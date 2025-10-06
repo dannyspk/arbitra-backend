@@ -1,0 +1,86 @@
+[
+  {
+    "endpoint": "wss://wbs-api.mexc.com/ws",
+    "subs": [
+      {
+        "method": "SUBSCRIPTION",
+        "params": [
+          "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+        ],
+        "id": 1759361706329
+      }
+    ],
+    "messages": [],
+    "connect_error": "BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_headers'"
+  },
+  {
+    "endpoint": "wss://wbs-api.mexc.com/ws",
+    "subs": [
+      {
+        "method": "SUBSCRIPTION",
+        "params": [
+          "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+        ],
+        "id": 1759361706329
+      }
+    ],
+    "messages": [],
+    "connect_error": "BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_headers'"
+  },
+  {
+    "endpoint": "wss://wbs.mexc.com/ws",
+    "subs": [
+      {
+        "method": "SUBSCRIPTION",
+        "params": [
+          "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+        ],
+        "id": 1759361706329
+      }
+    ],
+    "messages": [],
+    "connect_error": "BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_headers'"
+  },
+  {
+    "endpoint": "wss://wbs.mexc.com/ws",
+    "subs": [
+      {
+        "method": "SUBSCRIPTION",
+        "params": [
+          "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+        ],
+        "id": 1759361706329
+      }
+    ],
+    "messages": [],
+    "connect_error": "BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_headers'"
+  },
+  {
+    "endpoint": "wss://api.mexc.com/ws",
+    "subs": [
+      {
+        "method": "SUBSCRIPTION",
+        "params": [
+          "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+        ],
+        "id": 1759361706329
+      }
+    ],
+    "messages": [],
+    "connect_error": "BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_headers'"
+  },
+  {
+    "endpoint": "wss://api.mexc.com/ws",
+    "subs": [
+      {
+        "method": "SUBSCRIPTION",
+        "params": [
+          "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+        ],
+        "id": 1759361706329
+      }
+    ],
+    "messages": [],
+    "connect_error": "BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_headers'"
+  }
+]

@@ -1,0 +1,2287 @@
+{
+  "symbol": "MYX/USDT",
+  "closed_trades": [
+    {
+      "symbol": "MYX/USDT",
+      "direction": "long",
+      "entry_price": 5.886881,
+      "exit_price": 5.787207,
+      "size": 446.6945,
+      "qty": 75.8796551178799,
+      "pnl": -7.917559052721826,
+      "entry_time": 1759567206.218027,
+      "exit_time": 1759567206.218027
+    },
+    {
+      "symbol": "MYX/USDT",
+      "direction": "long",
+      "entry_price": 5.942937000000001,
+      "exit_price": 5.760234,
+      "size": 574.1215000000001,
+      "qty": 96.60568503418428,
+      "pnl": -18.102385613411542,
+      "entry_time": 1759567206.219027,
+      "exit_time": 1759567206.2200274
+    },
+    {
+      "symbol": "MYX/USDT",
+      "direction": "long",
+      "entry_price": 6.077071,
+      "exit_price": 6.260733,
+      "size": 45.1192,
+      "qty": 7.424497755579949,
+      "pnl": 4.662130998238325,
+      "entry_time": 1759567206.2210276,
+      "exit_time": 1759567206.2220259
+    },
+    {
+      "symbol": "MYX/USDT",
+      "direction": "long",
+      "entry_price": 6.455449,
+      "exit_price": 6.356637,
+      "size": 101.9306,
+      "qty": 15.7898544315043,
+      "pnl": -0.6490798936373114,
+      "entry_time": 1759567206.2230265,
+      "exit_time": 1759567206.2240264
+    },
+    {
+      "symbol": "MYX/USDT",
+      "direction": "long",
+      "entry_price": 6.424418,
+      "exit_price": 6.338655,
+      "size": 340.50780000000003,
+      "qty": 53.002124083457836,
+      "pnl": -4.816209159302488,
+      "entry_time": 1759567206.2250283,
+      "exit_time": 1759567206.2250283
+    },
+    {
+      "symbol": "MYX/USDT",
+      "direction": "long",
+      "entry_price": 6.510503999999999,
+      "exit_price": 6.414579000000001,
+      "size": 292.63045,
+      "qty": 44.94743417713898,
+      "pnl": -3.5222435080004413,
+      "entry_time": 1759567206.2280266,
+      "exit_time": 1759567206.2300274
+    },
+    {
+      "symbol": "MYX/USDT",
+      "direction": "short",
+      "entry_price": 6.185808,
+      "exit_price": 6.0890830000000005,
+      "size": 97.73076250000001,
+      "qty": 15.799191067682672,
+      "pnl": 5.007338455518009,
+      "entry_time": 1759567206.2360287,
+      "exit_time": 1759567206.2380283
+    },
+    {
+      "symbol": "MYX/USDT",
+      "direction": "short",
+      "entry_price": 5.712282,
+      "exit_price": 5.7997939999999994,
+      "size": 329.0393,
+      "qty": 57.60207566783293,
+      "pnl": -5.3061206349816965,
+      "entry_time": 1759567206.239028,
+      "exit_time": 1759567206.2400277
+    },
+    {
+      "symbol": "MYX/USDT",
+      "direction": "short",
+      "entry_price": 5.802192,
+      "exit_price": 5.763758,
+      "size": 39.0747625,
+      "qty": 6.734482847172241,
+      "pnl": 1.3291089873122763,
+      "entry_time": 1759567206.2400277,
+      "exit_time": 1759567206.2420275
+    },
+    {
+      "symbol": "MYX/USDT",
+      "direction": "short",
+      "entry_price": 5.612382,
+      "exit_price": 5.681676,
+      "size": 303.0933,
+      "qty": 54.00439599442803,
+      "pnl": -2.4561418340096033,
+      "entry_time": 1759567206.2570314,
+      "exit_time": 1759567206.2590299
+    },
+    {
+      "symbol": "MYX/USDT",
+      "direction": "long",
+      "entry_price": 5.869864,
+      "exit_price": 5.8651290000000005,
+      "size": 368.73125000000005,
+      "qty": 62.81768197695893,
+      "pnl": 0.6972773755355144,
+      "entry_time": 1759567206.26403,
+      "exit_time": 1759567206.2650292
+    }
+  ],
+  "total_pnl": -31.073883879460784,
+  "ledger_length": 240,
+  "ledger": [
+    {
+      "ts": 1759552860000,
+      "price": 5.782,
+      "funding": null,
+      "decision": "hold",
+      "reason": "insufficient history for sma",
+      "position": "None"
+    },
+    {
+      "ts": 1759552920000,
+      "price": 5.797,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0013",
+      "position": "None"
+    },
+    {
+      "ts": 1759552980000,
+      "price": 5.868,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.868000 > low 5.782",
+      "position": "None"
+    },
+    {
+      "ts": 1759553040000,
+      "price": 5.812,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0005",
+      "position": "None"
+    },
+    {
+      "ts": 1759553100000,
+      "price": 5.819,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0006",
+      "position": "None"
+    },
+    {
+      "ts": 1759553160000,
+      "price": 5.774,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0060",
+      "position": "None"
+    },
+    {
+      "ts": 1759553220000,
+      "price": 5.779,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0050",
+      "position": "None"
+    },
+    {
+      "ts": 1759553280000,
+      "price": 5.734,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.734000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553340000,
+      "price": 5.696,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.696000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553400000,
+      "price": 5.652,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.652000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553460000,
+      "price": 5.669,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.669000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553520000,
+      "price": 5.648,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.648000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553580000,
+      "price": 5.378,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.378000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553640000,
+      "price": 5.494,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.494000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553700000,
+      "price": 5.49,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.490000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553760000,
+      "price": 5.43,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.430000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553820000,
+      "price": 5.383,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.383000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553880000,
+      "price": 5.373,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.373000 < high 5.868",
+      "position": "None"
+    },
+    {
+      "ts": 1759553940000,
+      "price": 5.389,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0069",
+      "position": "None"
+    },
+    {
+      "ts": 1759554000000,
+      "price": 5.383,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0046",
+      "position": "None"
+    },
+    {
+      "ts": 1759554060000,
+      "price": 5.408,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0025",
+      "position": "None"
+    },
+    {
+      "ts": 1759554120000,
+      "price": 5.533,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.533000 > low 5.373",
+      "position": "None"
+    },
+    {
+      "ts": 1759554180000,
+      "price": 5.621,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.621000 > low 5.373",
+      "position": "None"
+    },
+    {
+      "ts": 1759554240000,
+      "price": 5.53,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.530000 > low 5.373",
+      "position": "None"
+    },
+    {
+      "ts": 1759554300000,
+      "price": 5.479,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0024",
+      "position": "None"
+    },
+    {
+      "ts": 1759554360000,
+      "price": 5.471,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0065",
+      "position": "None"
+    },
+    {
+      "ts": 1759554420000,
+      "price": 5.628,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.628000 > low 5.373",
+      "position": "None"
+    },
+    {
+      "ts": 1759554480000,
+      "price": 5.663,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.663000 > low 5.373",
+      "position": "None"
+    },
+    {
+      "ts": 1759554540000,
+      "price": 5.701,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.701000 > low 5.373",
+      "position": "None"
+    },
+    {
+      "ts": 1759554600000,
+      "price": 5.695,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.695000 > low 5.373",
+      "position": "None"
+    },
+    {
+      "ts": 1759554660000,
+      "price": 5.684,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0077",
+      "position": "None"
+    },
+    {
+      "ts": 1759554720000,
+      "price": 5.661,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0019",
+      "position": "None"
+    },
+    {
+      "ts": 1759554780000,
+      "price": 5.682,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0002",
+      "position": "None"
+    },
+    {
+      "ts": 1759554840000,
+      "price": 5.752,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.752000 > low 5.373",
+      "position": "None"
+    },
+    {
+      "ts": 1759554900000,
+      "price": 5.768,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.768000 > low 5.373",
+      "position": "None"
+    },
+    {
+      "ts": 1759554960000,
+      "price": 5.724,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0021",
+      "position": "None"
+    },
+    {
+      "ts": 1759555020000,
+      "price": 5.763,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0066",
+      "position": "None"
+    },
+    {
+      "ts": 1759555080000,
+      "price": 5.881,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=0.0207,funding=0.000000,vol=0.009491615765224717,trend=up,sr_low=None,sr_high=5.881,atr=0.008954666154753635,mom=0.006411901476066649",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.886881, size=446.6945, qty=75.8796551178799, entry_time=1759567206.218027, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759555140000,
+      "price": 5.843,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0075",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.886881, size=446.6945, qty=75.8796551178799, entry_time=1759567206.218027, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759555200000,
+      "price": 5.868,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0032",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.886881, size=446.6945, qty=75.8796551178799, entry_time=1759567206.218027, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759555260000,
+      "price": 5.793,
+      "funding": null,
+      "decision": "exit",
+      "reason": "stop loss pct=-0.0159",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.886881, size=446.6945, qty=75.8796551178799, entry_time=1759567206.218027, pnl=-7.917559052721826, exit_price=5.787207, exit_time=1759567206.218027)"
+    },
+    {
+      "ts": 1759555320000,
+      "price": 5.81,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0028",
+      "position": "None"
+    },
+    {
+      "ts": 1759555380000,
+      "price": 5.922,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.922000 > low 5.471",
+      "position": "None"
+    },
+    {
+      "ts": 1759555440000,
+      "price": 5.927,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.927000 > low 5.471",
+      "position": "None"
+    },
+    {
+      "ts": 1759555500000,
+      "price": 5.937,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=0.0104,funding=0.000000,vol=0.010212578664620699,trend=up,sr_low=5.471,sr_high=None,atr=0.0069671663809996705,mom=0.002706771016309818",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759555560000,
+      "price": 5.893,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0084",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759555620000,
+      "price": 5.919,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0040",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759555680000,
+      "price": 5.95,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=0.0012",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759555740000,
+      "price": 5.884,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0099",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759555800000,
+      "price": 5.766,
+      "funding": null,
+      "decision": "exit",
+      "reason": "stop loss pct=-0.0298",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=-18.102385613411542, exit_price=5.760234, exit_time=1759567206.2200274)"
+    },
+    {
+      "ts": 1759555860000,
+      "price": 5.786,
+      "funding": null,
+      "decision": "hold",
+      "reason": "trend up - skip short entry",
+      "position": "None"
+    },
+    {
+      "ts": 1759555920000,
+      "price": 5.737,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.737000 < high 5.95",
+      "position": "None"
+    },
+    {
+      "ts": 1759555980000,
+      "price": 5.759,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.759000 < high 5.95",
+      "position": "None"
+    },
+    {
+      "ts": 1759556040000,
+      "price": 5.742,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0064",
+      "position": "None"
+    },
+    {
+      "ts": 1759556100000,
+      "price": 5.75,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0012",
+      "position": "None"
+    },
+    {
+      "ts": 1759556160000,
+      "price": 5.743,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0017",
+      "position": "None"
+    },
+    {
+      "ts": 1759556220000,
+      "price": 5.745,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0002",
+      "position": "None"
+    },
+    {
+      "ts": 1759556280000,
+      "price": 6.071,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=0.0464,funding=0.000000,vol=0.023166138185738285,trend=up,sr_low=None,sr_high=6.071,atr=0.01108175633035713,mom=0.00969199210498588",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.077071, size=360.9536, qty=59.395982044639595, entry_time=1759567206.2210276, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759556340000,
+      "price": 6.106,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0048",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.077071, size=180.4768, qty=29.697991022319798, entry_time=1759567206.2210276, pnl=0.5331446902027583, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 0.5331446902027583,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "long",
+          "entry_price": 6.077071,
+          "size": 180.4768,
+          "qty": 29.697991022319798,
+          "entry_time": 1759567206.2210276,
+          "pnl": 0.5331446902027583,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759556400000,
+      "price": 6.195,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0194",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.077071, size=90.2384, qty=14.848995511159899, entry_time=1759567206.2210276, pnl=2.1194279795809243, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 1.586283289378166,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "long",
+          "entry_price": 6.077071,
+          "size": 90.2384,
+          "qty": 14.848995511159899,
+          "entry_time": 1759567206.2210276,
+          "pnl": 2.1194279795809243,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759556460000,
+      "price": 6.252,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0288",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.077071, size=45.1192, qty=7.424497755579949, entry_time=1759567206.2210276, pnl=3.335173690695714, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 1.21574571111479,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "long",
+          "entry_price": 6.077071,
+          "size": 45.1192,
+          "qty": 7.424497755579949,
+          "entry_time": 1759567206.2210276,
+          "pnl": 3.335173690695714,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759556520000,
+      "price": 6.267,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0313",
+      "position": "None",
+      "reduce_evt": {
+        "status": "force_exit_due_to_reduce_cap",
+        "position": {
+          "symbol": "MYX/USDT",
+          "direction": "long",
+          "entry_price": 6.077071,
+          "size": 45.1192,
+          "qty": 7.424497755579949,
+          "entry_time": 1759567206.2210276,
+          "pnl": 4.662130998238325,
+          "exit_price": 6.260733,
+          "exit_time": 1759567206.2220259
+        }
+      }
+    },
+    {
+      "ts": 1759556580000,
+      "price": 6.449,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=0.0363,funding=0.000000,vol=0.020442765624279886,trend=up,sr_low=None,sr_high=6.449,atr=0.019621190793486665,mom=0.019621190793486665",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.455449, size=203.8612, qty=31.5797088630086, entry_time=1759567206.2230265, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759556640000,
+      "price": 6.53,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0115",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.455449, size=101.9306, qty=15.7898544315043, entry_time=1759567206.2230265, pnl=0.9920675916100521, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 0.9920675916100521,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "long",
+          "entry_price": 6.455449,
+          "size": 101.9306,
+          "qty": 15.7898544315043,
+          "entry_time": 1759567206.2230265,
+          "pnl": 0.9920675916100521,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759556700000,
+      "price": 6.41,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0070",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.455449, size=101.9306, qty=15.7898544315043, entry_time=1759567206.2230265, pnl=0.9920675916100521, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759556760000,
+      "price": 6.363,
+      "funding": null,
+      "decision": "exit",
+      "reason": "stop loss pct=-0.0143",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.455449, size=101.9306, qty=15.7898544315043, entry_time=1759567206.2230265, pnl=-0.6490798936373114, exit_price=6.356637, exit_time=1759567206.2240264)"
+    },
+    {
+      "ts": 1759556820000,
+      "price": 6.369,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0045",
+      "position": "None"
+    },
+    {
+      "ts": 1759556880000,
+      "price": 6.391,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0043",
+      "position": "None"
+    },
+    {
+      "ts": 1759556940000,
+      "price": 6.357,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0072",
+      "position": "None"
+    },
+    {
+      "ts": 1759557000000,
+      "price": 6.263,
+      "funding": null,
+      "decision": "hold",
+      "reason": "trend up - skip short entry",
+      "position": "None"
+    },
+    {
+      "ts": 1759557060000,
+      "price": 6.194,
+      "funding": null,
+      "decision": "hold",
+      "reason": "trend up - skip short entry",
+      "position": "None"
+    },
+    {
+      "ts": 1759557120000,
+      "price": 6.256,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0078",
+      "position": "None"
+    },
+    {
+      "ts": 1759557180000,
+      "price": 6.418,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=0.0166,funding=0.000000,vol=0.015097749365325246,trend=up,sr_low=None,sr_high=6.53,atr=0.011747162287121055,mom=0.0013725240102586275",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.424418, size=340.50780000000003, qty=53.002124083457836, entry_time=1759567206.2250283, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759557240000,
+      "price": 6.345,
+      "funding": null,
+      "decision": "exit",
+      "reason": "stop loss pct=-0.0124",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.424418, size=340.50780000000003, qty=53.002124083457836, entry_time=1759567206.2250283, pnl=-4.816209159302488, exit_price=6.338655, exit_time=1759567206.2250283)"
+    },
+    {
+      "ts": 1759557300000,
+      "price": 6.317,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0029",
+      "position": "None"
+    },
+    {
+      "ts": 1759557360000,
+      "price": 6.261,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0060",
+      "position": "None"
+    },
+    {
+      "ts": 1759557420000,
+      "price": 6.276,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0057",
+      "position": "None"
+    },
+    {
+      "ts": 1759557480000,
+      "price": 6.33,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0009",
+      "position": "None"
+    },
+    {
+      "ts": 1759557540000,
+      "price": 6.343,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0049",
+      "position": "None"
+    },
+    {
+      "ts": 1759557600000,
+      "price": 6.303,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0003",
+      "position": "None"
+    },
+    {
+      "ts": 1759557660000,
+      "price": 6.312,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0012",
+      "position": "None"
+    },
+    {
+      "ts": 1759557720000,
+      "price": 6.291,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0029",
+      "position": "None"
+    },
+    {
+      "ts": 1759557780000,
+      "price": 6.244,
+      "funding": null,
+      "decision": "hold",
+      "reason": "trend up - skip short entry",
+      "position": "None"
+    },
+    {
+      "ts": 1759557840000,
+      "price": 6.334,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0047",
+      "position": "None"
+    },
+    {
+      "ts": 1759557900000,
+      "price": 6.388,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 6.388000 > low 6.194",
+      "position": "None"
+    },
+    {
+      "ts": 1759557960000,
+      "price": 6.393,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 6.393000 > low 6.194",
+      "position": "None"
+    },
+    {
+      "ts": 1759558020000,
+      "price": 6.395,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 6.395000 > low 6.194",
+      "position": "None"
+    },
+    {
+      "ts": 1759558080000,
+      "price": 6.326,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0033",
+      "position": "None"
+    },
+    {
+      "ts": 1759558140000,
+      "price": 6.349,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0024",
+      "position": "None"
+    },
+    {
+      "ts": 1759558200000,
+      "price": 6.367,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0004",
+      "position": "None"
+    },
+    {
+      "ts": 1759558260000,
+      "price": 6.36,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0008",
+      "position": "None"
+    },
+    {
+      "ts": 1759558320000,
+      "price": 6.401,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0054",
+      "position": "None"
+    },
+    {
+      "ts": 1759558380000,
+      "price": 6.417,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0074",
+      "position": "None"
+    },
+    {
+      "ts": 1759558440000,
+      "price": 6.42,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0054",
+      "position": "None"
+    },
+    {
+      "ts": 1759558500000,
+      "price": 6.361,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0042",
+      "position": "None"
+    },
+    {
+      "ts": 1759558560000,
+      "price": 6.388,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0005",
+      "position": "None"
+    },
+    {
+      "ts": 1759558620000,
+      "price": 6.504,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=0.0138,funding=0.000000,vol=0.008887255849107588,trend=up,sr_low=None,sr_high=6.504,atr=0.006834558915407927,mom=0.003771215197858592",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=585.2609, qty=89.89486835427796, entry_time=1759567206.2280266, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759558680000,
+      "price": 6.472,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0059",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=585.2609, qty=89.89486835427796, entry_time=1759567206.2280266, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759558740000,
+      "price": 6.48,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0047",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=585.2609, qty=89.89486835427796, entry_time=1759567206.2280266, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759558800000,
+      "price": 6.545,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0053",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=292.63045, qty=44.94743417713898, entry_time=1759567206.2280266, pnl=1.0217188423921701, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 1.0217188423921701,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "long",
+          "entry_price": 6.510503999999999,
+          "size": 292.63045,
+          "qty": 44.94743417713898,
+          "entry_time": 1759567206.2280266,
+          "pnl": 1.0217188423921701,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759558860000,
+      "price": 6.462,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0075",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=292.63045, qty=44.94743417713898, entry_time=1759567206.2280266, pnl=1.0217188423921701, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759558920000,
+      "price": 6.463,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0073",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=292.63045, qty=44.94743417713898, entry_time=1759567206.2280266, pnl=1.0217188423921701, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759558980000,
+      "price": 6.421,
+      "funding": null,
+      "decision": "exit",
+      "reason": "stop loss pct=-0.0137",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=292.63045, qty=44.94743417713898, entry_time=1759567206.2280266, pnl=-3.5222435080004413, exit_price=6.414579000000001, exit_time=1759567206.2300274)"
+    },
+    {
+      "ts": 1759559040000,
+      "price": 6.476,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0002",
+      "position": "None"
+    },
+    {
+      "ts": 1759559100000,
+      "price": 6.463,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0013",
+      "position": "None"
+    },
+    {
+      "ts": 1759559160000,
+      "price": 6.431,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0034",
+      "position": "None"
+    },
+    {
+      "ts": 1759559220000,
+      "price": 6.448,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0004",
+      "position": "None"
+    },
+    {
+      "ts": 1759559280000,
+      "price": 6.454,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0008",
+      "position": "None"
+    },
+    {
+      "ts": 1759559340000,
+      "price": 6.483,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0037",
+      "position": "None"
+    },
+    {
+      "ts": 1759559400000,
+      "price": 6.497,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0053",
+      "position": "None"
+    },
+    {
+      "ts": 1759559460000,
+      "price": 6.437,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0033",
+      "position": "None"
+    },
+    {
+      "ts": 1759559520000,
+      "price": 6.423,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0053",
+      "position": "None"
+    },
+    {
+      "ts": 1759559580000,
+      "price": 6.38,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 6.380000 < high 6.545",
+      "position": "None"
+    },
+    {
+      "ts": 1759559640000,
+      "price": 6.399,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0058",
+      "position": "None"
+    },
+    {
+      "ts": 1759559700000,
+      "price": 6.367,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0078",
+      "position": "None"
+    },
+    {
+      "ts": 1759559760000,
+      "price": 6.42,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0024",
+      "position": "None"
+    },
+    {
+      "ts": 1759559820000,
+      "price": 6.427,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0038",
+      "position": "None"
+    },
+    {
+      "ts": 1759559880000,
+      "price": 6.374,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0032",
+      "position": "None"
+    },
+    {
+      "ts": 1759559940000,
+      "price": 6.365,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0042",
+      "position": "None"
+    },
+    {
+      "ts": 1759560000000,
+      "price": 6.363,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0036",
+      "position": "None"
+    },
+    {
+      "ts": 1759560060000,
+      "price": 6.408,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0024",
+      "position": "None"
+    },
+    {
+      "ts": 1759560120000,
+      "price": 6.404,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0022",
+      "position": "None"
+    },
+    {
+      "ts": 1759560180000,
+      "price": 6.377,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0008",
+      "position": "None"
+    },
+    {
+      "ts": 1759560240000,
+      "price": 6.335,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0063",
+      "position": "None"
+    },
+    {
+      "ts": 1759560300000,
+      "price": 6.323,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0071",
+      "position": "None"
+    },
+    {
+      "ts": 1759560360000,
+      "price": 6.341,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0037",
+      "position": "None"
+    },
+    {
+      "ts": 1759560420000,
+      "price": 6.335,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0028",
+      "position": "None"
+    },
+    {
+      "ts": 1759560480000,
+      "price": 6.407,
+      "funding": null,
+      "decision": "hold",
+      "reason": "trend down - skip long entry",
+      "position": "None"
+    },
+    {
+      "ts": 1759560540000,
+      "price": 6.368,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0026",
+      "position": "None"
+    },
+    {
+      "ts": 1759560600000,
+      "price": 6.371,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0021",
+      "position": "None"
+    },
+    {
+      "ts": 1759560660000,
+      "price": 6.349,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0020",
+      "position": "None"
+    },
+    {
+      "ts": 1759560720000,
+      "price": 6.354,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0016",
+      "position": "None"
+    },
+    {
+      "ts": 1759560780000,
+      "price": 6.411,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0054",
+      "position": "None"
+    },
+    {
+      "ts": 1759560840000,
+      "price": 6.384,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0018",
+      "position": "None"
+    },
+    {
+      "ts": 1759560900000,
+      "price": 6.353,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0027",
+      "position": "None"
+    },
+    {
+      "ts": 1759560960000,
+      "price": 6.332,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0050",
+      "position": "None"
+    },
+    {
+      "ts": 1759561020000,
+      "price": 6.375,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0011",
+      "position": "None"
+    },
+    {
+      "ts": 1759561080000,
+      "price": 6.373,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0003",
+      "position": "None"
+    },
+    {
+      "ts": 1759561140000,
+      "price": 6.378,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0019",
+      "position": "None"
+    },
+    {
+      "ts": 1759561200000,
+      "price": 6.327,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0046",
+      "position": "None"
+    },
+    {
+      "ts": 1759561260000,
+      "price": 6.309,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0063",
+      "position": "None"
+    },
+    {
+      "ts": 1759561320000,
+      "price": 6.313,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0052",
+      "position": "None"
+    },
+    {
+      "ts": 1759561380000,
+      "price": 6.309,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0041",
+      "position": "None"
+    },
+    {
+      "ts": 1759561440000,
+      "price": 6.292,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0046",
+      "position": "None"
+    },
+    {
+      "ts": 1759561500000,
+      "price": 6.192,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=-0.0156,funding=0.000000,vol=0.006137613576009477,trend=down,sr_low=6.192,sr_high=None,atr=0.005116096065067269,mom=-0.0049047577652839135",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=781.8461000000001, qty=126.39352854146138, entry_time=1759567206.2360287, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759561560000,
+      "price": 6.211,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0041",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=781.8461000000001, qty=126.39352854146138, entry_time=1759567206.2360287, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759561620000,
+      "price": 6.209,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0037",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=781.8461000000001, qty=126.39352854146138, entry_time=1759567206.2360287, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759561680000,
+      "price": 6.15,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0058",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=390.92305000000005, qty=63.19676427073069, entry_time=1759567206.2360287, pnl=1.5623009105951966, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 1.5623009105951966,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "short",
+          "entry_price": 6.185808,
+          "size": 390.92305000000005,
+          "qty": 63.19676427073069,
+          "entry_time": 1759567206.2360287,
+          "pnl": 1.5623009105951966,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759561740000,
+      "price": 6.146,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0064",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=195.46152500000002, qty=31.598382135365345, entry_time=1759567206.2360287, pnl=2.4700218959316294, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 0.9077209853364329,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "short",
+          "entry_price": 6.185808,
+          "size": 195.46152500000002,
+          "qty": 31.598382135365345,
+          "entry_time": 1759567206.2360287,
+          "pnl": 2.4700218959316294,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759561800000,
+      "price": 6.106,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0129",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=97.73076250000001, qty=15.799191067682672, entry_time=1759567206.2360287, pnl=3.556735038794005, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 1.0867131428623755,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "short",
+          "entry_price": 6.185808,
+          "size": 97.73076250000001,
+          "qty": 15.799191067682672,
+          "entry_time": 1759567206.2360287,
+          "pnl": 3.556735038794005,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759561860000,
+      "price": 6.083,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0166",
+      "position": "None",
+      "reduce_evt": {
+        "status": "force_exit_due_to_reduce_cap",
+        "position": {
+          "symbol": "MYX/USDT",
+          "direction": "short",
+          "entry_price": 6.185808,
+          "size": 97.73076250000001,
+          "qty": 15.799191067682672,
+          "entry_time": 1759567206.2360287,
+          "pnl": 5.007338455518009,
+          "exit_price": 6.0890830000000005,
+          "exit_time": 1759567206.2380283
+        }
+      }
+    },
+    {
+      "ts": 1759561920000,
+      "price": 6.049,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 6.049000 < high 6.411",
+      "position": "None"
+    },
+    {
+      "ts": 1759561980000,
+      "price": 6.087,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0027",
+      "position": "None"
+    },
+    {
+      "ts": 1759562040000,
+      "price": 6.067,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0037",
+      "position": "None"
+    },
+    {
+      "ts": 1759562100000,
+      "price": 6.047,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0043",
+      "position": "None"
+    },
+    {
+      "ts": 1759562160000,
+      "price": 6.038,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0039",
+      "position": "None"
+    },
+    {
+      "ts": 1759562220000,
+      "price": 5.718,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=-0.0472,funding=0.000000,vol=0.02142803001501736,trend=down,sr_low=5.718,sr_high=None,atr=0.012156602185406831,mom=-0.010062592156200938",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.712282, size=329.0393, qty=57.60207566783293, entry_time=1759567206.239028, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759562280000,
+      "price": 5.794,
+      "funding": null,
+      "decision": "exit",
+      "reason": "stop loss pct=-0.0143",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.712282, size=329.0393, qty=57.60207566783293, entry_time=1759567206.239028, pnl=-5.3061206349816965, exit_price=5.7997939999999994, exit_time=1759567206.2400277)"
+    },
+    {
+      "ts": 1759562340000,
+      "price": 5.808,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=-0.0176,funding=0.000000,vol=0.02311796073916804,trend=down,sr_low=5.718,sr_high=None,atr=0.01279598149925455,mom=-0.007560097055186811",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=312.5981, qty=53.875862777377925, entry_time=1759567206.2400277, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759562400000,
+      "price": 5.827,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0043",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=312.5981, qty=53.875862777377925, entry_time=1759567206.2400277, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759562460000,
+      "price": 5.827,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0043",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=312.5981, qty=53.875862777377925, entry_time=1759567206.2400277, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759562520000,
+      "price": 5.806,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0007",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=312.5981, qty=53.875862777377925, entry_time=1759567206.2400277, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759562580000,
+      "price": 5.769,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0057",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=156.29905, qty=26.937931388688963, entry_time=1759567206.2400277, pnl=0.6139751400289996, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 0.6139751400289996,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "short",
+          "entry_price": 5.802192,
+          "size": 156.29905,
+          "qty": 26.937931388688963,
+          "entry_time": 1759567206.2400277,
+          "pnl": 0.6139751400289996,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759562640000,
+      "price": 5.77,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0055",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=78.149525, qty=13.468965694344481, entry_time=1759567206.2400277, pnl=0.9074748824096021, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 0.2934997423806025,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "short",
+          "entry_price": 5.802192,
+          "size": 78.149525,
+          "qty": 13.468965694344481,
+          "entry_time": 1759567206.2400277,
+          "pnl": 0.9074748824096021,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759562700000,
+      "price": 5.777,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=0.0043",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=78.149525, qty=13.468965694344481, entry_time=1759567206.2400277, pnl=0.9074748824096021, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759562760000,
+      "price": 5.778,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=0.0042",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=78.149525, qty=13.468965694344481, entry_time=1759567206.2400277, pnl=0.9074748824096021, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759562820000,
+      "price": 5.785,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=0.0030",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=78.149525, qty=13.468965694344481, entry_time=1759567206.2400277, pnl=0.9074748824096021, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759562880000,
+      "price": 5.763,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0068",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=39.0747625, qty=6.734482847172241, entry_time=1759567206.2400277, pnl=1.1014321503185616, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 0.19395726790895962,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "short",
+          "entry_price": 5.802192,
+          "size": 39.0747625,
+          "qty": 6.734482847172241,
+          "entry_time": 1759567206.2400277,
+          "pnl": 1.1014321503185616,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759562940000,
+      "price": 5.758,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0076",
+      "position": "None",
+      "reduce_evt": {
+        "status": "force_exit_due_to_reduce_cap",
+        "position": {
+          "symbol": "MYX/USDT",
+          "direction": "short",
+          "entry_price": 5.802192,
+          "size": 39.0747625,
+          "qty": 6.734482847172241,
+          "entry_time": 1759567206.2400277,
+          "pnl": 1.3291089873122763,
+          "exit_price": 5.763758,
+          "exit_time": 1759567206.2420275
+        }
+      }
+    },
+    {
+      "ts": 1759563000000,
+      "price": 5.739,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0048",
+      "position": "None"
+    },
+    {
+      "ts": 1759563060000,
+      "price": 5.734,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0044",
+      "position": "None"
+    },
+    {
+      "ts": 1759563120000,
+      "price": 5.752,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0006",
+      "position": "None"
+    },
+    {
+      "ts": 1759563180000,
+      "price": 5.735,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0021",
+      "position": "None"
+    },
+    {
+      "ts": 1759563240000,
+      "price": 5.76,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0024",
+      "position": "None"
+    },
+    {
+      "ts": 1759563300000,
+      "price": 5.819,
+      "funding": null,
+      "decision": "hold",
+      "reason": "trend down - skip long entry",
+      "position": "None"
+    },
+    {
+      "ts": 1759563360000,
+      "price": 5.858,
+      "funding": null,
+      "decision": "hold",
+      "reason": "trend down - skip long entry",
+      "position": "None"
+    },
+    {
+      "ts": 1759563420000,
+      "price": 5.81,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0036",
+      "position": "None"
+    },
+    {
+      "ts": 1759563480000,
+      "price": 5.767,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0042",
+      "position": "None"
+    },
+    {
+      "ts": 1759563540000,
+      "price": 5.767,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0051",
+      "position": "None"
+    },
+    {
+      "ts": 1759563600000,
+      "price": 5.805,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0001",
+      "position": "None"
+    },
+    {
+      "ts": 1759563660000,
+      "price": 5.795,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0009",
+      "position": "None"
+    },
+    {
+      "ts": 1759563720000,
+      "price": 5.806,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0025",
+      "position": "None"
+    },
+    {
+      "ts": 1759563780000,
+      "price": 5.795,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0010",
+      "position": "None"
+    },
+    {
+      "ts": 1759563840000,
+      "price": 5.772,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0031",
+      "position": "None"
+    },
+    {
+      "ts": 1759563900000,
+      "price": 5.873,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.873000 > low 5.734",
+      "position": "None"
+    },
+    {
+      "ts": 1759563960000,
+      "price": 5.873,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.873000 > low 5.734",
+      "position": "None"
+    },
+    {
+      "ts": 1759564020000,
+      "price": 5.83,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0009",
+      "position": "None"
+    },
+    {
+      "ts": 1759564080000,
+      "price": 5.83,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0002",
+      "position": "None"
+    },
+    {
+      "ts": 1759564140000,
+      "price": 5.831,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0007",
+      "position": "None"
+    },
+    {
+      "ts": 1759564200000,
+      "price": 5.83,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0025",
+      "position": "None"
+    },
+    {
+      "ts": 1759564260000,
+      "price": 5.825,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0020",
+      "position": "None"
+    },
+    {
+      "ts": 1759564320000,
+      "price": 5.796,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0048",
+      "position": "None"
+    },
+    {
+      "ts": 1759564380000,
+      "price": 5.752,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0101,funding=0.000000,vol=0.003260681478031776,trend=down,sr_low=5.752,sr_high=5.873,atr=0.0022951066394342784,mom=-0.002237931110560617,skipped_by_size",
+      "position": null
+    },
+    {
+      "ts": 1759564440000,
+      "price": 5.781,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0037",
+      "position": "None"
+    },
+    {
+      "ts": 1759564500000,
+      "price": 5.755,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0060",
+      "position": "None"
+    },
+    {
+      "ts": 1759564560000,
+      "price": 5.838,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.838000 > low 5.752",
+      "position": "None"
+    },
+    {
+      "ts": 1759564620000,
+      "price": 5.795,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0015",
+      "position": "None"
+    },
+    {
+      "ts": 1759564680000,
+      "price": 5.794,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0014",
+      "position": "None"
+    },
+    {
+      "ts": 1759564740000,
+      "price": 5.811,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0026",
+      "position": "None"
+    },
+    {
+      "ts": 1759564800000,
+      "price": 5.82,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0031",
+      "position": "None"
+    },
+    {
+      "ts": 1759564860000,
+      "price": 5.777,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0050",
+      "position": "None"
+    },
+    {
+      "ts": 1759564920000,
+      "price": 5.769,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0044",
+      "position": "None"
+    },
+    {
+      "ts": 1759564980000,
+      "price": 5.713,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.713000 < high 5.873",
+      "position": "None"
+    },
+    {
+      "ts": 1759565040000,
+      "price": 5.618,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=-0.0232,funding=0.000000,vol=0.007509040584411062,trend=down,sr_low=5.618,sr_high=None,atr=0.006598628479688347,mom=-0.0051043429760249",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=606.1866, qty=108.00879198885606, entry_time=1759567206.2570314, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759565100000,
+      "price": 5.646,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0060",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=606.1866, qty=108.00879198885606, entry_time=1759567206.2570314, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759565160000,
+      "price": 5.618,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0010",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=606.1866, qty=108.00879198885606, entry_time=1759567206.2570314, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759565220000,
+      "price": 5.605,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=0.0013",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=606.1866, qty=108.00879198885606, entry_time=1759567206.2570314, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759565280000,
+      "price": 5.574,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0068",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=303.0933, qty=54.00439599442803, entry_time=1759567206.2570314, pnl=1.530010294274718, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 1.530010294274718,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "short",
+          "entry_price": 5.612382,
+          "size": 303.0933,
+          "qty": 54.00439599442803,
+          "entry_time": 1759567206.2570314,
+          "pnl": 1.530010294274718,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759565340000,
+      "price": 5.608,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=0.0008",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=303.0933, qty=54.00439599442803, entry_time=1759567206.2570314, pnl=1.530010294274718, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759565400000,
+      "price": 5.651,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0069",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=303.0933, qty=54.00439599442803, entry_time=1759567206.2570314, pnl=1.530010294274718, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759565460000,
+      "price": 5.676,
+      "funding": null,
+      "decision": "exit",
+      "reason": "stop loss pct=-0.0113",
+      "position": "Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=303.0933, qty=54.00439599442803, entry_time=1759567206.2570314, pnl=-2.4561418340096033, exit_price=5.681676, exit_time=1759567206.2590299)"
+    },
+    {
+      "ts": 1759565520000,
+      "price": 5.632,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0014",
+      "position": "None"
+    },
+    {
+      "ts": 1759565580000,
+      "price": 5.601,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0040",
+      "position": "None"
+    },
+    {
+      "ts": 1759565640000,
+      "price": 5.579,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near resistance: price 5.579000 < high 5.838",
+      "position": "None"
+    },
+    {
+      "ts": 1759565700000,
+      "price": 5.61,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0026",
+      "position": "None"
+    },
+    {
+      "ts": 1759565760000,
+      "price": 5.571,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0072",
+      "position": "None"
+    },
+    {
+      "ts": 1759565820000,
+      "price": 5.591,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0011",
+      "position": "None"
+    },
+    {
+      "ts": 1759565880000,
+      "price": 5.625,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0052",
+      "position": "None"
+    },
+    {
+      "ts": 1759565940000,
+      "price": 5.621,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0038",
+      "position": "None"
+    },
+    {
+      "ts": 1759566000000,
+      "price": 5.659,
+      "funding": null,
+      "decision": "hold",
+      "reason": "trend down - skip long entry",
+      "position": "None"
+    },
+    {
+      "ts": 1759566060000,
+      "price": 5.709,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.709000 > low 5.571",
+      "position": "None"
+    },
+    {
+      "ts": 1759566120000,
+      "price": 5.677,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0053",
+      "position": "None"
+    },
+    {
+      "ts": 1759566180000,
+      "price": 5.689,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0045",
+      "position": "None"
+    },
+    {
+      "ts": 1759566240000,
+      "price": 5.703,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0047",
+      "position": "None"
+    },
+    {
+      "ts": 1759566300000,
+      "price": 5.702,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0021",
+      "position": "None"
+    },
+    {
+      "ts": 1759566360000,
+      "price": 5.735,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0057",
+      "position": "None"
+    },
+    {
+      "ts": 1759566420000,
+      "price": 5.762,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.762000 > low 5.571",
+      "position": "None"
+    },
+    {
+      "ts": 1759566480000,
+      "price": 5.791,
+      "funding": null,
+      "decision": "hold",
+      "reason": "not near support: price 5.791000 > low 5.571",
+      "position": "None"
+    },
+    {
+      "ts": 1759566540000,
+      "price": 5.786,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0069",
+      "position": "None"
+    },
+    {
+      "ts": 1759566600000,
+      "price": 5.781,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0037",
+      "position": "None"
+    },
+    {
+      "ts": 1759566660000,
+      "price": 5.749,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0032",
+      "position": "None"
+    },
+    {
+      "ts": 1759566720000,
+      "price": 5.798,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0035",
+      "position": "None"
+    },
+    {
+      "ts": 1759566780000,
+      "price": 5.78,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=-0.0001",
+      "position": "None"
+    },
+    {
+      "ts": 1759566840000,
+      "price": 5.787,
+      "funding": null,
+      "decision": "hold",
+      "reason": "slope=0.0012",
+      "position": "None"
+    },
+    {
+      "ts": 1759566900000,
+      "price": 5.864,
+      "funding": null,
+      "decision": "enter",
+      "reason": "slope=0.0122,funding=0.000000,vol=0.007233830581540198,trend=up,sr_low=None,sr_high=5.864,atr=0.0054240045682293755,mom=0.0022559885152902063",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=737.4625000000001, qty=125.63536395391786, entry_time=1759567206.26403, pnl=0.0, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759566960000,
+      "price": 5.901,
+      "funding": null,
+      "decision": "reduce",
+      "reason": "partial_target hit pct=0.0053",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=368.73125000000005, qty=62.81768197695893, entry_time=1759567206.26403, pnl=1.2895851230067046, exit_price=None, exit_time=None)",
+      "reduce_evt": {
+        "status": "reduced",
+        "realized": 1.2895851230067046,
+        "remaining": {
+          "symbol": "MYX/USDT",
+          "direction": "long",
+          "entry_price": 5.869864,
+          "size": 368.73125000000005,
+          "qty": 62.81768197695893,
+          "entry_time": 1759567206.26403,
+          "pnl": 1.2895851230067046,
+          "exit_price": null,
+          "exit_time": null
+        }
+      }
+    },
+    {
+      "ts": 1759567020000,
+      "price": 5.838,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0054",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=368.73125000000005, qty=62.81768197695893, entry_time=1759567206.26403, pnl=1.2895851230067046, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759567080000,
+      "price": 5.848,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=-0.0037",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=368.73125000000005, qty=62.81768197695893, entry_time=1759567206.26403, pnl=1.2895851230067046, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759567140000,
+      "price": 5.876,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=0.0010",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=368.73125000000005, qty=62.81768197695893, entry_time=1759567206.26403, pnl=1.2895851230067046, exit_price=None, exit_time=None)"
+    },
+    {
+      "ts": 1759567200000,
+      "price": 5.871,
+      "funding": null,
+      "decision": "hold",
+      "reason": "in_position pct=0.0002",
+      "position": "Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=368.73125000000005, qty=62.81768197695893, entry_time=1759567206.26403, pnl=1.2895851230067046, exit_price=None, exit_time=None)"
+    }
+  ]
+}

@@ -1,0 +1,2406 @@
+{
+  "symbol": "MYX/USDT",
+  "limit": 1000,
+  "results": [
+    {
+      "htf_momentum_threshold": 0.005,
+      "momentum_window": 3,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.005,
+      "momentum_window": 6,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.005,
+      "momentum_window": 12,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.01,
+      "momentum_window": 3,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.01,
+      "momentum_window": 6,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.01,
+      "momentum_window": 12,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.02,
+      "momentum_window": 3,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.02,
+      "momentum_window": 6,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.02,
+      "momentum_window": 12,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.03,
+      "momentum_window": 3,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.03,
+      "momentum_window": 6,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    },
+    {
+      "htf_momentum_threshold": 0.03,
+      "momentum_window": 12,
+      "closed_trades": 32,
+      "total_pnl": 1.478099548969192,
+      "closed": [
+        {
+          "direction": "short",
+          "entry_price": 8.366625,
+          "exit_price": 8.470462,
+          "pnl": -7.252521176157665
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.691683,
+          "exit_price": 8.556434999999999,
+          "pnl": -11.9956274642904
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.4915,
+          "exit_price": 8.45845,
+          "pnl": 2.481541804288258
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.569422,
+          "exit_price": 8.5085,
+          "pnl": 7.427445394542083
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.270721,
+          "exit_price": 8.376368000000001,
+          "pnl": -13.053893847804693
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.218774,
+          "exit_price": 7.304297,
+          "pnl": -2.2152105247118863
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.584408,
+          "exit_price": 7.473466,
+          "pnl": 3.045284279291236
+        },
+        {
+          "direction": "long",
+          "entry_price": 7.709702,
+          "exit_price": 7.953039,
+          "pnl": 20.59630207565886
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.090082,
+          "exit_price": 8.219771999999999,
+          "pnl": 10.912976672959593
+        },
+        {
+          "direction": "long",
+          "entry_price": 8.297289,
+          "exit_price": 8.199792,
+          "pnl": 1.2320510833001972
+        },
+        {
+          "direction": "short",
+          "entry_price": 8.055936,
+          "exit_price": 8.201193,
+          "pnl": 5.951630333076764
+        },
+        {
+          "direction": "short",
+          "entry_price": 7.70229,
+          "exit_price": 7.21721,
+          "pnl": 15.58178789041003
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.868125,
+          "exit_price": 6.945939,
+          "pnl": 8.517799630338867
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.672321,
+          "exit_price": 6.844838,
+          "pnl": -20.26424378060605
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.953947,
+          "exit_price": 7.021971,
+          "pnl": 3.6950058837128426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.741252,
+          "exit_price": 6.838832,
+          "pnl": -8.205629399048327
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.984978,
+          "exit_price": 6.782210999999999,
+          "pnl": 0.45677975935912585
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.6833100000000005,
+          "exit_price": 6.328322,
+          "pnl": 9.266036084543261
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.397596,
+          "exit_price": 6.349343,
+          "pnl": 1.353651687672007
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.221772,
+          "exit_price": 6.315309,
+          "pnl": -12.213615645690426
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.025968,
+          "exit_price": 6.139133,
+          "pnl": -8.607944109464322
+        },
+        {
+          "direction": "long",
+          "entry_price": 6.315309,
+          "exit_price": 6.238755,
+          "pnl": -3.893676964250462
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.17382,
+          "exit_price": 6.249243000000001,
+          "pnl": -7.738793718809011
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.168825,
+          "exit_price": 6.1061,
+          "pnl": 8.477132387537889
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.757237,
+          "exit_price": 5.834829,
+          "pnl": -4.945591071680411
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.690303999999999,
+          "exit_price": 5.499493999999999,
+          "pnl": 10.392794401586743
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.48451,
+          "exit_price": 5.394389,
+          "pnl": 3.5584627949069327
+        },
+        {
+          "direction": "short",
+          "entry_price": 6.185808,
+          "exit_price": 6.0890830000000005,
+          "pnl": 5.007338455518009
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.712282,
+          "exit_price": 5.7997939999999994,
+          "pnl": -5.3061206349816965
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.802192,
+          "exit_price": 5.763758,
+          "pnl": 1.3291089873122763
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.612382,
+          "exit_price": 5.681676,
+          "pnl": -2.4561418340096033
+        },
+        {
+          "direction": "short",
+          "entry_price": 5.671322999999999,
+          "exit_price": 5.762757,
+          "pnl": -9.656019885540827
+        }
+      ]
+    }
+  ]
+}

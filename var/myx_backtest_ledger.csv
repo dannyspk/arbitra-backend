@@ -1,0 +1,241 @@
+ts,price,funding,decision,reason,position
+1759552860000,5.782,,hold,insufficient history for sma,None
+1759552920000,5.797,,hold,slope=0.0013,None
+1759552980000,5.868,,hold,not near support: price 5.868000 > low 5.782,None
+1759553040000,5.812,,hold,slope=-0.0005,None
+1759553100000,5.819,,hold,slope=0.0006,None
+1759553160000,5.774,,hold,slope=-0.0060,None
+1759553220000,5.779,,hold,slope=-0.0050,None
+1759553280000,5.734,,hold,not near resistance: price 5.734000 < high 5.868,None
+1759553340000,5.696,,hold,not near resistance: price 5.696000 < high 5.868,None
+1759553400000,5.652,,hold,not near resistance: price 5.652000 < high 5.868,None
+1759553460000,5.669,,hold,not near resistance: price 5.669000 < high 5.868,None
+1759553520000,5.648,,hold,not near resistance: price 5.648000 < high 5.868,None
+1759553580000,5.378,,hold,not near resistance: price 5.378000 < high 5.868,None
+1759553640000,5.494,,hold,not near resistance: price 5.494000 < high 5.868,None
+1759553700000,5.49,,hold,not near resistance: price 5.490000 < high 5.868,None
+1759553760000,5.43,,hold,not near resistance: price 5.430000 < high 5.868,None
+1759553820000,5.383,,hold,not near resistance: price 5.383000 < high 5.868,None
+1759553880000,5.373,,hold,not near resistance: price 5.373000 < high 5.868,None
+1759553940000,5.389,,hold,slope=-0.0069,None
+1759554000000,5.383,,hold,slope=-0.0046,None
+1759554060000,5.408,,hold,slope=0.0025,None
+1759554120000,5.533,,hold,not near support: price 5.533000 > low 5.373,None
+1759554180000,5.621,,hold,not near support: price 5.621000 > low 5.373,None
+1759554240000,5.53,,hold,not near support: price 5.530000 > low 5.373,None
+1759554300000,5.479,,hold,slope=-0.0024,None
+1759554360000,5.471,,hold,slope=-0.0065,None
+1759554420000,5.628,,hold,not near support: price 5.628000 > low 5.373,None
+1759554480000,5.663,,hold,not near support: price 5.663000 > low 5.373,None
+1759554540000,5.701,,hold,not near support: price 5.701000 > low 5.373,None
+1759554600000,5.695,,hold,not near support: price 5.695000 > low 5.373,None
+1759554660000,5.684,,hold,slope=0.0077,None
+1759554720000,5.661,,hold,slope=-0.0019,None
+1759554780000,5.682,,hold,slope=0.0002,None
+1759554840000,5.752,,hold,not near support: price 5.752000 > low 5.373,None
+1759554900000,5.768,,hold,not near support: price 5.768000 > low 5.373,None
+1759554960000,5.724,,hold,slope=0.0021,None
+1759555020000,5.763,,hold,slope=0.0066,None
+1759555080000,5.881,,enter,"slope=0.0207,funding=0.000000,vol=0.009491615765224717,trend=up,sr_low=None,sr_high=5.881,atr=0.008954666154753635,mom=0.006411901476066649","Position(symbol='MYX/USDT', direction='long', entry_price=5.886881, size=446.6945, qty=75.8796551178799, entry_time=1759567206.218027, pnl=0.0, exit_price=None, exit_time=None)"
+1759555140000,5.843,,hold,in_position pct=-0.0075,"Position(symbol='MYX/USDT', direction='long', entry_price=5.886881, size=446.6945, qty=75.8796551178799, entry_time=1759567206.218027, pnl=0.0, exit_price=None, exit_time=None)"
+1759555200000,5.868,,hold,in_position pct=-0.0032,"Position(symbol='MYX/USDT', direction='long', entry_price=5.886881, size=446.6945, qty=75.8796551178799, entry_time=1759567206.218027, pnl=0.0, exit_price=None, exit_time=None)"
+1759555260000,5.793,,exit,stop loss pct=-0.0159,"Position(symbol='MYX/USDT', direction='long', entry_price=5.886881, size=446.6945, qty=75.8796551178799, entry_time=1759567206.218027, pnl=-7.917559052721826, exit_price=5.787207, exit_time=1759567206.218027)"
+1759555320000,5.81,,hold,slope=-0.0028,None
+1759555380000,5.922,,hold,not near support: price 5.922000 > low 5.471,None
+1759555440000,5.927,,hold,not near support: price 5.927000 > low 5.471,None
+1759555500000,5.937,,enter,"slope=0.0104,funding=0.000000,vol=0.010212578664620699,trend=up,sr_low=5.471,sr_high=None,atr=0.0069671663809996705,mom=0.002706771016309818","Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=0.0, exit_price=None, exit_time=None)"
+1759555560000,5.893,,hold,in_position pct=-0.0084,"Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=0.0, exit_price=None, exit_time=None)"
+1759555620000,5.919,,hold,in_position pct=-0.0040,"Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=0.0, exit_price=None, exit_time=None)"
+1759555680000,5.95,,hold,in_position pct=0.0012,"Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=0.0, exit_price=None, exit_time=None)"
+1759555740000,5.884,,hold,in_position pct=-0.0099,"Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=0.0, exit_price=None, exit_time=None)"
+1759555800000,5.766,,exit,stop loss pct=-0.0298,"Position(symbol='MYX/USDT', direction='long', entry_price=5.942937000000001, size=574.1215000000001, qty=96.60568503418428, entry_time=1759567206.219027, pnl=-18.102385613411542, exit_price=5.760234, exit_time=1759567206.2200274)"
+1759555860000,5.786,,hold,trend up - skip short entry,None
+1759555920000,5.737,,hold,not near resistance: price 5.737000 < high 5.95,None
+1759555980000,5.759,,hold,not near resistance: price 5.759000 < high 5.95,None
+1759556040000,5.742,,hold,slope=-0.0064,None
+1759556100000,5.75,,hold,slope=-0.0012,None
+1759556160000,5.743,,hold,slope=-0.0017,None
+1759556220000,5.745,,hold,slope=-0.0002,None
+1759556280000,6.071,,enter,"slope=0.0464,funding=0.000000,vol=0.023166138185738285,trend=up,sr_low=None,sr_high=6.071,atr=0.01108175633035713,mom=0.00969199210498588","Position(symbol='MYX/USDT', direction='long', entry_price=6.077071, size=360.9536, qty=59.395982044639595, entry_time=1759567206.2210276, pnl=0.0, exit_price=None, exit_time=None)"
+1759556340000,6.106,,reduce,partial_target hit pct=0.0048,"Position(symbol='MYX/USDT', direction='long', entry_price=6.077071, size=180.4768, qty=29.697991022319798, entry_time=1759567206.2210276, pnl=0.5331446902027583, exit_price=None, exit_time=None)"
+1759556400000,6.195,,reduce,partial_target hit pct=0.0194,"Position(symbol='MYX/USDT', direction='long', entry_price=6.077071, size=90.2384, qty=14.848995511159899, entry_time=1759567206.2210276, pnl=2.1194279795809243, exit_price=None, exit_time=None)"
+1759556460000,6.252,,reduce,partial_target hit pct=0.0288,"Position(symbol='MYX/USDT', direction='long', entry_price=6.077071, size=45.1192, qty=7.424497755579949, entry_time=1759567206.2210276, pnl=3.335173690695714, exit_price=None, exit_time=None)"
+1759556520000,6.267,,reduce,partial_target hit pct=0.0313,None
+1759556580000,6.449,,enter,"slope=0.0363,funding=0.000000,vol=0.020442765624279886,trend=up,sr_low=None,sr_high=6.449,atr=0.019621190793486665,mom=0.019621190793486665","Position(symbol='MYX/USDT', direction='long', entry_price=6.455449, size=203.8612, qty=31.5797088630086, entry_time=1759567206.2230265, pnl=0.0, exit_price=None, exit_time=None)"
+1759556640000,6.53,,reduce,partial_target hit pct=0.0115,"Position(symbol='MYX/USDT', direction='long', entry_price=6.455449, size=101.9306, qty=15.7898544315043, entry_time=1759567206.2230265, pnl=0.9920675916100521, exit_price=None, exit_time=None)"
+1759556700000,6.41,,hold,in_position pct=-0.0070,"Position(symbol='MYX/USDT', direction='long', entry_price=6.455449, size=101.9306, qty=15.7898544315043, entry_time=1759567206.2230265, pnl=0.9920675916100521, exit_price=None, exit_time=None)"
+1759556760000,6.363,,exit,stop loss pct=-0.0143,"Position(symbol='MYX/USDT', direction='long', entry_price=6.455449, size=101.9306, qty=15.7898544315043, entry_time=1759567206.2230265, pnl=-0.6490798936373114, exit_price=6.356637, exit_time=1759567206.2240264)"
+1759556820000,6.369,,hold,slope=-0.0045,None
+1759556880000,6.391,,hold,slope=-0.0043,None
+1759556940000,6.357,,hold,slope=-0.0072,None
+1759557000000,6.263,,hold,trend up - skip short entry,None
+1759557060000,6.194,,hold,trend up - skip short entry,None
+1759557120000,6.256,,hold,slope=-0.0078,None
+1759557180000,6.418,,enter,"slope=0.0166,funding=0.000000,vol=0.015097749365325246,trend=up,sr_low=None,sr_high=6.53,atr=0.011747162287121055,mom=0.0013725240102586275","Position(symbol='MYX/USDT', direction='long', entry_price=6.424418, size=340.50780000000003, qty=53.002124083457836, entry_time=1759567206.2250283, pnl=0.0, exit_price=None, exit_time=None)"
+1759557240000,6.345,,exit,stop loss pct=-0.0124,"Position(symbol='MYX/USDT', direction='long', entry_price=6.424418, size=340.50780000000003, qty=53.002124083457836, entry_time=1759567206.2250283, pnl=-4.816209159302488, exit_price=6.338655, exit_time=1759567206.2250283)"
+1759557300000,6.317,,hold,slope=0.0029,None
+1759557360000,6.261,,hold,slope=-0.0060,None
+1759557420000,6.276,,hold,slope=-0.0057,None
+1759557480000,6.33,,hold,slope=0.0009,None
+1759557540000,6.343,,hold,slope=0.0049,None
+1759557600000,6.303,,hold,slope=-0.0003,None
+1759557660000,6.312,,hold,slope=0.0012,None
+1759557720000,6.291,,hold,slope=-0.0029,None
+1759557780000,6.244,,hold,trend up - skip short entry,None
+1759557840000,6.334,,hold,slope=0.0047,None
+1759557900000,6.388,,hold,not near support: price 6.388000 > low 6.194,None
+1759557960000,6.393,,hold,not near support: price 6.393000 > low 6.194,None
+1759558020000,6.395,,hold,not near support: price 6.395000 > low 6.194,None
+1759558080000,6.326,,hold,slope=-0.0033,None
+1759558140000,6.349,,hold,slope=-0.0024,None
+1759558200000,6.367,,hold,slope=-0.0004,None
+1759558260000,6.36,,hold,slope=-0.0008,None
+1759558320000,6.401,,hold,slope=0.0054,None
+1759558380000,6.417,,hold,slope=0.0074,None
+1759558440000,6.42,,hold,slope=0.0054,None
+1759558500000,6.361,,hold,slope=-0.0042,None
+1759558560000,6.388,,hold,slope=-0.0005,None
+1759558620000,6.504,,enter,"slope=0.0138,funding=0.000000,vol=0.008887255849107588,trend=up,sr_low=None,sr_high=6.504,atr=0.006834558915407927,mom=0.003771215197858592","Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=585.2609, qty=89.89486835427796, entry_time=1759567206.2280266, pnl=0.0, exit_price=None, exit_time=None)"
+1759558680000,6.472,,hold,in_position pct=-0.0059,"Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=585.2609, qty=89.89486835427796, entry_time=1759567206.2280266, pnl=0.0, exit_price=None, exit_time=None)"
+1759558740000,6.48,,hold,in_position pct=-0.0047,"Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=585.2609, qty=89.89486835427796, entry_time=1759567206.2280266, pnl=0.0, exit_price=None, exit_time=None)"
+1759558800000,6.545,,reduce,partial_target hit pct=0.0053,"Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=292.63045, qty=44.94743417713898, entry_time=1759567206.2280266, pnl=1.0217188423921701, exit_price=None, exit_time=None)"
+1759558860000,6.462,,hold,in_position pct=-0.0075,"Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=292.63045, qty=44.94743417713898, entry_time=1759567206.2280266, pnl=1.0217188423921701, exit_price=None, exit_time=None)"
+1759558920000,6.463,,hold,in_position pct=-0.0073,"Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=292.63045, qty=44.94743417713898, entry_time=1759567206.2280266, pnl=1.0217188423921701, exit_price=None, exit_time=None)"
+1759558980000,6.421,,exit,stop loss pct=-0.0137,"Position(symbol='MYX/USDT', direction='long', entry_price=6.510503999999999, size=292.63045, qty=44.94743417713898, entry_time=1759567206.2280266, pnl=-3.5222435080004413, exit_price=6.414579000000001, exit_time=1759567206.2300274)"
+1759559040000,6.476,,hold,slope=0.0002,None
+1759559100000,6.463,,hold,slope=-0.0013,None
+1759559160000,6.431,,hold,slope=-0.0034,None
+1759559220000,6.448,,hold,slope=-0.0004,None
+1759559280000,6.454,,hold,slope=0.0008,None
+1759559340000,6.483,,hold,slope=0.0037,None
+1759559400000,6.497,,hold,slope=0.0053,None
+1759559460000,6.437,,hold,slope=-0.0033,None
+1759559520000,6.423,,hold,slope=-0.0053,None
+1759559580000,6.38,,hold,not near resistance: price 6.380000 < high 6.545,None
+1759559640000,6.399,,hold,slope=-0.0058,None
+1759559700000,6.367,,hold,slope=-0.0078,None
+1759559760000,6.42,,hold,slope=0.0024,None
+1759559820000,6.427,,hold,slope=0.0038,None
+1759559880000,6.374,,hold,slope=-0.0032,None
+1759559940000,6.365,,hold,slope=-0.0042,None
+1759560000000,6.363,,hold,slope=-0.0036,None
+1759560060000,6.408,,hold,slope=0.0024,None
+1759560120000,6.404,,hold,slope=0.0022,None
+1759560180000,6.377,,hold,slope=-0.0008,None
+1759560240000,6.335,,hold,slope=-0.0063,None
+1759560300000,6.323,,hold,slope=-0.0071,None
+1759560360000,6.341,,hold,slope=-0.0037,None
+1759560420000,6.335,,hold,slope=-0.0028,None
+1759560480000,6.407,,hold,trend down - skip long entry,None
+1759560540000,6.368,,hold,slope=0.0026,None
+1759560600000,6.371,,hold,slope=0.0021,None
+1759560660000,6.349,,hold,slope=-0.0020,None
+1759560720000,6.354,,hold,slope=-0.0016,None
+1759560780000,6.411,,hold,slope=0.0054,None
+1759560840000,6.384,,hold,slope=0.0018,None
+1759560900000,6.353,,hold,slope=-0.0027,None
+1759560960000,6.332,,hold,slope=-0.0050,None
+1759561020000,6.375,,hold,slope=0.0011,None
+1759561080000,6.373,,hold,slope=0.0003,None
+1759561140000,6.378,,hold,slope=0.0019,None
+1759561200000,6.327,,hold,slope=-0.0046,None
+1759561260000,6.309,,hold,slope=-0.0063,None
+1759561320000,6.313,,hold,slope=-0.0052,None
+1759561380000,6.309,,hold,slope=-0.0041,None
+1759561440000,6.292,,hold,slope=-0.0046,None
+1759561500000,6.192,,enter,"slope=-0.0156,funding=0.000000,vol=0.006137613576009477,trend=down,sr_low=6.192,sr_high=None,atr=0.005116096065067269,mom=-0.0049047577652839135","Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=781.8461000000001, qty=126.39352854146138, entry_time=1759567206.2360287, pnl=0.0, exit_price=None, exit_time=None)"
+1759561560000,6.211,,hold,in_position pct=-0.0041,"Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=781.8461000000001, qty=126.39352854146138, entry_time=1759567206.2360287, pnl=0.0, exit_price=None, exit_time=None)"
+1759561620000,6.209,,hold,in_position pct=-0.0037,"Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=781.8461000000001, qty=126.39352854146138, entry_time=1759567206.2360287, pnl=0.0, exit_price=None, exit_time=None)"
+1759561680000,6.15,,reduce,partial_target hit pct=0.0058,"Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=390.92305000000005, qty=63.19676427073069, entry_time=1759567206.2360287, pnl=1.5623009105951966, exit_price=None, exit_time=None)"
+1759561740000,6.146,,reduce,partial_target hit pct=0.0064,"Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=195.46152500000002, qty=31.598382135365345, entry_time=1759567206.2360287, pnl=2.4700218959316294, exit_price=None, exit_time=None)"
+1759561800000,6.106,,reduce,partial_target hit pct=0.0129,"Position(symbol='MYX/USDT', direction='short', entry_price=6.185808, size=97.73076250000001, qty=15.799191067682672, entry_time=1759567206.2360287, pnl=3.556735038794005, exit_price=None, exit_time=None)"
+1759561860000,6.083,,reduce,partial_target hit pct=0.0166,None
+1759561920000,6.049,,hold,not near resistance: price 6.049000 < high 6.411,None
+1759561980000,6.087,,hold,slope=-0.0027,None
+1759562040000,6.067,,hold,slope=-0.0037,None
+1759562100000,6.047,,hold,slope=-0.0043,None
+1759562160000,6.038,,hold,slope=-0.0039,None
+1759562220000,5.718,,enter,"slope=-0.0472,funding=0.000000,vol=0.02142803001501736,trend=down,sr_low=5.718,sr_high=None,atr=0.012156602185406831,mom=-0.010062592156200938","Position(symbol='MYX/USDT', direction='short', entry_price=5.712282, size=329.0393, qty=57.60207566783293, entry_time=1759567206.239028, pnl=0.0, exit_price=None, exit_time=None)"
+1759562280000,5.794,,exit,stop loss pct=-0.0143,"Position(symbol='MYX/USDT', direction='short', entry_price=5.712282, size=329.0393, qty=57.60207566783293, entry_time=1759567206.239028, pnl=-5.3061206349816965, exit_price=5.7997939999999994, exit_time=1759567206.2400277)"
+1759562340000,5.808,,enter,"slope=-0.0176,funding=0.000000,vol=0.02311796073916804,trend=down,sr_low=5.718,sr_high=None,atr=0.01279598149925455,mom=-0.007560097055186811","Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=312.5981, qty=53.875862777377925, entry_time=1759567206.2400277, pnl=0.0, exit_price=None, exit_time=None)"
+1759562400000,5.827,,hold,in_position pct=-0.0043,"Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=312.5981, qty=53.875862777377925, entry_time=1759567206.2400277, pnl=0.0, exit_price=None, exit_time=None)"
+1759562460000,5.827,,hold,in_position pct=-0.0043,"Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=312.5981, qty=53.875862777377925, entry_time=1759567206.2400277, pnl=0.0, exit_price=None, exit_time=None)"
+1759562520000,5.806,,hold,in_position pct=-0.0007,"Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=312.5981, qty=53.875862777377925, entry_time=1759567206.2400277, pnl=0.0, exit_price=None, exit_time=None)"
+1759562580000,5.769,,reduce,partial_target hit pct=0.0057,"Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=156.29905, qty=26.937931388688963, entry_time=1759567206.2400277, pnl=0.6139751400289996, exit_price=None, exit_time=None)"
+1759562640000,5.77,,reduce,partial_target hit pct=0.0055,"Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=78.149525, qty=13.468965694344481, entry_time=1759567206.2400277, pnl=0.9074748824096021, exit_price=None, exit_time=None)"
+1759562700000,5.777,,hold,in_position pct=0.0043,"Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=78.149525, qty=13.468965694344481, entry_time=1759567206.2400277, pnl=0.9074748824096021, exit_price=None, exit_time=None)"
+1759562760000,5.778,,hold,in_position pct=0.0042,"Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=78.149525, qty=13.468965694344481, entry_time=1759567206.2400277, pnl=0.9074748824096021, exit_price=None, exit_time=None)"
+1759562820000,5.785,,hold,in_position pct=0.0030,"Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=78.149525, qty=13.468965694344481, entry_time=1759567206.2400277, pnl=0.9074748824096021, exit_price=None, exit_time=None)"
+1759562880000,5.763,,reduce,partial_target hit pct=0.0068,"Position(symbol='MYX/USDT', direction='short', entry_price=5.802192, size=39.0747625, qty=6.734482847172241, entry_time=1759567206.2400277, pnl=1.1014321503185616, exit_price=None, exit_time=None)"
+1759562940000,5.758,,reduce,partial_target hit pct=0.0076,None
+1759563000000,5.739,,hold,slope=-0.0048,None
+1759563060000,5.734,,hold,slope=-0.0044,None
+1759563120000,5.752,,hold,slope=-0.0006,None
+1759563180000,5.735,,hold,slope=-0.0021,None
+1759563240000,5.76,,hold,slope=0.0024,None
+1759563300000,5.819,,hold,trend down - skip long entry,None
+1759563360000,5.858,,hold,trend down - skip long entry,None
+1759563420000,5.81,,hold,slope=0.0036,None
+1759563480000,5.767,,hold,slope=-0.0042,None
+1759563540000,5.767,,hold,slope=-0.0051,None
+1759563600000,5.805,,hold,slope=0.0001,None
+1759563660000,5.795,,hold,slope=-0.0009,None
+1759563720000,5.806,,hold,slope=0.0025,None
+1759563780000,5.795,,hold,slope=0.0010,None
+1759563840000,5.772,,hold,slope=-0.0031,None
+1759563900000,5.873,,hold,not near support: price 5.873000 > low 5.734,None
+1759563960000,5.873,,hold,not near support: price 5.873000 > low 5.734,None
+1759564020000,5.83,,hold,slope=0.0009,None
+1759564080000,5.83,,hold,slope=0.0002,None
+1759564140000,5.831,,hold,slope=-0.0007,None
+1759564200000,5.83,,hold,slope=-0.0025,None
+1759564260000,5.825,,hold,slope=-0.0020,None
+1759564320000,5.796,,hold,slope=-0.0048,None
+1759564380000,5.752,,hold,"slope=-0.0101,funding=0.000000,vol=0.003260681478031776,trend=down,sr_low=5.752,sr_high=5.873,atr=0.0022951066394342784,mom=-0.002237931110560617,skipped_by_size",
+1759564440000,5.781,,hold,slope=-0.0037,None
+1759564500000,5.755,,hold,slope=-0.0060,None
+1759564560000,5.838,,hold,not near support: price 5.838000 > low 5.752,None
+1759564620000,5.795,,hold,slope=0.0015,None
+1759564680000,5.794,,hold,slope=0.0014,None
+1759564740000,5.811,,hold,slope=0.0026,None
+1759564800000,5.82,,hold,slope=0.0031,None
+1759564860000,5.777,,hold,slope=-0.0050,None
+1759564920000,5.769,,hold,slope=-0.0044,None
+1759564980000,5.713,,hold,not near resistance: price 5.713000 < high 5.873,None
+1759565040000,5.618,,enter,"slope=-0.0232,funding=0.000000,vol=0.007509040584411062,trend=down,sr_low=5.618,sr_high=None,atr=0.006598628479688347,mom=-0.0051043429760249","Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=606.1866, qty=108.00879198885606, entry_time=1759567206.2570314, pnl=0.0, exit_price=None, exit_time=None)"
+1759565100000,5.646,,hold,in_position pct=-0.0060,"Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=606.1866, qty=108.00879198885606, entry_time=1759567206.2570314, pnl=0.0, exit_price=None, exit_time=None)"
+1759565160000,5.618,,hold,in_position pct=-0.0010,"Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=606.1866, qty=108.00879198885606, entry_time=1759567206.2570314, pnl=0.0, exit_price=None, exit_time=None)"
+1759565220000,5.605,,hold,in_position pct=0.0013,"Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=606.1866, qty=108.00879198885606, entry_time=1759567206.2570314, pnl=0.0, exit_price=None, exit_time=None)"
+1759565280000,5.574,,reduce,partial_target hit pct=0.0068,"Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=303.0933, qty=54.00439599442803, entry_time=1759567206.2570314, pnl=1.530010294274718, exit_price=None, exit_time=None)"
+1759565340000,5.608,,hold,in_position pct=0.0008,"Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=303.0933, qty=54.00439599442803, entry_time=1759567206.2570314, pnl=1.530010294274718, exit_price=None, exit_time=None)"
+1759565400000,5.651,,hold,in_position pct=-0.0069,"Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=303.0933, qty=54.00439599442803, entry_time=1759567206.2570314, pnl=1.530010294274718, exit_price=None, exit_time=None)"
+1759565460000,5.676,,exit,stop loss pct=-0.0113,"Position(symbol='MYX/USDT', direction='short', entry_price=5.612382, size=303.0933, qty=54.00439599442803, entry_time=1759567206.2570314, pnl=-2.4561418340096033, exit_price=5.681676, exit_time=1759567206.2590299)"
+1759565520000,5.632,,hold,slope=0.0014,None
+1759565580000,5.601,,hold,slope=-0.0040,None
+1759565640000,5.579,,hold,not near resistance: price 5.579000 < high 5.838,None
+1759565700000,5.61,,hold,slope=-0.0026,None
+1759565760000,5.571,,hold,slope=-0.0072,None
+1759565820000,5.591,,hold,slope=-0.0011,None
+1759565880000,5.625,,hold,slope=0.0052,None
+1759565940000,5.621,,hold,slope=0.0038,None
+1759566000000,5.659,,hold,trend down - skip long entry,None
+1759566060000,5.709,,hold,not near support: price 5.709000 > low 5.571,None
+1759566120000,5.677,,hold,slope=0.0053,None
+1759566180000,5.689,,hold,slope=0.0045,None
+1759566240000,5.703,,hold,slope=0.0047,None
+1759566300000,5.702,,hold,slope=0.0021,None
+1759566360000,5.735,,hold,slope=0.0057,None
+1759566420000,5.762,,hold,not near support: price 5.762000 > low 5.571,None
+1759566480000,5.791,,hold,not near support: price 5.791000 > low 5.571,None
+1759566540000,5.786,,hold,slope=0.0069,None
+1759566600000,5.781,,hold,slope=0.0037,None
+1759566660000,5.749,,hold,slope=-0.0032,None
+1759566720000,5.798,,hold,slope=0.0035,None
+1759566780000,5.78,,hold,slope=-0.0001,None
+1759566840000,5.787,,hold,slope=0.0012,None
+1759566900000,5.864,,enter,"slope=0.0122,funding=0.000000,vol=0.007233830581540198,trend=up,sr_low=None,sr_high=5.864,atr=0.0054240045682293755,mom=0.0022559885152902063","Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=737.4625000000001, qty=125.63536395391786, entry_time=1759567206.26403, pnl=0.0, exit_price=None, exit_time=None)"
+1759566960000,5.901,,reduce,partial_target hit pct=0.0053,"Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=368.73125000000005, qty=62.81768197695893, entry_time=1759567206.26403, pnl=1.2895851230067046, exit_price=None, exit_time=None)"
+1759567020000,5.838,,hold,in_position pct=-0.0054,"Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=368.73125000000005, qty=62.81768197695893, entry_time=1759567206.26403, pnl=1.2895851230067046, exit_price=None, exit_time=None)"
+1759567080000,5.848,,hold,in_position pct=-0.0037,"Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=368.73125000000005, qty=62.81768197695893, entry_time=1759567206.26403, pnl=1.2895851230067046, exit_price=None, exit_time=None)"
+1759567140000,5.876,,hold,in_position pct=0.0010,"Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=368.73125000000005, qty=62.81768197695893, entry_time=1759567206.26403, pnl=1.2895851230067046, exit_price=None, exit_time=None)"
+1759567200000,5.871,,hold,in_position pct=0.0002,"Position(symbol='MYX/USDT', direction='long', entry_price=5.869864, size=368.73125000000005, qty=62.81768197695893, entry_time=1759567206.26403, pnl=1.2895851230067046, exit_price=None, exit_time=None)"

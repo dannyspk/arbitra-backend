@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Live Trading Dashboard</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: #0a0e27;
+            color: #e0e0e0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            color: #00d4ff;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: #1a1f3a;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+        
+        .card h2 {
+            color: #00d4ff;
+            font-size: 1.2em;
+            margin-bottom: 15px;
+            border-bottom: 2px solid #2a3f5f;
+            padding-bottom: 10px;
+        }
+        
+        .stat {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #2a3f5f;
+        }
+        
+        .stat:last-child {
+            border-bottom: none;
+        }
+        
+        .stat-label {
+            color: #8b92a8;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+        
+        .positive {
+            color: #00ff7f !important;
+        }
+        
+        .negative {
+            color: #ff4757 !important;
+        }
+        
+        .status-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+        }
+        
+        .status-running {
+            background: #00ff7f;
+            color: #0a0e27;
+        }
+        
+        .status-stopped {
+            background: #ff4757;
+            color: white;
+        }
+        
+        .status-executed {
+            background: #00d4ff;
+            color: #0a0e27;
+        }
+        
+        .status-pending {
+            background: #ffa500;
+            color: #0a0e27;
+        }
+        
+        .status-failed {
+            background: #ff4757;
+            color: white;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        
+        th {
+            background: #2a3f5f;
+            padding: 12px;
+            text-align: left;
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #2a3f5f;
+        }
+        
+        tr:hover {
+            background: #222844;
+        }
+        
+        .timestamp {
+            color: #8b92a8;
+            font-size: 0.9em;
+        }
+        
+        .refresh-bar {
+            background: #1a1f3a;
+            padding: 15px 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .refresh-bar button {
+            background: #00d4ff;
+            color: #0a0e27;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .refresh-bar button:hover {
+            background: #00b8d4;
+            transform: translateY(-2px);
+        }
+        
+        .auto-refresh {
+            color: #8b92a8;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: #8b92a8;
+        }
+        
+        .action-long {
+            color: #00ff7f;
+            font-weight: 600;
+        }
+        
+        .action-short {
+            color: #ff4757;
+            font-weight: 600;
+        }
+        
+        .side-long {
+            background: rgba(0, 255, 127, 0.2);
+            color: #00ff7f;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+        
+        .side-short {
+            background: rgba(255, 71, 87, 0.2);
+            color: #ff4757;
+            padding: 4px 8px;
+            border-radius: 4px;
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 Live Trading Dashboard</h1>
+        
+        <div class="refresh-bar">
+            <div class="auto-refresh">
+                Auto-refresh: <strong id="refresh-status">ON</strong> (every 2s)
+            </div>
+            <button onclick="refreshDashboard()">🔄 Refresh Now</button>
+        </div>
+        
+        <!-- Strategy Status -->
+        <div class="grid">
+            <div class="card">
+                <h2>Strategy Status</h2>
+                <div class="stat">
+                    <span class="stat-label">Status:</span>
+                    <span class="stat-value" id="strategy-status">--</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Mode:</span>
+                    <span class="stat-value" id="strategy-mode">--</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Symbol:</span>
+                    <span class="stat-value" id="strategy-symbol">--</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Type:</span>
+                    <span class="stat-value" id="strategy-type">--</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Performance</h2>
+                <div class="stat">
+                    <span class="stat-label">Total Trades:</span>
+                    <span class="stat-value" id="total-trades">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Win Rate:</span>
+                    <span class="stat-value" id="win-rate">0%</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Realized P&L:</span>
+                    <span class="stat-value" id="realized-pnl">$0.00</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Unrealized P&L:</span>
+                    <span class="stat-value" id="unrealized-pnl">$0.00</span>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h2>Active Positions</h2>
+                <div class="stat">
+                    <span class="stat-label">Open Positions:</span>
+                    <span class="stat-value" id="active-positions">0</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total P&L:</span>
+                    <span class="stat-value" id="total-pnl">$0.00</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Positions Table -->
+        <div class="card">
+            <h2>Open Positions</h2>
+            <div id="positions-container">
+                <div class="loading">No open positions</div>
+            </div>
+        </div>
+        
+        <!-- Recent Signals -->
+        <div class="card">
+            <h2>Recent Signals</h2>
+            <div id="signals-container">
+                <div class="loading">Loading signals...</div>
+            </div>
+        </div>
+        
+        <!-- Completed Trades -->
+        <div class="card">
+            <h2>Completed Trades</h2>
+            <div id="trades-container">
+                <div class="loading">Loading trades...</div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        const API_BASE = 'http://127.0.0.1:8000/api';
+        let autoRefresh = true;
+        
+        function formatPrice(price) {
+            return price ? `$${price.toFixed(2)}` : '--';
+        }
+        
+        function formatPercent(pct) {
+            if (pct === null || pct === undefined) return '--';
+            const sign = pct >= 0 ? '+' : '';
+            return `${sign}${pct.toFixed(2)}%`;
+        }
+        
+        function formatTimestamp(ts) {
+            if (!ts) return '--';
+            const date = new Date(ts);
+            return date.toLocaleTimeString();
+        }
+        
+        function getStatusClass(status) {
+            return `status-badge status-${status}`;
+        }
+        
+        async function refreshDashboard() {
+            try {
+                const response = await fetch(`${API_BASE}/dashboard`);
+                const data = await response.json();
+                
+                updateStrategy(data.strategy);
+                updateStatistics(data.statistics);
+                updatePositions(data.positions);
+                updateSignals(data.signals);
+                updateTrades(data.trades);
+            } catch (error) {
+                console.error('Failed to refresh dashboard:', error);
+            }
+        }
+        
+        function updateStrategy(strategy) {
+            const statusEl = document.getElementById('strategy-status');
+            statusEl.innerHTML = strategy.running 
+                ? '<span class="status-badge status-running">RUNNING</span>'
+                : '<span class="status-badge status-stopped">STOPPED</span>';
+            
+            document.getElementById('strategy-mode').textContent = strategy.mode || '--';
+            document.getElementById('strategy-symbol').textContent = strategy.symbol || '--';
+            document.getElementById('strategy-type').textContent = strategy.type ? strategy.type.toUpperCase() : '--';
+        }
+        
+        function updateStatistics(stats) {
+            document.getElementById('total-trades').textContent = stats.total_trades || 0;
+            document.getElementById('win-rate').textContent = `${(stats.win_rate || 0).toFixed(1)}%`;
+            
+            const realizedEl = document.getElementById('realized-pnl');
+            realizedEl.textContent = formatPrice(stats.realized_pnl || 0);
+            realizedEl.className = `stat-value ${stats.realized_pnl >= 0 ? 'positive' : 'negative'}`;
+            
+            const unrealizedEl = document.getElementById('unrealized-pnl');
+            unrealizedEl.textContent = formatPrice(stats.unrealized_pnl || 0);
+            unrealizedEl.className = `stat-value ${stats.unrealized_pnl >= 0 ? 'positive' : 'negative'}`;
+            
+            const totalEl = document.getElementById('total-pnl');
+            totalEl.textContent = formatPrice(stats.total_pnl || 0);
+            totalEl.className = `stat-value ${stats.total_pnl >= 0 ? 'positive' : 'negative'}`;
+            
+            document.getElementById('active-positions').textContent = stats.active_positions || 0;
+        }
+        
+        function updatePositions(positions) {
+            const container = document.getElementById('positions-container');
+            
+            if (!positions || positions.length === 0) {
+                container.innerHTML = '<div class="loading">No open positions</div>';
+                return;
+            }
+            
+            let html = '<table><thead><tr><th>Symbol</th><th>Side</th><th>Entry</th><th>Size</th><th>P&L</th><th>P&L %</th><th>Stop Loss</th><th>Take Profit</th></tr></thead><tbody>';
+            
+            positions.forEach(pos => {
+                const pnlClass = pos.unrealized_pnl >= 0 ? 'positive' : 'negative';
+                const sideClass = pos.side === 'long' ? 'side-long' : 'side-short';
+                
+                html += `
+                    <tr>
+                        <td>${pos.symbol}</td>
+                        <td><span class="${sideClass}">${pos.side.toUpperCase()}</span></td>
+                        <td>${formatPrice(pos.entry_price)}</td>
+                        <td>${pos.size.toFixed(4)}</td>
+                        <td class="${pnlClass}">${formatPrice(pos.unrealized_pnl)}</td>
+                        <td class="${pnlClass}">${formatPercent(pos.unrealized_pnl_pct)}</td>
+                        <td>${formatPrice(pos.stop_loss)}</td>
+                        <td>${formatPrice(pos.take_profit)}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        
+        function updateSignals(signals) {
+            const container = document.getElementById('signals-container');
+            
+            if (!signals || signals.length === 0) {
+                container.innerHTML = '<div class="loading">No signals yet</div>';
+                return;
+            }
+            
+            let html = '<table><thead><tr><th>Time</th><th>Symbol</th><th>Action</th><th>Price</th><th>Size</th><th>Reason</th><th>Status</th></tr></thead><tbody>';
+            
+            signals.forEach(sig => {
+                const actionClass = sig.action.includes('long') ? 'action-long' : 'action-short';
+                
+                html += `
+                    <tr>
+                        <td class="timestamp">${formatTimestamp(sig.timestamp)}</td>
+                        <td>${sig.symbol}</td>
+                        <td class="${actionClass}">${sig.action}</td>
+                        <td>${formatPrice(sig.price)}</td>
+                        <td>${sig.size ? sig.size.toFixed(4) : '--'}</td>
+                        <td>${sig.reason}</td>
+                        <td><span class="${getStatusClass(sig.status)}">${sig.status}</span></td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        
+        function updateTrades(trades) {
+            const container = document.getElementById('trades-container');
+            
+            if (!trades || trades.length === 0) {
+                container.innerHTML = '<div class="loading">No completed trades yet</div>';
+                return;
+            }
+            
+            let html = '<table><thead><tr><th>Time</th><th>Symbol</th><th>Side</th><th>Entry</th><th>Exit</th><th>Size</th><th>P&L</th><th>P&L %</th><th>Reason</th></tr></thead><tbody>';
+            
+            trades.forEach(trade => {
+                const pnlClass = trade.pnl >= 0 ? 'positive' : 'negative';
+                const sideClass = trade.side === 'long' ? 'side-long' : 'side-short';
+                
+                html += `
+                    <tr>
+                        <td class="timestamp">${formatTimestamp(trade.exit_time)}</td>
+                        <td>${trade.symbol}</td>
+                        <td><span class="${sideClass}">${trade.side.toUpperCase()}</span></td>
+                        <td>${formatPrice(trade.entry_price)}</td>
+                        <td>${formatPrice(trade.exit_price)}</td>
+                        <td>${trade.size.toFixed(4)}</td>
+                        <td class="${pnlClass}">${formatPrice(trade.pnl)}</td>
+                        <td class="${pnlClass}">${formatPercent(trade.pnl_pct)}</td>
+                        <td>${trade.reason}</td>
+                    </tr>
+                `;
+            });
+            
+            html += '</tbody></table>';
+            container.innerHTML = html;
+        }
+        
+        // Auto-refresh every 2 seconds
+        setInterval(() => {
+            if (autoRefresh) {
+                refreshDashboard();
+            }
+        }, 2000);
+        
+        // Initial load
+        refreshDashboard();
+    </script>
+</body>
+</html>

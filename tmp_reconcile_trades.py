@@ -1,0 +1,10 @@
+import pandas as pd
+tr = pd.read_csv('var/bear_verbose_trades.csv')
+tr['entry_time']=pd.to_datetime(tr['entry_time'])
+tr['exit_time']=pd.to_datetime(tr['exit_time'])
+print('Trades:')
+print(tr.to_string(index=False))
+print('\nSum of pnl:', tr['pnl'].sum())
+print('Start equity 10000 + sum pnl =', 10000 + tr['pnl'].sum())
+print('\nEquity column in trades shows:')
+print(tr['equity'].to_list())

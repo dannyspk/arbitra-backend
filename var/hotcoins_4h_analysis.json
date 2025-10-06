@@ -1,0 +1,262 @@
+[
+  {
+    "symbol": "PEPEUSDT",
+    "trend": "Mild Bullish",
+    "analysis": {
+      "first": 9.88e-06,
+      "last": 1.018e-05,
+      "pct_change": 3.0364372469635637,
+      "slope": 1.1329710585253231e-09,
+      "sma30": 1.0181333333333334e-05,
+      "above_sma": -1.3333333333328688e-09,
+      "quote_volume_1h": 19266511.534864545
+    }
+  },
+  {
+    "symbol": "LINEAUSDT",
+    "trend": "Bullish",
+    "analysis": {
+      "first": 0.02764,
+      "last": 0.02891,
+      "pct_change": 4.594790159189577,
+      "slope": 6.962746749075507e-06,
+      "sma30": 0.028843666666666667,
+      "above_sma": 6.633333333333491e-05,
+      "quote_volume_1h": 9718972.77938
+    }
+  },
+  {
+    "symbol": "SUIUSDT",
+    "trend": "Mild Bullish",
+    "analysis": {
+      "first": 3.5309,
+      "last": 3.5474,
+      "pct_change": 0.46730295392110044,
+      "slope": 5.854203197972186e-05,
+      "sma30": 3.553576666666667,
+      "above_sma": -0.006176666666666719,
+      "quote_volume_1h": 8126849.546899996
+    }
+  },
+  {
+    "symbol": "NEARUSDT",
+    "trend": "Neutral",
+    "analysis": {
+      "first": 2.978,
+      "last": 2.983,
+      "pct_change": 0.167897918065818,
+      "slope": 8.646460876056843e-05,
+      "sma30": 2.9910666666666668,
+      "above_sma": -0.008066666666666666,
+      "quote_volume_1h": 7196610.226699996
+    }
+  },
+  {
+    "symbol": "XPLUSDT",
+    "trend": "Mild Bullish",
+    "analysis": {
+      "first": 0.8594,
+      "last": 0.9399,
+      "pct_change": 9.367000232720502,
+      "slope": 0.00035475685341759404,
+      "sma30": 0.9429366666666666,
+      "above_sma": -0.0030366666666666875,
+      "quote_volume_1h": 70072925.03718998
+    }
+  },
+  {
+    "symbol": "WLDUSDT",
+    "trend": "Neutral",
+    "analysis": {
+      "first": 1.31,
+      "last": 1.309,
+      "pct_change": -0.07633587786259888,
+      "slope": 4.480546537266277e-06,
+      "sma30": 1.3114666666666666,
+      "above_sma": -0.002466666666666617,
+      "quote_volume_1h": 7127054.945599999
+    }
+  },
+  {
+    "symbol": "APTUSDT",
+    "trend": "Mild Bullish",
+    "analysis": {
+      "first": 5.431,
+      "last": 5.5,
+      "pct_change": 1.2704842570429031,
+      "slope": 0.00020266020243407012,
+      "sma30": 5.503133333333333,
+      "above_sma": -0.0031333333333334323,
+      "quote_volume_1h": 12451208.435039995
+    }
+  },
+  {
+    "symbol": "PUMPUSDT",
+    "trend": "Neutral",
+    "analysis": {
+      "first": 0.006777,
+      "last": 0.006818,
+      "pct_change": 0.6049874575771108,
+      "slope": -7.374520390979057e-08,
+      "sma30": 0.006824,
+      "above_sma": -5.999999999999929e-06,
+      "quote_volume_1h": 10430291.182817005
+    }
+  },
+  {
+    "symbol": "BONKUSDT",
+    "trend": "Mild Bullish",
+    "analysis": {
+      "first": 2.046e-05,
+      "last": 2.141e-05,
+      "pct_change": 4.643206256109478,
+      "slope": 4.740893939130887e-09,
+      "sma30": 2.1446666666666666e-05,
+      "above_sma": -3.666666666666575e-08,
+      "quote_volume_1h": 12991849.890561815
+    }
+  },
+  {
+    "symbol": "SOMIUSDT",
+    "trend": "Bullish",
+    "analysis": {
+      "first": 0.9433,
+      "last": 0.9815,
+      "pct_change": 4.049613060532176,
+      "slope": 0.0002558293980798278,
+      "sma30": 0.97059,
+      "above_sma": 0.010910000000000086,
+      "quote_volume_1h": 23371809.906700004
+    }
+  },
+  {
+    "symbol": "CAKEUSDT",
+    "trend": "Bearish",
+    "analysis": {
+      "first": 3.66,
+      "last": 3.525,
+      "pct_change": -3.688524590163944,
+      "slope": -0.0005287209847393186,
+      "sma30": 3.5353,
+      "above_sma": -0.010299999999999976,
+      "quote_volume_1h": 16046756.56158
+    }
+  },
+  {
+    "symbol": "FLOKIUSDT",
+    "trend": "Bullish",
+    "analysis": {
+      "first": 9.892e-05,
+      "last": 0.00011479,
+      "pct_change": 16.043267286696338,
+      "slope": 6.113193805448011e-08,
+      "sma30": 0.000114241,
+      "above_sma": 5.489999999999976e-07,
+      "quote_volume_1h": 31189445.50669244
+    }
+  },
+  {
+    "symbol": "OPENUSDT",
+    "trend": "Bullish",
+    "analysis": {
+      "first": 0.5577,
+      "last": 0.5693,
+      "pct_change": 2.079971310740558,
+      "slope": 4.3812262365666044e-05,
+      "sma30": 0.56629,
+      "above_sma": 0.003010000000000068,
+      "quote_volume_1h": 3508244.6131600006
+    }
+  },
+  {
+    "symbol": "ZECUSDT",
+    "trend": "Bullish",
+    "analysis": {
+      "first": 126.18,
+      "last": 134.61,
+      "pct_change": 6.680932001902051,
+      "slope": 0.02988652580773972,
+      "sma30": 133.36733333333333,
+      "above_sma": 1.242666666666679,
+      "quote_volume_1h": 13813109.752300002
+    }
+  },
+  {
+    "symbol": "0GUSDT",
+    "trend": "Mild Bullish",
+    "analysis": {
+      "first": 3.04,
+      "last": 3.081,
+      "pct_change": 1.3486842105263186,
+      "slope": 3.1823903192763815e-05,
+      "sma30": 3.0964,
+      "above_sma": -0.01540000000000008,
+      "quote_volume_1h": 2615209.0241399994
+    }
+  },
+  {
+    "symbol": "AVNTUSDT",
+    "trend": "Bullish",
+    "analysis": {
+      "first": 1.2164,
+      "last": 1.2698,
+      "pct_change": 4.390003288391986,
+      "slope": 0.0002500652789110922,
+      "sma30": 1.2646066666666667,
+      "above_sma": 0.005193333333333383,
+      "quote_volume_1h": 10207827.242389996
+    }
+  },
+  {
+    "symbol": "WLFIUSDT",
+    "trend": "Neutral",
+    "analysis": {
+      "first": 0.2028,
+      "last": 0.2027,
+      "pct_change": -0.04930966469428588,
+      "slope": 4.368825847670927e-06,
+      "sma30": 0.20328,
+      "above_sma": -0.0005799999999999972,
+      "quote_volume_1h": 3991898.5262599993
+    }
+  },
+  {
+    "symbol": "ENAUSDT",
+    "trend": "Mild Bullish",
+    "analysis": {
+      "first": 0.6085,
+      "last": 0.6151,
+      "pct_change": 1.0846343467542985,
+      "slope": 4.89528898071146e-05,
+      "sma30": 0.61696,
+      "above_sma": -0.0018599999999999728,
+      "quote_volume_1h": 4762283.863069001
+    }
+  },
+  {
+    "symbol": "2ZUSDT",
+    "trend": "Bullish",
+    "analysis": {
+      "first": 0.51614,
+      "last": 0.51948,
+      "pct_change": 0.6471112488859676,
+      "slope": 2.8795083247973054e-05,
+      "sma30": 0.5187353333333333,
+      "above_sma": 0.0007446666666667268,
+      "quote_volume_1h": 3672087.9090599995
+    }
+  },
+  {
+    "symbol": "PENGUUSDT",
+    "trend": "Mild Bullish",
+    "analysis": {
+      "first": 0.031158,
+      "last": 0.031694,
+      "pct_change": 1.720264458566012,
+      "slope": 2.5736705498359354e-06,
+      "sma30": 0.0317903,
+      "above_sma": -9.630000000000055e-05,
+      "quote_volume_1h": 5571738.858861003
+    }
+  }
+]

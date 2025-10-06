@@ -1,0 +1,85 @@
+{
+  "run_id": "4f9d804c806c4361abb5959ca85d5ddf",
+  "mode": "paper",
+  "start_time": 1759628571.9329631,
+  "events": [
+    {
+      "type": "place",
+      "oid": "mock-1",
+      "side": "short",
+      "price": 8.683,
+      "size": 230.45036280664803,
+      "notional": 2001.0005002501248
+    },
+    {
+      "type": "partial_unfilled",
+      "oid": "mock-1",
+      "remaining_qty": 230.45036280664803
+    },
+    {
+      "type": "place",
+      "oid": "mock-2",
+      "side": "long",
+      "price": 7.45,
+      "size": 268.3222147315604,
+      "notional": 1999.000499750125
+    },
+    {
+      "type": "partial_unfilled",
+      "oid": "mock-2",
+      "remaining_qty": 268.3222147315604
+    },
+    {
+      "type": "place_close",
+      "oid": "mock-3",
+      "price": 7.826,
+      "size": null
+    },
+    {
+      "type": "place",
+      "oid": "mock-4",
+      "side": "short",
+      "price": 7.743,
+      "size": 268.1349583435717,
+      "notional": 2076.168982454276
+    },
+    {
+      "type": "partial_unfilled",
+      "oid": "mock-4",
+      "remaining_qty": 268.1349583435717
+    },
+    {
+      "type": "place",
+      "oid": "mock-5",
+      "side": "long",
+      "price": 1.699,
+      "size": 1220.773308438805,
+      "notional": 2074.09385103753
+    },
+    {
+      "type": "partial_unfilled",
+      "oid": "mock-5",
+      "remaining_qty": 1220.773308438805
+    },
+    {
+      "type": "place_close",
+      "oid": "mock-6",
+      "price": 1.655,
+      "size": null
+    },
+    {
+      "type": "place",
+      "oid": "mock-7",
+      "side": "short",
+      "price": 1.858,
+      "size": 1285.314051658924,
+      "notional": 2388.1135079822807
+    },
+    {
+      "type": "partial_unfilled",
+      "oid": "mock-7",
+      "remaining_qty": 1285.314051658924
+    }
+  ],
+  "end_time": 1759628571.9329631
+}

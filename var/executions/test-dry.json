@@ -1,0 +1,124 @@
+{
+  "run_id": "test-dry",
+  "mode": "dry",
+  "start_time": 1759635381.7136443,
+  "events": [
+    {
+      "type": "enter",
+      "side": "short",
+      "price": 8.683,
+      "res": {
+        "status": "entered",
+        "position": {
+          "symbol": "2025-09-30 16:30:00 UTC",
+          "direction": "short",
+          "entry_price": 8.6786585,
+          "size": 230.45000000000002,
+          "qty": 26.553643054396026,
+          "entry_time": 1759635381.7136443,
+          "pnl": 0.0,
+          "exit_price": null,
+          "exit_time": null
+        },
+        "exec_price": 8.6786585
+      }
+    },
+    {
+      "type": "enter",
+      "side": "long",
+      "price": 7.45,
+      "res": {
+        "status": "entered",
+        "position": {
+          "symbol": "2025-09-30 18:00:00 UTC",
+          "direction": "long",
+          "entry_price": 7.453725,
+          "size": 268.32,
+          "qty": 35.99810832838614,
+          "entry_time": 1759635381.7136443,
+          "pnl": 0.0,
+          "exit_price": null,
+          "exit_time": null
+        },
+        "exec_price": 7.453725
+      }
+    },
+    {
+      "type": "exit",
+      "price": 7.826,
+      "res": {
+        "status": "noop",
+        "reason": "no_position"
+      }
+    },
+    {
+      "type": "enter",
+      "side": "short",
+      "price": 7.743,
+      "res": {
+        "status": "entered",
+        "position": {
+          "symbol": "2025-09-30 21:15:00 UTC",
+          "direction": "short",
+          "entry_price": 7.7391285000000005,
+          "size": 268.13,
+          "qty": 34.64601989746003,
+          "entry_time": 1759635381.7136443,
+          "pnl": 0.0,
+          "exit_price": null,
+          "exit_time": null
+        },
+        "exec_price": 7.7391285000000005
+      }
+    },
+    {
+      "type": "enter",
+      "side": "long",
+      "price": 1.699,
+      "res": {
+        "status": "entered",
+        "position": {
+          "symbol": "2025-10-01 03:45:00 UTC",
+          "direction": "long",
+          "entry_price": 1.6998495,
+          "size": 1220.77,
+          "qty": 718.1635785991642,
+          "entry_time": 1759635381.7136443,
+          "pnl": 0.0,
+          "exit_price": null,
+          "exit_time": null
+        },
+        "exec_price": 1.6998495
+      }
+    },
+    {
+      "type": "exit",
+      "price": 1.655,
+      "res": {
+        "status": "noop",
+        "reason": "no_position"
+      }
+    },
+    {
+      "type": "enter",
+      "side": "short",
+      "price": 1.858,
+      "res": {
+        "status": "entered",
+        "position": {
+          "symbol": "2025-10-01 05:45:00 UTC",
+          "direction": "short",
+          "entry_price": 1.8570710000000001,
+          "size": 1285.31,
+          "qty": 692.1167795953951,
+          "entry_time": 1759635381.7136443,
+          "pnl": 0.0,
+          "exit_price": null,
+          "exit_time": null
+        },
+        "exec_price": 1.8570710000000001
+      }
+    }
+  ],
+  "end_time": 1759635381.7136443
+}

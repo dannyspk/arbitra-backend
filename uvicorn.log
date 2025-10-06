@@ -1,0 +1,92 @@
+INFO:     Started server process [27996]
+INFO:     Waiting for application startup.
+INFO:     Application startup complete.
+INFO:     Uvicorn running on http://127.0.0.1:8000 (Press CTRL+C to quit)
+INFO:     127.0.0.1:57580 - "GET /logs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:51822 - "GET /logs HTTP/1.1" 200 OK
+INFO:     127.0.0.1:50419 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     127.0.0.1:52485 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:58639 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:60205 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     connection closed
+INFO:     connection closed
+INFO:     127.0.0.1:55049 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:65146 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     connection closed
+INFO:     connection closed
+INFO:     127.0.0.1:52858 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:58112 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:57458 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57458 - "GET /favicon.ico HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57662 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57662 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58373 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52796 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:58951 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:53046 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:55073 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60206 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:65465 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:64830 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:55073 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50779 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51517 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51517 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52677 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64929 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60652 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61038 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61349 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64912 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64912 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52415 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:64912 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52415 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63721 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63721 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57748 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57748 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50303 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:50303 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62758 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62758 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56157 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:56157 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57106 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:52545 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51386 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62681 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:63723 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:60717 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62455 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49666 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:51281 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49691 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49252 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:59470 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:49692 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:49282 - "WebSocket /ws/opportunities" [accepted]
+INFO:     connection open
+INFO:     127.0.0.1:50440 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61616 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:57473 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:62921 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:61169 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     connection closed
+INFO:     connection closed
+INFO:     127.0.0.1:65041 - "GET /file_opportunities HTTP/1.1" 404 Not Found
+INFO:     127.0.0.1:65041 - "GET /file_opportunities HTTP/1.1" 404 Not Found

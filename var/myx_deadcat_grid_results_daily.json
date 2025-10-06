@@ -1,0 +1,233 @@
+{
+  "symbol": "MYX/USDT",
+  "results": [
+    {
+      "short_rsi_min": 40,
+      "short_cross_20": true,
+      "enable_long_bounce": true,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 40,
+      "short_cross_20": true,
+      "enable_long_bounce": false,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 40,
+      "short_cross_20": false,
+      "enable_long_bounce": true,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 40,
+      "short_cross_20": false,
+      "enable_long_bounce": false,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 50,
+      "short_cross_20": true,
+      "enable_long_bounce": true,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 50,
+      "short_cross_20": true,
+      "enable_long_bounce": false,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 50,
+      "short_cross_20": false,
+      "enable_long_bounce": true,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 50,
+      "short_cross_20": false,
+      "enable_long_bounce": false,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 60,
+      "short_cross_20": true,
+      "enable_long_bounce": true,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 60,
+      "short_cross_20": true,
+      "enable_long_bounce": false,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 60,
+      "short_cross_20": false,
+      "enable_long_bounce": true,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    },
+    {
+      "short_rsi_min": 60,
+      "short_cross_20": false,
+      "enable_long_bounce": false,
+      "trades": 0,
+      "summary": {
+        "symbol": "MYX/USDT",
+        "bars": 109,
+        "trades": 0,
+        "wins": 0,
+        "losses": 0,
+        "win_rate": 0.0,
+        "profit_factor": null,
+        "final_equity": 10000.0,
+        "return_pct": 0.0,
+        "sharpe_daily": 0.0,
+        "max_drawdown_pct": 0.0
+      }
+    }
+  ]
+}

@@ -1,0 +1,14 @@
+{
+  "name": "mexc-ws-proxy",
+  "version": "0.1.0",
+  "description": "Tiny proxy that connects to MEXC WS, decodes protobuf and exposes JSON via SSE",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "protobufjs": "^7.2.2",
+    "ws": "^8.13.0"
+  }
+}

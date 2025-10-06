@@ -1,0 +1,62 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <title>MEXC Deals Live</title>
+  <style>
+    body { font-family: system-ui, Arial; margin: 20px; }
+    #last { font-size: 1.2rem; margin-top: 10px; }
+    .deal { margin: 6px 0; }
+    .price { font-weight: 700; margin-right: 8px; }
+    .qty { color: #444; margin-right: 8px; }
+    .time { color: #888; font-size: .9rem; }
+  </style>
+</head>
+<body>
+  <h2>MEXC BTC/USDT Deals (via proxy)</h2>
+  <div id="status">Connecting...</div>
+  <div id="last"></div>
+  <div id="feed"></div>
+
+  <script>
+    const status = document.getElementById('status');
+    const lastEl = document.getElementById('last');
+    const feed = document.getElementById('feed');
+
+    const es = new EventSource('http://localhost:3000/stream');
+    es.onopen = () => status.textContent = 'Connected to /stream';
+    es.onerror = (e) => status.textContent = 'Connection error';
+
+    es.onmessage = (evt) => {
+      try {
+        const obj = JSON.parse(evt.data);
+        // show summary
+        const time = obj.sendTime || (obj.deals && obj.deals[0] && obj.deals[0].time) || Date.now();
+        lastEl.innerHTML = `<strong>Last update:</strong> ${new Date(Number(time)).toLocaleTimeString()}`;
+
+        // append each deal
+        if (obj.deals && obj.deals.length) {
+          obj.deals.forEach(d => {
+            const div = document.createElement('div');
+            div.className = 'deal';
+            const price = document.createElement('span'); price.className = 'price'; price.textContent = d.price;
+            const qty = document.createElement('span'); qty.className = 'qty'; qty.textContent = '×'+d.quantity;
+            const meta = document.createElement('span'); meta.className = 'time'; meta.textContent = (d.tradeType ? ('type:'+d.tradeType+' ') : '') + (d.time ? new Date(Number(d.time)).toLocaleTimeString() : '');
+            div.append(price, qty, meta);
+            feed.prepend(div);
+            // keep only latest 50
+            while (feed.children.length > 50) feed.removeChild(feed.lastChild);
+          });
+        } else {
+          // generic wrapper
+          const div = document.createElement('div');
+          div.textContent = JSON.stringify(obj).slice(0,200);
+          feed.prepend(div);
+        }
+      } catch (e) {
+        console.error('parse error', e);
+      }
+    };
+  </script>
+</body>
+</html>

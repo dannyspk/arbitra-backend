@@ -1,0 +1,22 @@
+[
+  {
+    "endpoint": "wss://wbs-api.mexc.com/ws",
+    "headers": {
+      "Origin": "https://www.mexc.com",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Referer": "https://www.mexc.com"
+    },
+    "results": [],
+    "connect_error": "BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_headers'"
+  },
+  {
+    "endpoint": "wss://wbs.mexc.com/ws",
+    "headers": {
+      "Origin": "https://www.mexc.com",
+      "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36",
+      "Referer": "https://www.mexc.com"
+    },
+    "results": [],
+    "connect_error": "BaseEventLoop.create_connection() got an unexpected keyword argument 'extra_headers'"
+  }
+]

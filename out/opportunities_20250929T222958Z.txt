@@ -1,0 +1,4 @@
+Found 1 opportunities
+Exchanges used: binance-mock, mexc-mock, kucoin-mock, gate-mock
+
+Opportunity(buy_exchange='binance-mock', sell_exchange='mexc-mock', symbol='NEIRO/USDT', buy_price=0.00027027027027, sell_price=0.0007492486263749999, profit_pct=177.22199175902722)

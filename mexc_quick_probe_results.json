@@ -1,0 +1,156 @@
+[
+  {
+    "endpoint": "wss://wbs-api.mexc.com/ws",
+    "results": [
+      {
+        "payload": {
+          "method": "SUBSCRIPTION",
+          "params": [
+            "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+          ],
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":1759360138285,\"code\":0,\"msg\":\"Not Subscribed successfully! [spot@public.depth.v3.api.pb@100ms@BTCUSDT].  Reason\uff1a Blocked! \"}"
+        ]
+      },
+      {
+        "payload": {
+          "method": "SUBSCRIPTION",
+          "params": [
+            "spot@public.depth.v3.api.pb@BTCUSDT@100ms"
+          ],
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":1759360138285,\"code\":0,\"msg\":\"Not Subscribed successfully! [spot@public.depth.v3.api.pb@BTCUSDT@100ms].  Reason\uff1a Blocked! \"}"
+        ]
+      },
+      {
+        "payload": {
+          "method": "SUBSCRIBE",
+          "params": [
+            "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+          ],
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":1759360138285,\"code\":0,\"msg\":\"SUBSCRIBE is not supported.\"}"
+        ]
+      },
+      {
+        "payload": {
+          "method": "SUBSCRIBE",
+          "params": [
+            "spot@public.depth.v3.api.pb@BTCUSDT@100ms"
+          ],
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":1759360138285,\"code\":0,\"msg\":\"SUBSCRIBE is not supported.\"}"
+        ]
+      },
+      {
+        "payload": {
+          "method": "SUBSCRIPTION",
+          "params": {
+            "topic": "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+          },
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":0,\"code\":0,\"msg\":\"msg format invalid\"}"
+        ]
+      },
+      {
+        "payload": {
+          "method": "SUBSCRIPTION",
+          "params": {
+            "topic": "spot@public.depth.v3.api.pb@BTCUSDT@100ms"
+          },
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":0,\"code\":0,\"msg\":\"msg format invalid\"}"
+        ]
+      }
+    ]
+  },
+  {
+    "endpoint": "wss://wbs.mexc.com/ws",
+    "results": [
+      {
+        "payload": {
+          "method": "SUBSCRIPTION",
+          "params": [
+            "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+          ],
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":1759360138285,\"code\":0,\"msg\":\"Not Subscribed successfully! [spot@public.depth.v3.api.pb@100ms@BTCUSDT].  Reason\uff1a Blocked! \"}"
+        ]
+      },
+      {
+        "payload": {
+          "method": "SUBSCRIPTION",
+          "params": [
+            "spot@public.depth.v3.api.pb@BTCUSDT@100ms"
+          ],
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":1759360138285,\"code\":0,\"msg\":\"Not Subscribed successfully! [spot@public.depth.v3.api.pb@BTCUSDT@100ms].  Reason\uff1a Blocked! \"}"
+        ]
+      },
+      {
+        "payload": {
+          "method": "SUBSCRIBE",
+          "params": [
+            "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+          ],
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":1759360138285,\"code\":0,\"msg\":\"SUBSCRIBE is not supported.\"}"
+        ]
+      },
+      {
+        "payload": {
+          "method": "SUBSCRIBE",
+          "params": [
+            "spot@public.depth.v3.api.pb@BTCUSDT@100ms"
+          ],
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":1759360138285,\"code\":0,\"msg\":\"SUBSCRIBE is not supported.\"}"
+        ]
+      },
+      {
+        "payload": {
+          "method": "SUBSCRIPTION",
+          "params": {
+            "topic": "spot@public.depth.v3.api.pb@100ms@BTCUSDT"
+          },
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":0,\"code\":0,\"msg\":\"msg format invalid\"}"
+        ]
+      },
+      {
+        "payload": {
+          "method": "SUBSCRIPTION",
+          "params": {
+            "topic": "spot@public.depth.v3.api.pb@BTCUSDT@100ms"
+          },
+          "id": 1759360138285
+        },
+        "messages": [
+          "{\"id\":0,\"code\":0,\"msg\":\"msg format invalid\"}"
+        ]
+      }
+    ]
+  }
+]
