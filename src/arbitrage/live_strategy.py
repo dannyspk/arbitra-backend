@@ -271,13 +271,40 @@ class LiveStrategy:
                     
                     short_quick = True if (pct15 is not None and pct15 >= 5.0) else False
 
-                    if long_signal:
+                    # Check if position already exists before opening new one
+                    current_pos = self.dashboard.get_position(self.symbol)
+                    
+                    if long_signal and current_pos is None:
                         reason = signal_reason if signal_reason else 'long_signal'
                         act = self._make_action('open_long', price, None, reason)
                         await self._emit_action(act)
-                    elif short_quick:
+                    elif short_quick and current_pos is None:
                         act = self._make_action('open_short', price, None, 'short_quick')
                         await self._emit_action(act)
+                    elif current_pos is not None:
+                        # Position exists - check stop-loss and take-profit
+                        should_close = False
+                        close_reason = ''
+                        
+                        if current_pos.side == 'long':
+                            if price <= current_pos.stop_loss:
+                                should_close = True
+                                close_reason = 'stop_loss'
+                            elif price >= current_pos.take_profit:
+                                should_close = True
+                                close_reason = 'take_profit'
+                        else:  # short
+                            if price >= current_pos.stop_loss:
+                                should_close = True
+                                close_reason = 'stop_loss'
+                            elif price <= current_pos.take_profit:
+                                should_close = True
+                                close_reason = 'take_profit'
+                        
+                        if should_close:
+                            action_type = 'close_long' if current_pos.side == 'long' else 'close_short'
+                            act = self._make_action(action_type, price, None, close_reason)
+                            await self._emit_action(act)
 
                 elif self.mode == 'bull':
                     # Bull mode: short when deeply overbought, long quick on dips
@@ -288,12 +315,39 @@ class LiveStrategy:
                             short_signal = True
                     long_quick = True if (pct15 is not None and pct15 <= -5.0) else False
 
-                    if short_signal:
+                    # Check if position already exists before opening new one
+                    current_pos = self.dashboard.get_position(self.symbol)
+                    
+                    if short_signal and current_pos is None:
                         act = self._make_action('open_short', price, None, 'short_signal')
                         await self._emit_action(act)
-                    elif long_quick:
+                    elif long_quick and current_pos is None:
                         act = self._make_action('open_long', price, None, 'long_quick')
                         await self._emit_action(act)
+                    elif current_pos is not None:
+                        # Position exists - check stop-loss and take-profit
+                        should_close = False
+                        close_reason = ''
+                        
+                        if current_pos.side == 'long':
+                            if price <= current_pos.stop_loss:
+                                should_close = True
+                                close_reason = 'stop_loss'
+                            elif price >= current_pos.take_profit:
+                                should_close = True
+                                close_reason = 'take_profit'
+                        else:  # short
+                            if price >= current_pos.stop_loss:
+                                should_close = True
+                                close_reason = 'stop_loss'
+                            elif price <= current_pos.take_profit:
+                                should_close = True
+                                close_reason = 'take_profit'
+                        
+                        if should_close:
+                            action_type = 'close_long' if current_pos.side == 'long' else 'close_short'
+                            act = self._make_action(action_type, price, None, close_reason)
+                            await self._emit_action(act)
 
                 elif self.mode == 'scalp':
                     # Scalp mode: Use QuickScalpStrategy for decisions
