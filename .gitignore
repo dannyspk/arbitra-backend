@@ -15,3 +15,8 @@ build/
 dist/
 *.egg-info/
 
+# Environment variables (NEVER commit API keys!)
+.env
+.env.local
+.env.production
+

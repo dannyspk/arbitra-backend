@@ -177,9 +177,14 @@ class LiveStrategy:
     async def _loop(self, poll_s: float = 15.0):
         # rolling buffer of closes (most recent last) length >= 5 to compute 15/30/60m
         closes = []
+        # For scalp mode, fetch more initial bars
+        initial_fetch = 50 if self.mode == 'scalp' else 5
+        print(f"[LiveStrategy] Starting {self.mode} strategy loop for {self.symbol} (interval={self.interval})")
+        
         while not self._stop:
             # fetch several recent klines and compute close list
-            data = await asyncio.to_thread(self._fetch_klines, 5)
+            fetch_limit = initial_fetch if len(closes) < initial_fetch else 5
+            data = await asyncio.to_thread(self._fetch_klines, fetch_limit)
             new_closes = []
             try:
                 for k in data:
@@ -190,6 +195,9 @@ class LiveStrategy:
                 new_closes = []
             if new_closes:
                 closes = new_closes
+            
+            if len(closes) > 0:
+                print(f"[LiveStrategy {self.symbol}] Closes buffer: {len(closes)} bars, current price: {closes[-1]:.2f}")
             
             # Update position P&L with current price
             if closes and self._current_position:
@@ -217,13 +225,55 @@ class LiveStrategy:
                     # Bear mode: long when deeply oversold, short quick on pumps
                     long_signal = False
                     short_quick = False
+                    signal_reason = None
+                    
                     if pct15 is not None and pct30 is not None and pct60 is not None:
-                        if (pct15 <= -self.p15_thresh) and (pct30 <= -self.p30_thresh) and (pct60 <= -self.p60_thresh):
+                        # Calculate adaptive 60-min threshold based on max drop in last 60 minutes
+                        # This catches extreme volatile moves that might not recover
+                        # We look for the WORST drop at any point in the last 60 minutes
+                        max_drop_60m = 0.0
+                        if len(closes) >= 5:  # Need at least 5 bars (60 mins of 15m candles)
+                            for i in range(1, min(5, len(closes))):
+                                prev = closes[-1 - i]
+                                if prev > 0:
+                                    drop = ((price - prev) / prev) * 100.0
+                                    if drop < max_drop_60m:
+                                        max_drop_60m = drop
+                        
+                        # Standard entry: strict conditions
+                        standard_condition = (pct15 <= -self.p15_thresh) and (pct30 <= -self.p30_thresh) and (pct60 <= -self.p60_thresh)
+                        
+                        # Adaptive entry: if max drop in 60min exceeds -12%, use relaxed conditions
+                        # This catches scenarios where price crashed -20% then recovered
+                        # We still want to enter because the volatility suggests more downside
+                        extreme_drop_detected = max_drop_60m <= -self.p60_thresh  # Worse than -12%
+                        
+                        # Scale relaxation based on severity of max drop
+                        # -12% to -15%: relax pct30 to -8% (20% relaxation)
+                        # -15% to -20%: relax pct30 to -6% (40% relaxation)
+                        # -20%+:        relax pct30 to -5% (50% relaxation)
+                        if max_drop_60m <= -20.0:
+                            relaxed_p30 = -(self.p30_thresh * 0.5)  # -5%
+                        elif max_drop_60m <= -15.0:
+                            relaxed_p30 = -(self.p30_thresh * 0.6)  # -6%
+                        else:
+                            relaxed_p30 = -(self.p30_thresh * 0.8)  # -8%
+                        
+                        adaptive_condition = (pct15 <= -self.p15_thresh) and (pct30 <= relaxed_p30)
+                        
+                        if standard_condition:
                             long_signal = True
+                            signal_reason = f'standard_oversold: pct15={pct15:.2f}%, pct30={pct30:.2f}%, pct60={pct60:.2f}%'
+                        elif extreme_drop_detected and adaptive_condition:
+                            # Extreme volatility detected - use relaxed entry
+                            long_signal = True
+                            signal_reason = f'extreme_volatility: max_drop_60m={max_drop_60m:.2f}%, current: pct15={pct15:.2f}%, pct30={pct30:.2f}%, pct60={pct60:.2f}%'
+                    
                     short_quick = True if (pct15 is not None and pct15 >= 5.0) else False
 
                     if long_signal:
-                        act = self._make_action('open_long', price, None, 'long_signal')
+                        reason = signal_reason if signal_reason else 'long_signal'
+                        act = self._make_action('open_long', price, None, reason)
                         await self._emit_action(act)
                     elif short_quick:
                         act = self._make_action('open_short', price, None, 'short_quick')
@@ -248,6 +298,7 @@ class LiveStrategy:
                 elif self.mode == 'scalp':
                     # Scalp mode: Use QuickScalpStrategy for decisions
                     # Need at least 30+ bars for strategy indicators
+                    print(f"[Scalp] Checking decision... bars={len(closes)}, need 40+")
                     if len(closes) >= 40:
                         # Check current position from dashboard
                         current_pos = self.dashboard.get_position(self.symbol) if hasattr(self.dashboard, 'get_position') else self._current_position

@@ -1289,8 +1289,8 @@ def _load_webhook_config():
     return {}
 
 
-# Live strategy manager
-_live_strategy_instance = None
+# Live strategy manager - support multiple concurrent strategies
+_live_strategy_instances = {}  # key: symbol, value: LiveStrategy instance
 
 
 @app.get('/api/defi-vaults')
@@ -2241,46 +2241,149 @@ async def api_live_strategy_start(req: Request):
     """Start the live strategy for a given symbol. Body: { symbol: 'ALPINEUSDT', mode: 'bear' }
 
     Returns the start status. Execution defaults to paper unless ARB_ALLOW_LIVE_EXECUTION=1 and proper auth is provided.
+    Supports multiple concurrent strategies on different symbols.
     """
     body = await req.json()
     symbol = (body.get('symbol') or '').strip()
     mode = (body.get('mode') or 'bear').strip()
+    interval = (body.get('interval') or '1m').strip()
+    
     if not symbol:
         raise HTTPException(status_code=400, detail='symbol required')
+    
     try:
         from .live_strategy import LiveStrategy
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'live_strategy unavailable: {e}')
-    global _live_strategy_instance
-    if _live_strategy_instance is not None and _live_strategy_instance.running():
-        return {'started': False, 'reason': 'already running'}
-    inst = LiveStrategy(symbol, mode=mode)
+    
+    global _live_strategy_instances
+    
+    # Check if strategy already running for this symbol
+    if symbol in _live_strategy_instances and _live_strategy_instances[symbol].running():
+        return {'started': False, 'reason': f'strategy already running for {symbol}', 'symbol': symbol}
+    
+    # Create and start new strategy instance
+    inst = LiveStrategy(symbol, mode=mode, interval=interval)
     started = inst.start()
+    
     if not started:
         raise HTTPException(status_code=500, detail='failed-to-start')
-    _live_strategy_instance = inst
-    return {'started': True, 'symbol': symbol, 'mode': mode}
+    
+    _live_strategy_instances[symbol] = inst
+    
+    return {
+        'started': True, 
+        'symbol': symbol, 
+        'mode': mode,
+        'interval': interval,
+        'active_strategies': len(_live_strategy_instances),
+        'all_strategies': list(_live_strategy_instances.keys())
+    }
 
 
 @app.post('/api/live-strategy/stop')
-async def api_live_strategy_stop():
-    global _live_strategy_instance
-    if _live_strategy_instance is None or not _live_strategy_instance.running():
-        return {'stopped': False, 'reason': 'not running'}
-    try:
-        await _live_strategy_instance.stop()
-    except Exception:
-        pass
-    _live_strategy_instance = None
-    return {'stopped': True}
+async def api_live_strategy_stop(req: Request = None):
+    """Stop strategy for a specific symbol or all strategies if no symbol provided.
+    
+    Body (optional): { symbol: 'BTCUSDT' }
+    If no symbol provided, stops all strategies.
+    """
+    global _live_strategy_instances
+    
+    symbol = None
+    if req:
+        try:
+            body = await req.json()
+            symbol = (body.get('symbol') or '').strip() if body else None
+        except Exception:
+            pass
+    
+    stopped_strategies = []
+    
+    if symbol:
+        # Stop specific strategy
+        if symbol not in _live_strategy_instances:
+            return {'stopped': False, 'reason': f'no strategy running for {symbol}', 'symbol': symbol}
+        
+        try:
+            await _live_strategy_instances[symbol].stop()
+        except Exception as e:
+            print(f"Error stopping strategy for {symbol}: {e}")
+        
+        del _live_strategy_instances[symbol]
+        stopped_strategies.append(symbol)
+        
+        return {
+            'stopped': True, 
+            'symbol': symbol,
+            'remaining_strategies': len(_live_strategy_instances),
+            'active_symbols': list(_live_strategy_instances.keys())
+        }
+    else:
+        # Stop all strategies
+        if not _live_strategy_instances:
+            return {'stopped': False, 'reason': 'no strategies running'}
+        
+        for sym, inst in list(_live_strategy_instances.items()):
+            try:
+                await inst.stop()
+                stopped_strategies.append(sym)
+            except Exception as e:
+                print(f"Error stopping strategy for {sym}: {e}")
+        
+        _live_strategy_instances.clear()
+        
+        return {
+            'stopped': True,
+            'stopped_strategies': stopped_strategies,
+            'count': len(stopped_strategies)
+        }
 
 
 @app.get('/api/live-strategy/status')
-async def api_live_strategy_status():
-    global _live_strategy_instance
-    if _live_strategy_instance is None:
-        return {'running': False}
-    return {'running': _live_strategy_instance.running(), 'symbol': getattr(_live_strategy_instance, 'symbol', None), 'mode': getattr(_live_strategy_instance, 'mode', None)}
+async def api_live_strategy_status(symbol: str = None):
+    """Get status of live strategies.
+    
+    If symbol provided: returns status for that specific strategy
+    If no symbol: returns status for all running strategies
+    """
+    global _live_strategy_instances
+    
+    if symbol:
+        # Get status for specific symbol
+        if symbol not in _live_strategy_instances:
+            return {'running': False, 'symbol': symbol}
+        
+        inst = _live_strategy_instances[symbol]
+        return {
+            'running': inst.running(),
+            'symbol': inst.symbol,
+            'mode': inst.mode,
+            'interval': getattr(inst, 'interval', '1m')
+        }
+    else:
+        # Get status for all strategies
+        if not _live_strategy_instances:
+            return {
+                'running': False,
+                'active_count': 0,
+                'strategies': []
+            }
+        
+        strategies = []
+        for sym, inst in _live_strategy_instances.items():
+            strategies.append({
+                'symbol': sym,
+                'mode': inst.mode,
+                'interval': getattr(inst, 'interval', '1m'),
+                'running': inst.running()
+            })
+        
+        return {
+            'running': True,
+            'active_count': len(strategies),
+            'strategies': strategies
+        }
 
 
 @app.get('/api/live-check')
