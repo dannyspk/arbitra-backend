@@ -171,6 +171,9 @@ class LiveDashboard:
             if len(self._trades) > self._max_trades:
                 self._trades = self._trades[:self._max_trades]
             
+            print(f"[LiveDashboard] Trade recorded: {symbol} {pos.side} entry=${pos.entry_price:.2f} exit=${exit_price:.2f} P&L=${pnl:.2f} ({pnl_pct:.2f}%) reason={reason}")
+            print(f"[LiveDashboard] Total trades: {self._total_trades}, Stored trades: {len(self._trades)}")
+            
             return trade
     
     def update_position_pnl(self, symbol: str, current_price: float):

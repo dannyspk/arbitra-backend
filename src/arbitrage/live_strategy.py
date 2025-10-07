@@ -460,8 +460,12 @@ class LiveStrategy:
                         
                     elif action_type in ['close_long', 'close_short']:
                         # Close position
-                        self.dashboard.close_position(self.symbol, price, reason='signal')
+                        trade = self.dashboard.close_position(self.symbol, price, reason='signal')
                         self._current_position = None
+                        if trade:
+                            print(f"[LiveStrategy] Trade completed: {trade.symbol} {trade.side} P&L=${trade.pnl:.2f} ({trade.pnl_pct:.2f}%)")
+                        else:
+                            print(f"[LiveStrategy] WARNING: close_position returned None for {self.symbol}")
             else:
                 error_msg = res.get('error', 'unknown error') if res else 'no response'
                 self.dashboard.update_signal_status(aid, 'failed', error=error_msg)
