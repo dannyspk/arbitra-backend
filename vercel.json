@@ -14,6 +14,8 @@
   ],
   "env": {
     "ARB_ALLOW_ORIGINS": "*",
-    "ARB_ALLOW_LIVE_ORDERS": "1"
+    "ARB_ALLOW_LIVE_ORDERS": "1",
+    "BINANCE_API_KEY": "mCKNY0bBb5ZjWDRGwUpynLuGum6wHEOdCWKieqZSPUv8Q4qwiYgWlwWTtXZtXP23",
+    "BINANCE_API_SECRET": "9mt3IjYLzzpUtJvpBESJRp1vKLjItxrMbyC0vSk8NrVYqrjL75tBGe3kQjBTmcGB"
   }
 }
