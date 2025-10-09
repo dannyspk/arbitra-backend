@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "builds": [
+    {
+      "src": "src/arbitrage/web.py",
+      "use": "@vercel/python"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "src/arbitrage/web.py"
+    }
+  ],
+  "env": {
+    "ARB_ALLOW_ORIGINS": "*",
+    "ARB_ALLOW_LIVE_ORDERS": "1"
+  }
+}
