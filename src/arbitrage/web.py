@@ -14,7 +14,7 @@ except ImportError:
     pass
 
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, HTTPException
-from urllib import request as _urllib_request, parse as _urllib_parse
+from urllib import request as _urllib_request, parse as _urllib_parse, error as _urllib_error
 import datetime as _dt
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -1234,6 +1234,7 @@ latest_opportunities: Optional[dict] = None  # store {'opportunities': [...]}
 _scanner_task: Optional[asyncio.Task] = None
 _hotcoins_task: Optional[asyncio.Task] = None
 _vol_index_task: Optional[asyncio.Task] = None
+_position_monitor_task: Optional[asyncio.Task] = None
 manager = ConnectionManager()
 hot_manager = ConnectionManager()
 liquidation_manager = ConnectionManager()
@@ -2737,12 +2738,143 @@ async def api_test_order(req: Request):
         raise HTTPException(status_code=500, detail=f'Order failed: {str(e)}')
 
 @app.get('/api/dashboard')
-async def api_dashboard():
-    """Get live trading dashboard data (positions, signals, trades, statistics)."""
+async def api_dashboard(mode: str = 'test'):
+    """Get live trading dashboard data (positions, signals, trades, statistics).
+    
+    Args:
+        mode: 'live' to fetch real Binance balance, 'test' for simulated balance
+    """
     try:
         from .live_dashboard import get_dashboard
         dashboard = get_dashboard()
-        return dashboard.get_full_state()
+        
+        # Update P&L for all open positions with current prices
+        positions = dashboard.get_all_positions()
+        
+        # Filter positions based on mode
+        if mode == 'live':
+            # Only show live positions in live mode
+            positions = [p for p in positions if getattr(p, 'is_live', False)]
+            
+            # Reconcile with Binance - check if positions still exist
+            live_enabled = os.environ.get('ARB_ALLOW_LIVE_ORDERS', '0').strip() == '1'
+            if live_enabled and positions:
+                try:
+                    # Fetch actual positions from Binance
+                    binance_positions = await asyncio.to_thread(_get_binance_positions)
+                    binance_symbols = {p['symbol'] for p in binance_positions if p['positionAmt'] != 0}
+                    
+                    # Check each local position
+                    positions_to_close = []
+                    for pos in positions:
+                        if pos.symbol not in binance_symbols:
+                            print(f"[RECONCILE] Position {pos.symbol} not found on Binance - marking as closed")
+                            positions_to_close.append(pos)
+                    
+                    # Close positions that don't exist on Binance anymore
+                    for pos in positions_to_close:
+                        # Fetch last known price to calculate final PNL
+                        current_price = await asyncio.to_thread(_fetch_ticker_sync, pos.symbol, pos.market if hasattr(pos, 'market') else 'futures')
+                        if current_price:
+                            dashboard.close_position(pos.symbol, current_price, reason='stop_loss')
+                            print(f"[RECONCILE] Closed {pos.symbol} @ ${current_price:.2f}")
+                        positions.remove(pos)
+                    
+                except Exception as e:
+                    print(f"[WARNING] Failed to reconcile positions with Binance: {e}")
+        else:
+            # Only show test positions in test mode
+            positions = [p for p in positions if not getattr(p, 'is_live', False)]
+        
+        # Update PNL for filtered positions
+        for pos in positions:
+            try:
+                # Fetch current price from the correct market (spot or futures)
+                market = getattr(pos, 'market', None)
+                
+                if market is None:
+                    # Try futures first (most manual trades use leverage)
+                    current_price = await asyncio.to_thread(_fetch_ticker_sync, pos.symbol, 'futures')
+                    if not current_price:
+                        current_price = await asyncio.to_thread(_fetch_ticker_sync, pos.symbol, 'spot')
+                else:
+                    current_price = await asyncio.to_thread(_fetch_ticker_sync, pos.symbol, market)
+                
+                if current_price:
+                    pos.update_pnl(current_price)
+                else:
+                    print(f"[WARNING] Could not fetch price for {pos.symbol}")
+            except Exception as e:
+                print(f"[ERROR] Failed to update P&L for {pos.symbol}: {e}")
+        
+        # Get dashboard state
+        state = dashboard.get_full_state()
+        
+        # Override positions in state with filtered positions
+        state['positions'] = [
+            {
+                'symbol': p.symbol,
+                'side': p.side,
+                'entry_price': p.entry_price,
+                'size': p.size,
+                'entry_time': p.entry_time,
+                'stop_loss': p.stop_loss,
+                'take_profit': p.take_profit,
+                'unrealized_pnl': p.unrealized_pnl,
+                'unrealized_pnl_pct': p.unrealized_pnl_pct,
+            }
+            for p in positions
+        ]
+        
+        # Recalculate statistics based on filtered positions
+        state['statistics']['active_positions'] = len(positions)
+        state['statistics']['unrealized_pnl'] = sum(p.unrealized_pnl for p in positions)
+        
+        # Check if we should show live balance instead of test balance
+        # Only fetch live balance if mode='live' AND ARB_ALLOW_LIVE_ORDERS is enabled
+        live_enabled = os.environ.get('ARB_ALLOW_LIVE_ORDERS', '0').strip() == '1'
+        
+        if mode == 'live' and live_enabled:
+            try:
+                # Fetch live Binance balance
+                balance_info = await asyncio.to_thread(_get_binance_futures_balance)
+                
+                if balance_info.get('success'):
+                    # Get wallet balance (without unrealized P&L) and unrealized P&L from Binance
+                    total_balance = balance_info.get('balance', 0.0)  # Total (with unrealized P&L)
+                    wallet_balance = balance_info.get('wallet_balance', total_balance)  # Wallet (without unrealized P&L)
+                    unrealized_pnl_binance = balance_info.get('unrealized_pnl', 0.0)  # From Binance positions
+                    
+                    # Replace test balance with live balance
+                    state['balance'] = {
+                        'current': total_balance,  # Total balance (wallet + unrealized P&L)
+                        'initial': wallet_balance,  # Wallet balance (without unrealized P&L)
+                        'pnl': unrealized_pnl_binance,  # Use Binance's unrealized P&L
+                        'pnl_pct': (unrealized_pnl_binance / wallet_balance * 100) if wallet_balance > 0 else 0.0,
+                        'live': True,  # Flag to indicate this is live balance
+                        'wallet_balance': wallet_balance,  # Wallet balance for display
+                        'unrealized_pnl': unrealized_pnl_binance,  # Unrealized P&L from Binance
+                        'realized_pnl': 0.0,  # Realized P&L is already in wallet_balance
+                        'total_fees_paid': 0.0  # Fees are already deducted from wallet_balance
+                    }
+            except Exception as e:
+                print(f"[WARNING] Failed to fetch live balance, using test balance: {e}")
+        else:
+            # Test mode - ensure we're showing test balance with test positions only
+            test_unrealized_pnl = sum(p.unrealized_pnl for p in positions)
+            test_balance = state['balance']['current']
+            
+            # Recalculate balance including unrealized PNL from test positions
+            state['balance'] = {
+                'current': test_balance + test_unrealized_pnl,
+                'initial': state['balance']['initial'],
+                'pnl': test_unrealized_pnl + (test_balance - state['balance']['initial']),
+                'pnl_pct': ((test_unrealized_pnl + (test_balance - state['balance']['initial'])) / state['balance']['initial'] * 100) if state['balance']['initial'] > 0 else 0.0,
+                'live': False,  # Flag to indicate this is test balance
+                'unrealized_pnl': test_unrealized_pnl
+            }
+        
+        return state
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'Failed to get dashboard: {str(e)}')
 
@@ -2753,6 +2885,26 @@ async def api_dashboard_positions():
         from .live_dashboard import get_dashboard
         dashboard = get_dashboard()
         positions = dashboard.get_all_positions()
+        
+        # Update P&L for all positions with current prices
+        for pos in positions:
+            try:
+                # Fetch current price from the correct market (spot or futures)
+                market = getattr(pos, 'market', None)
+                
+                if market is None:
+                    # Try futures first, then spot
+                    current_price = await asyncio.to_thread(_fetch_ticker_sync, pos.symbol, 'futures')
+                    if not current_price:
+                        current_price = await asyncio.to_thread(_fetch_ticker_sync, pos.symbol, 'spot')
+                else:
+                    current_price = await asyncio.to_thread(_fetch_ticker_sync, pos.symbol, market)
+                
+                if current_price:
+                    pos.update_pnl(current_price)
+            except Exception as e:
+                print(f"[ERROR] Failed to update P&L for {pos.symbol}: {e}")
+        
         return {'positions': [vars(p) for p in positions]}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'Failed to get positions: {str(e)}')
@@ -2799,6 +2951,1109 @@ async def api_dashboard_reset():
         return {'success': True, 'message': 'Dashboard reset successfully'}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'Failed to reset dashboard: {str(e)}')
+
+@app.get('/api/binance/balance')
+async def api_binance_balance():
+    """Get comprehensive Binance Futures balance including fees and PNL."""
+    try:
+        from .live_dashboard import get_dashboard
+        
+        dashboard = get_dashboard()
+        
+        # Get raw Binance Futures balance
+        balance_info = await asyncio.to_thread(_get_binance_futures_balance)
+        
+        if not balance_info.get('success'):
+            return balance_info
+        
+        # Get balances from Binance
+        total_balance = balance_info.get('balance', 0.0)  # Total (with unrealized P&L)
+        wallet_balance = balance_info.get('wallet_balance', total_balance)  # Wallet (without unrealized P&L)
+        unrealized_pnl_binance = balance_info.get('unrealized_pnl', 0.0)  # From Binance
+        available = balance_info.get('available', 0.0)
+        used = balance_info.get('used', 0.0)
+        
+        # Calculate net balance with fees (using wallet balance as base)
+        net_info = dashboard.calculate_net_balance(wallet_balance)
+        
+        return {
+            'success': True,
+            'wallet_balance': wallet_balance,  # Actual wallet balance (207.35)
+            'available': available,
+            'used': used,
+            'unrealized_pnl': unrealized_pnl_binance,  # Use Binance's unrealized P&L (-33.22)
+            'realized_pnl': net_info['realized_pnl'],
+            'total_fees_paid': net_info['total_fees_paid'],
+            'net_balance': total_balance,  # Total balance after P&L (174.13)
+            'balance': available,  # Available balance for trading
+            'currency': 'USDT'
+        }
+    except Exception as e:
+        print(f"[ERROR] Failed to fetch Binance balance: {e}")
+        raise HTTPException(status_code=500, detail=f'Failed to fetch balance: {str(e)}')
+
+@app.get('/api/binance/order-history')
+async def api_binance_order_history(
+    symbol: Optional[str] = None,
+    limit: int = 100,
+    start_time: Optional[int] = None,
+    end_time: Optional[int] = None
+):
+    """
+    Get order history from Binance Futures.
+    
+    Args:
+        symbol: Trading pair symbol (e.g., 'MYXUSDT'). If None, gets all symbols.
+        limit: Maximum number of orders to return (default 100, max 1000)
+        start_time: Filter by start timestamp in milliseconds
+        end_time: Filter by end timestamp in milliseconds
+    """
+    try:
+        # Fetch orders from Binance
+        orders = await asyncio.to_thread(
+            _get_binance_order_history,
+            symbol=symbol,
+            limit=limit,
+            start_time=start_time,
+            end_time=end_time
+        )
+        
+        if not orders.get('success'):
+            raise HTTPException(status_code=500, detail=orders.get('error', 'Failed to fetch orders'))
+        
+        return {
+            'success': True,
+            'orders': orders.get('orders', []),
+            'count': len(orders.get('orders', [])),
+            'symbol': symbol,
+        }
+        
+    except Exception as e:
+        print(f"[ERROR] Failed to fetch order history: {e}")
+        raise HTTPException(status_code=500, detail=f'Failed to fetch order history: {str(e)}')
+
+def _get_binance_order_history(symbol: Optional[str] = None, limit: int = 100, start_time: Optional[int] = None, end_time: Optional[int] = None):
+    """Synchronous function to get Binance Futures order history."""
+    try:
+        import ccxt
+        
+        # Get API keys from environment
+        api_key = os.environ.get('BINANCE_API_KEY', '')
+        api_secret = os.environ.get('BINANCE_API_SECRET', '')
+        
+        if not api_key or not api_secret:
+            return {
+                'success': False,
+                'error': 'Binance API keys not configured',
+                'orders': []
+            }
+        
+        # Initialize Binance Futures exchange
+        exchange = ccxt.binance({
+            'apiKey': api_key,
+            'secret': api_secret,
+            'options': {
+                'defaultType': 'future',
+            }
+        })
+        
+        # Build params for Binance Futures API
+        params = {}
+        if start_time:
+            params['startTime'] = start_time
+        if end_time:
+            params['endTime'] = end_time
+        
+        # Fetch orders
+        orders = []
+        
+        if symbol:
+            # Convert symbol to CCXT format (e.g., MYXUSDT -> MYX/USDT:USDT)
+            if '/' not in symbol:
+                # Assume it's a normalized symbol like MYXUSDT
+                base = symbol[:-4]  # Remove USDT
+                quote = symbol[-4:]  # Get USDT
+                ccxt_symbol = f"{base}/{quote}:{quote}"
+            else:
+                ccxt_symbol = symbol
+            
+            # For Binance Futures, use fetch_closed_orders or fetch_orders with symbol
+            try:
+                # Try closed orders first (filled/canceled orders)
+                orders = exchange.fetch_closed_orders(ccxt_symbol, limit=limit, params=params)
+            except:
+                # Fallback to all orders
+                orders = exchange.fetch_orders(ccxt_symbol, limit=limit, params=params)
+        else:
+            # Fetch all orders across all symbols
+            # Binance Futures doesn't support fetch_orders without symbol
+            # So we need to use the direct API call
+            try:
+                # Use fapiPrivateGetAllOrders for all orders
+                params['limit'] = limit
+                raw_orders = exchange.fapiPrivateGetAllOrders(params)
+                
+                # Convert raw orders to CCXT format
+                for raw_order in raw_orders:
+                    try:
+                        parsed = exchange.parse_order(raw_order)
+                        orders.append(parsed)
+                    except:
+                        pass
+            except Exception as e:
+                print(f"[DEBUG] Failed to fetch all orders, trying recent trades: {e}")
+                # Alternative: Get recent filled orders via trades
+                try:
+                    my_trades = exchange.fetch_my_trades(limit=limit, params=params)
+                    # Group trades by order ID to create order-like objects
+                    order_map = {}
+                    for trade in my_trades:
+                        order_id = trade.get('order')
+                        if order_id not in order_map:
+                            order_map[order_id] = {
+                                'id': order_id,
+                                'symbol': trade.get('symbol'),
+                                'side': trade.get('side'),
+                                'type': trade.get('type', 'market'),
+                                'status': 'closed',
+                                'price': trade.get('price'),
+                                'average': trade.get('price'),
+                                'amount': trade.get('amount', 0),
+                                'filled': trade.get('amount', 0),
+                                'cost': trade.get('cost', 0),
+                                'fee': trade.get('fee'),
+                                'timestamp': trade.get('timestamp'),
+                                'datetime': trade.get('datetime'),
+                            }
+                        else:
+                            # Aggregate multiple fills for same order
+                            order_map[order_id]['amount'] += trade.get('amount', 0)
+                            order_map[order_id]['filled'] += trade.get('amount', 0)
+                            order_map[order_id]['cost'] += trade.get('cost', 0)
+                    
+                    orders = list(order_map.values())
+                except Exception as e2:
+                    print(f"[DEBUG] Failed to fetch trades: {e2}")
+                    orders = []
+        
+        # Format orders for frontend
+        formatted_orders = []
+        for order in orders:
+            formatted_orders.append({
+                'id': order.get('id'),
+                'client_order_id': order.get('clientOrderId'),
+                'symbol': order.get('symbol'),
+                'type': order.get('type'),
+                'side': order.get('side'),
+                'status': order.get('status'),
+                'price': order.get('price'),
+                'average': order.get('average'),
+                'amount': order.get('amount'),
+                'filled': order.get('filled'),
+                'remaining': order.get('remaining'),
+                'cost': order.get('cost'),
+                'fee': order.get('fee'),
+                'timestamp': order.get('timestamp'),
+                'datetime': order.get('datetime'),
+                'reduce_only': order.get('reduceOnly'),
+                'post_only': order.get('postOnly'),
+                'time_in_force': order.get('timeInForce'),
+            })
+        
+        return {
+            'success': True,
+            'orders': formatted_orders
+        }
+        
+    except Exception as e:
+        print(f"[ERROR] Binance order history fetch error: {e}")
+        import traceback
+        traceback.print_exc()
+        return {
+            'success': False,
+            'error': str(e),
+            'orders': []
+        }
+
+def _get_binance_futures_balance():
+    """Synchronous function to get Binance Futures balance."""
+    try:
+        import ccxt
+        
+        # Get API keys from environment
+        api_key = os.environ.get('BINANCE_API_KEY', '')
+        api_secret = os.environ.get('BINANCE_API_SECRET', '')
+        
+        if not api_key or not api_secret:
+            return {
+                'success': False,
+                'error': 'Binance API keys not configured',
+                'balance': 0.0,
+                'available': 0.0
+            }
+        
+        # Initialize Binance Futures exchange
+        exchange = ccxt.binance({
+            'apiKey': api_key,
+            'secret': api_secret,
+            'options': {
+                'defaultType': 'future',  # Use futures
+            }
+        })
+        
+        # Fetch balance
+        balance = exchange.fetch_balance()
+        
+        # Get USDT balance
+        usdt_balance = balance.get('USDT', {})
+        total = usdt_balance.get('total', 0.0)  # This includes unrealized P&L
+        free = usdt_balance.get('free', 0.0)
+        used = usdt_balance.get('used', 0.0)
+        
+        # Get wallet balance (without unrealized PNL) from info
+        # In Binance Futures: walletBalance = actual deposited balance
+        # totalWalletBalance = walletBalance + unrealizedProfit
+        wallet_balance = total  # Default to total
+        unrealized_pnl = 0.0
+        
+        # Try to get the actual wallet balance from the raw info
+        info = balance.get('info', {})
+        if isinstance(info, dict):
+            assets = info.get('assets', [])
+            for asset in assets:
+                if asset.get('asset') == 'USDT':
+                    # walletBalance is the actual balance without unrealized P&L
+                    wallet_balance = float(asset.get('walletBalance', total))
+                    unrealized_pnl = float(asset.get('unrealizedProfit', 0.0))
+                    break
+        
+        return {
+            'success': True,
+            'balance': total,  # Total balance (with unrealized P&L)
+            'wallet_balance': wallet_balance,  # Wallet balance (without unrealized P&L)
+            'unrealized_pnl': unrealized_pnl,  # Unrealized P&L from Binance
+            'available': free,
+            'used': used,
+            'currency': 'USDT'
+        }
+        
+    except Exception as e:
+        print(f"[ERROR] Binance balance fetch error: {e}")
+        return {
+            'success': False,
+            'error': str(e),
+            'balance': 0.0,
+            'available': 0.0
+        }
+
+def _get_binance_positions():
+    """Synchronous function to get Binance Futures positions."""
+    try:
+        import ccxt
+        
+        # Get API keys from environment
+        api_key = os.environ.get('BINANCE_API_KEY', '')
+        api_secret = os.environ.get('BINANCE_API_SECRET', '')
+        
+        if not api_key or not api_secret:
+            return []
+        
+        # Initialize Binance Futures exchange
+        exchange = ccxt.binance({
+            'apiKey': api_key,
+            'secret': api_secret,
+            'options': {
+                'defaultType': 'future',
+            }
+        })
+        
+        # Fetch positions
+        positions = exchange.fetch_positions()
+        
+        # Filter to only positions with non-zero amount
+        active_positions = [p for p in positions if float(p.get('contracts', 0)) != 0]
+        
+        print(f"[BINANCE] Found {len(active_positions)} active positions on Binance")
+        for p in active_positions:
+            print(f"[BINANCE] - {p['symbol']}: {p['contracts']} contracts, side={p['side']}")
+        
+        return positions
+        
+    except Exception as e:
+        print(f"[ERROR] Binance positions fetch error: {e}")
+        return []
+
+@app.post('/api/manual-trade')
+async def api_manual_trade(request: dict):
+    """Place a manual test trade (paper trading).
+    
+    Body:
+    {
+        "symbol": "BTCUSDT",
+        "side": "long" | "short",
+        "size": 0.001,  # position size in base asset
+        "leverage": 1-10,
+        "take_profit_pct": 2.0,
+        "stop_loss_pct": 1.0,
+        "entry_price": 97000.50
+    }
+    """
+    try:
+        from .live_dashboard import get_dashboard, Position
+        import time
+        
+        dashboard = get_dashboard()
+        
+        symbol = request.get('symbol')
+        side = request.get('side')
+        size = request.get('size')
+        leverage = request.get('leverage', 1)
+        tp_pct = request.get('take_profit_pct', 2.0)
+        sl_pct = request.get('stop_loss_pct', 1.0)
+        entry_price = request.get('entry_price')
+        allow_live = request.get('allow_live', False)
+        
+        # Check if live trading is enabled
+        live_enabled = os.environ.get('ARB_ALLOW_LIVE_ORDERS', '0').strip() == '1'
+        if allow_live and not live_enabled:
+            raise HTTPException(
+                status_code=403, 
+                detail='Live trading is disabled. Set ARB_ALLOW_LIVE_ORDERS=1 to enable.'
+            )
+        
+        print(f"[MANUAL TRADE] symbol={symbol}, side={side}, size={size}, leverage={leverage}, entry_price={entry_price}, live={allow_live}")
+        
+        # Validate required fields
+        if not all([symbol, side, size, entry_price]):
+            raise HTTPException(status_code=400, detail='Missing required fields')
+        
+        # Convert to proper types
+        try:
+            size = float(size)
+            entry_price = float(entry_price)
+            leverage = int(leverage)
+            tp_pct = float(tp_pct)
+            sl_pct = float(sl_pct)
+        except (ValueError, TypeError) as e:
+            raise HTTPException(status_code=400, detail=f'Invalid numeric values: {e}')
+        
+        if side not in ['long', 'short']:
+            raise HTTPException(status_code=400, detail='Side must be "long" or "short"')
+        
+        # Check if position already exists
+        existing_pos = dashboard.get_position(symbol)
+        if existing_pos:
+            raise HTTPException(status_code=400, detail=f'Position already open for {symbol}')
+        
+        # Calculate stop-loss and take-profit prices
+        if side == 'long':
+            stop_loss = entry_price * (1 - sl_pct / 100)
+            take_profit = entry_price * (1 + tp_pct / 100)
+        else:  # short
+            stop_loss = entry_price * (1 + sl_pct / 100)
+            take_profit = entry_price * (1 - tp_pct / 100)
+        
+        # Create position
+        market_type = 'futures' if leverage > 1 else 'spot'
+        
+        # Execute real order on Binance if allow_live=True
+        binance_order_id = None
+        actual_entry_price = entry_price
+        
+        if allow_live:
+            try:
+                import ccxt
+                
+                # Get API keys
+                api_key = os.environ.get('BINANCE_API_KEY', '')
+                api_secret = os.environ.get('BINANCE_API_SECRET', '')
+                
+                if not api_key or not api_secret:
+                    raise HTTPException(status_code=400, detail='Binance API keys not configured')
+                
+                # Initialize exchange
+                exchange = ccxt.binance({
+                    'apiKey': api_key,
+                    'secret': api_secret,
+                    'options': {
+                        'defaultType': 'future' if market_type == 'futures' else 'spot',
+                    },
+                    'enableRateLimit': True,  # Enable built-in rate limiting
+                })
+                
+                # Set leverage for futures (only if needed)
+                if market_type == 'futures' and leverage > 1:
+                    await asyncio.to_thread(exchange.set_leverage, leverage, symbol)
+                
+                # Place market order
+                order_side = 'buy' if side == 'long' else 'sell'
+                position_side = 'LONG' if side == 'long' else 'SHORT'
+                
+                # For Binance Futures in Hedge Mode, we need to specify positionSide
+                order = await asyncio.to_thread(
+                    exchange.create_order,
+                    symbol,
+                    'market',
+                    order_side,
+                    size,
+                    None,
+                    {
+                        'positionSide': position_side
+                    }
+                )
+                
+                binance_order_id = order.get('id')
+                actual_entry_price = order.get('average') or order.get('price') or entry_price
+                
+                # Calculate and track entry fee
+                order_value = actual_entry_price * size
+                entry_fee = order_value * 0.0004  # Binance Futures taker fee (0.04%)
+                dashboard.add_fee_paid(entry_fee)
+                
+                print(f"[LIVE ORDER] Binance order executed: {binance_order_id}, side={order_side}, size={size}, price={actual_entry_price}")
+                print(f"[LIVE ORDER] Order value: ${order_value:.2f}, Entry fee: ${entry_fee:.4f}")
+                print(f"[TIMING] Main order: {order_time:.0f}ms")
+                
+                # Place Stop-Loss and Take-Profit orders in parallel for speed
+                async def place_sl_order():
+                    if not stop_loss:
+                        return None
+                    try:
+                        sl_side = 'sell' if side == 'long' else 'buy'
+                        start = time.time()
+                        sl_order = await asyncio.to_thread(
+                            exchange.create_order,
+                            symbol,
+                            'STOP_MARKET',
+                            sl_side,
+                            size,
+                            None,
+                            {
+                                'stopPrice': stop_loss,
+                                'positionSide': position_side,
+                                'closePosition': True,
+                                'workingType': 'MARK_PRICE'
+                            }
+                        )
+                        sl_time = (time.time() - start) * 1000
+                        print(f"[LIVE ORDER] Stop-Loss order placed: {sl_order.get('id')} @ ${stop_loss:.2f} ({sl_time:.0f}ms)")
+                        return sl_order
+                    except Exception as e:
+                        print(f"[ERROR] Failed to place Stop-Loss order: {e}")
+                        import traceback
+                        traceback.print_exc()
+                        return None
+                
+                async def place_tp_order():
+                    if not take_profit:
+                        return None
+                    try:
+                        tp_side = 'sell' if side == 'long' else 'buy'
+                        start = time.time()
+                        tp_order = await asyncio.to_thread(
+                            exchange.create_order,
+                            symbol,
+                            'TAKE_PROFIT_MARKET',
+                            tp_side,
+                            size,
+                            None,
+                            {
+                                'stopPrice': take_profit,
+                                'positionSide': position_side,
+                                'closePosition': True,
+                                'workingType': 'MARK_PRICE'
+                            }
+                        )
+                        tp_time = (time.time() - start) * 1000
+                        print(f"[LIVE ORDER] Take-Profit order placed: {tp_order.get('id')} @ ${take_profit:.2f} ({tp_time:.0f}ms)")
+                        return tp_order
+                    except Exception as e:
+                        print(f"[ERROR] Failed to place Take-Profit order: {e}")
+                        import traceback
+                        traceback.print_exc()
+                        return None
+                
+                # Execute SL and TP orders in parallel
+                start_sltp = time.time()
+                sl_result, tp_result = await asyncio.gather(
+                    place_sl_order(),
+                    place_tp_order(),
+                    return_exceptions=True
+                )
+                sltp_time = (time.time() - start_sltp) * 1000
+                print(f"[TIMING] SL/TP orders: {sltp_time:.0f}ms (parallel)")
+                
+            except Exception as e:
+                print(f"[ERROR] Failed to execute live order on Binance: {e}")
+                raise HTTPException(status_code=500, detail=f'Failed to execute order on Binance: {str(e)}')
+        
+        position = Position(
+            symbol=symbol,
+            side=side,
+            entry_price=actual_entry_price,
+            size=size,
+            entry_time=int(time.time() * 1000),
+            stop_loss=stop_loss,
+            take_profit=take_profit,
+            market=market_type,
+            is_live=allow_live  # Mark position as live or test
+        )
+        
+        dashboard.open_position(position)
+        
+        return {
+            'success': True,
+            'message': f'Manual {side} position opened {"(LIVE)" if allow_live else "(TEST)"}',
+            'position': {
+                'symbol': symbol,
+                'side': side,
+                'entry_price': entry_price,
+                'size': size,
+                'leverage': leverage,
+                'stop_loss': stop_loss,
+                'take_profit': take_profit
+            }
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'Failed to place manual trade: {str(e)}')
+
+@app.post('/api/manual-trade-ws')
+async def api_manual_trade_ws(request: dict):
+    """
+    Place a manual trade using WebSocket API (FASTER).
+    This uses ccxt.pro's WebSocket methods for lower latency order execution.
+    
+    Body: Same as /api/manual-trade
+    {
+        "symbol": "BTCUSDT",
+        "side": "long" | "short",
+        "size": 0.001,
+        "leverage": 1-10,
+        "take_profit_pct": 2.0,
+        "stop_loss_pct": 1.0,
+        "entry_price": 97000.50,
+        "allow_live": true
+    }
+    """
+    try:
+        from .live_dashboard import get_dashboard, Position
+        import time
+        
+        dashboard = get_dashboard()
+        
+        symbol = request.get('symbol')
+        side = request.get('side')
+        size = request.get('size')
+        leverage = request.get('leverage', 1)
+        tp_pct = request.get('take_profit_pct', 2.0)
+        sl_pct = request.get('stop_loss_pct', 1.0)
+        entry_price = request.get('entry_price')
+        allow_live = request.get('allow_live', False)
+        
+        # Check if live trading is enabled
+        live_enabled = os.environ.get('ARB_ALLOW_LIVE_ORDERS', '0').strip() == '1'
+        if allow_live and not live_enabled:
+            raise HTTPException(
+                status_code=403, 
+                detail='Live trading is disabled. Set ARB_ALLOW_LIVE_ORDERS=1 to enable.'
+            )
+        
+        print(f"[MANUAL TRADE WS] symbol={symbol}, side={side}, size={size}, leverage={leverage}, entry_price={entry_price}, live={allow_live}")
+        
+        # Validate required fields
+        if not all([symbol, side, size, entry_price]):
+            raise HTTPException(status_code=400, detail='Missing required fields')
+        
+        # Convert to proper types
+        try:
+            size = float(size)
+            entry_price = float(entry_price)
+            leverage = int(leverage)
+            tp_pct = float(tp_pct)
+            sl_pct = float(sl_pct)
+        except (ValueError, TypeError) as e:
+            raise HTTPException(status_code=400, detail=f'Invalid numeric values: {e}')
+        
+        if side not in ['long', 'short']:
+            raise HTTPException(status_code=400, detail='Side must be "long" or "short"')
+        
+        # Check if position already exists
+        existing_pos = dashboard.get_position(symbol)
+        if existing_pos:
+            raise HTTPException(status_code=400, detail=f'Position already open for {symbol}')
+        
+        # Calculate stop-loss and take-profit prices
+        if side == 'long':
+            stop_loss = entry_price * (1 - sl_pct / 100)
+            take_profit = entry_price * (1 + tp_pct / 100)
+        else:  # short
+            stop_loss = entry_price * (1 + sl_pct / 100)
+            take_profit = entry_price * (1 - tp_pct / 100)
+        
+        # Create position
+        market_type = 'futures' if leverage > 1 else 'spot'
+        
+        # Execute real order on Binance using WebSocket if allow_live=True
+        binance_order_id = None
+        actual_entry_price = entry_price
+        
+        if allow_live:
+            exchange = None
+            session = None
+            connector = None
+            try:
+                import ccxt.pro as ccxtpro
+                import aiohttp
+                from aiohttp.resolver import ThreadedResolver
+                
+                # Get API keys
+                api_key = os.environ.get('BINANCE_API_KEY', '')
+                api_secret = os.environ.get('BINANCE_API_SECRET', '')
+                
+                if not api_key or not api_secret:
+                    raise HTTPException(status_code=400, detail='Binance API keys not configured')
+                
+                # Create resolver, connector, and session (same as dashboard WebSocket)
+                resolver = ThreadedResolver()
+                connector = aiohttp.TCPConnector(
+                    resolver=resolver,
+                    limit=100,
+                    ttl_dns_cache=300,
+                    use_dns_cache=True,
+                    force_close=False,
+                )
+                session = aiohttp.ClientSession(connector=connector)
+                
+                # Initialize WebSocket exchange
+                exchange = ccxtpro.binance({
+                    'apiKey': api_key,
+                    'secret': api_secret,
+                    'options': {
+                        'defaultType': 'future' if market_type == 'futures' else 'spot',
+                    },
+                    'enableRateLimit': True,
+                    'session': session,
+                })
+                
+                try:
+                    # Set leverage for futures (using REST as WS doesn't support this)
+                    if market_type == 'futures' and leverage > 1:
+                        await asyncio.to_thread(exchange.set_leverage, leverage, symbol)
+                    
+                    # Place market order via WebSocket - FASTER!
+                    order_side = 'buy' if side == 'long' else 'sell'
+                    position_side = 'LONG' if side == 'long' else 'SHORT'
+                    
+                    start = time.time()
+                    order = await exchange.create_order_ws(
+                        symbol,
+                        'market',
+                        order_side,
+                        size,
+                        None,
+                        {
+                            'positionSide': position_side
+                        }
+                    )
+                    order_time = (time.time() - start) * 1000
+                    
+                    binance_order_id = order.get('id')
+                    actual_entry_price = order.get('average') or order.get('price') or entry_price
+                    
+                    # Calculate and track entry fee
+                    order_value = actual_entry_price * size
+                    entry_fee = order_value * 0.0004  # Binance Futures taker fee (0.04%)
+                    dashboard.add_fee_paid(entry_fee)
+                    
+                    print(f"[LIVE ORDER WS] ✅ Binance order executed via WebSocket: {binance_order_id}")
+                    print(f"[LIVE ORDER WS] side={order_side}, size={size}, price={actual_entry_price}")
+                    print(f"[TIMING WS] Main order: {order_time:.0f}ms")
+                    
+                    # Place Stop-Loss and Take-Profit orders via HTTP (more reliable than WS for these order types)
+                    # Note: Binance doesn't fully support TP/SL via WebSocket yet, so we use HTTP
+                    async def place_sl_order_http():
+                        if not stop_loss:
+                            return None
+                        try:
+                            sl_side = 'sell' if side == 'long' else 'buy'
+                            start = time.time()
+                            sl_order = await asyncio.to_thread(
+                                exchange.create_order,
+                                symbol,
+                                'STOP_MARKET',
+                                sl_side,
+                                size,
+                                None,
+                                {
+                                    'stopPrice': stop_loss,
+                                    'positionSide': position_side,
+                                    'closePosition': True,
+                                    'workingType': 'MARK_PRICE'
+                                }
+                            )
+                            sl_time = (time.time() - start) * 1000
+                            print(f"[LIVE ORDER WS] ✅ Stop-Loss placed: {sl_order.get('id')} @ ${stop_loss:.2f} ({sl_time:.0f}ms)")
+                            return sl_order
+                        except Exception as e:
+                            print(f"[ERROR WS] Failed to place Stop-Loss: {e}")
+                            return None
+                    
+                    async def place_tp_order_http():
+                        if not take_profit:
+                            return None
+                        try:
+                            tp_side = 'sell' if side == 'long' else 'buy'
+                            start = time.time()
+                            tp_order = await asyncio.to_thread(
+                                exchange.create_order,
+                                symbol,
+                                'TAKE_PROFIT_MARKET',
+                                tp_side,
+                                size,
+                                None,
+                                {
+                                    'stopPrice': take_profit,
+                                    'positionSide': position_side,
+                                    'closePosition': True,
+                                    'workingType': 'MARK_PRICE'
+                                }
+                            )
+                            tp_time = (time.time() - start) * 1000
+                            print(f"[LIVE ORDER WS] ✅ Take-Profit placed: {tp_order.get('id')} @ ${take_profit:.2f} ({tp_time:.0f}ms)")
+                            return tp_order
+                        except Exception as e:
+                            print(f"[ERROR WS] Failed to place Take-Profit: {e}")
+                            return None
+                    
+                    # Execute SL and TP orders in parallel (HTTP method, more reliable)
+                    start_sltp = time.time()
+                    sl_result, tp_result = await asyncio.gather(
+                        place_sl_order_http(),
+                        place_tp_order_http(),
+                        return_exceptions=True
+                    )
+                    sltp_time = (time.time() - start_sltp) * 1000
+                    print(f"[TIMING WS] SL/TP orders: {sltp_time:.0f}ms (parallel HTTP)")
+                    
+                finally:
+                    # Proper cleanup: close in reverse order
+                    if exchange:
+                        await exchange.close()
+                    if session:
+                        await session.close()
+                    if connector:
+                        await connector.close()
+                    
+            except Exception as e:
+                print(f"[ERROR WS] Failed to execute live order via WebSocket: {e}")
+                import traceback
+                traceback.print_exc()
+                raise HTTPException(status_code=500, detail=f'Failed to execute order via WebSocket: {str(e)}')
+        
+        position = Position(
+            symbol=symbol,
+            side=side,
+            entry_price=actual_entry_price,
+            size=size,
+            entry_time=int(time.time() * 1000),
+            stop_loss=stop_loss,
+            take_profit=take_profit,
+            market=market_type,
+            is_live=allow_live
+        )
+        
+        dashboard.open_position(position)
+        
+        return {
+            'success': True,
+            'message': f'Manual {side} position opened via WebSocket {"(LIVE)" if allow_live else "(TEST)"}',
+            'position': {
+                'symbol': symbol,
+                'side': side,
+                'entry_price': actual_entry_price,
+                'size': size,
+                'leverage': leverage,
+                'stop_loss': stop_loss,
+                'take_profit': take_profit
+            },
+            'method': 'WebSocket'
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        import traceback
+        traceback.print_exc()
+        raise HTTPException(status_code=500, detail=f'Failed to place manual trade via WebSocket: {str(e)}')
+
+@app.post('/api/manual-trade/close')
+async def api_manual_trade_close(request: dict):
+    """Close a manual test position.
+    
+    Body:
+    {
+        "symbol": "BTCUSDT",
+        "exit_price": 98000.50,
+        "allow_live": false
+    }
+    """
+    try:
+        from .live_dashboard import get_dashboard
+        
+        dashboard = get_dashboard()
+        
+        symbol = request.get('symbol')
+        exit_price = request.get('exit_price')
+        allow_live = request.get('allow_live', False)
+        
+        # Check if live trading is enabled
+        live_enabled = os.environ.get('ARB_ALLOW_LIVE_ORDERS', '0').strip() == '1'
+        if allow_live and not live_enabled:
+            raise HTTPException(
+                status_code=403, 
+                detail='Live trading is disabled. Set ARB_ALLOW_LIVE_ORDERS=1 to enable.'
+            )
+        
+        print(f"[CLOSE POSITION] symbol={symbol}, exit_price={exit_price}, live={allow_live}")
+        
+        if not all([symbol, exit_price]):
+            raise HTTPException(status_code=400, detail='Missing required fields')
+        
+        # Convert to proper types
+        try:
+            exit_price = float(exit_price)
+        except (ValueError, TypeError) as e:
+            raise HTTPException(status_code=400, detail=f'Invalid exit_price: {e}')
+        
+        # Get the position before closing to know the side
+        position = dashboard.get_position(symbol)
+        if not position:
+            raise HTTPException(status_code=404, detail=f'No open position found for {symbol}')
+        
+        # Execute real close order on Binance if allow_live=True
+        if allow_live:
+            try:
+                import ccxt
+                
+                # Get API keys
+                api_key = os.environ.get('BINANCE_API_KEY', '')
+                api_secret = os.environ.get('BINANCE_API_SECRET', '')
+                
+                if not api_key or not api_secret:
+                    raise HTTPException(status_code=400, detail='Binance API keys not configured')
+                
+                # Initialize exchange
+                exchange = ccxt.binance({
+                    'apiKey': api_key,
+                    'secret': api_secret,
+                    'options': {
+                        'defaultType': 'future',
+                    }
+                })
+                
+                # Close position by placing opposite order
+                # If we have a LONG position, we SELL to close
+                # If we have a SHORT position, we BUY to close
+                close_side = 'sell' if position.side == 'long' else 'buy'
+                position_side = 'LONG' if position.side == 'long' else 'SHORT'
+                
+                # Close the position with reduceOnly=True
+                close_order = await asyncio.to_thread(
+                    exchange.create_order,
+                    symbol,
+                    'market',  # Order type
+                    close_side,
+                    position.size,  # Close the full position
+                    None,  # Price (None for market orders)
+                    {
+                        'positionSide': position_side,  # Must match the position we're closing
+                        'reduceOnly': True  # Ensures we only close, not open opposite position
+                    }
+                )
+                
+                # Calculate and track exit fee
+                actual_exit_price = close_order.get('average') or close_order.get('price') or exit_price
+                exit_value = actual_exit_price * position.size
+                exit_fee = exit_value * 0.0004  # Binance Futures taker fee (0.04%)
+                dashboard.add_fee_paid(exit_fee)
+                
+                print(f"[LIVE CLOSE] Binance close order executed: {close_order.get('id')}, side={close_side}, positionSide={position_side}")
+                print(f"[LIVE CLOSE] Exit value: ${exit_value:.2f}, Exit fee: ${exit_fee:.4f}")
+                
+            except Exception as e:
+                print(f"[ERROR] Failed to close live position on Binance: {e}")
+                raise HTTPException(status_code=500, detail=f'Failed to close position on Binance: {str(e)}')
+        
+        # Close position in dashboard
+        trade = dashboard.close_position(symbol, exit_price, reason='manual_close')
+        
+        if not trade:
+            raise HTTPException(status_code=404, detail=f'No open position found for {symbol}')
+        
+        return {
+            'success': True,
+            'message': f'Position closed {"(LIVE)" if allow_live else "(TEST)"}',
+            'trade': {
+                'symbol': trade.symbol,
+                'side': trade.side,
+                'entry_price': trade.entry_price,
+                'exit_price': trade.exit_price,
+                'pnl': trade.pnl,
+                'pnl_pct': trade.pnl_pct,
+                'reason': trade.reason
+            }
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'Failed to close manual trade: {str(e)}')
+
+
+@app.post('/api/manual-trade/adjust')
+async def api_manual_trade_adjust(request: dict):
+    """Adjust stop-loss and take-profit for an open position.
+    
+    Body:
+    {
+        "symbol": "BTCUSDT",
+        "stop_loss": 97000.00,
+        "take_profit": 99000.00,
+        "allow_live": false
+    }
+    """
+    try:
+        from .live_dashboard import get_dashboard
+        
+        dashboard = get_dashboard()
+        
+        symbol = request.get('symbol')
+        stop_loss = request.get('stop_loss')
+        take_profit = request.get('take_profit')
+        allow_live = request.get('allow_live', False)
+        
+        if not symbol:
+            raise HTTPException(status_code=400, detail='Symbol is required')
+        
+        # Check if live trading is enabled
+        live_enabled = os.environ.get('ARB_ALLOW_LIVE_ORDERS', '0').strip() == '1'
+        if allow_live and not live_enabled:
+            raise HTTPException(
+                status_code=403, 
+                detail='Live trading is disabled. Set ARB_ALLOW_LIVE_ORDERS=1 to enable.'
+            )
+        
+        # Get the position
+        position = dashboard.get_position(symbol)
+        if not position:
+            raise HTTPException(status_code=404, detail=f'No open position found for {symbol}')
+        
+        # If live trading, update orders on Binance
+        if allow_live:
+            try:
+                import ccxt
+                
+                # Get API keys
+                api_key = os.environ.get('BINANCE_API_KEY', '')
+                api_secret = os.environ.get('BINANCE_API_SECRET', '')
+                
+                if not api_key or not api_secret:
+                    raise HTTPException(status_code=400, detail='Binance API keys not configured')
+                
+                # Initialize exchange
+                exchange = ccxt.binance({
+                    'apiKey': api_key,
+                    'secret': api_secret,
+                    'options': {
+                        'defaultType': 'future',
+                    }
+                })
+                
+                position_side = 'LONG' if position.side == 'long' else 'SHORT'
+                order_side = 'sell' if position.side == 'long' else 'buy'  # Opposite of entry
+                
+                # Cancel all existing stop and take-profit orders for this position
+                try:
+                    open_orders = await asyncio.to_thread(exchange.fetch_open_orders, symbol)
+                    for order in open_orders:
+                        # Cancel stop-loss and take-profit orders for this position side
+                        if order.get('info', {}).get('positionSide') == position_side:
+                            order_type = order.get('type', '').upper()
+                            if 'STOP' in order_type or 'TAKE_PROFIT' in order_type:
+                                await asyncio.to_thread(exchange.cancel_order, order['id'], symbol)
+                                print(f"[ADJUST] Cancelled order {order['id']} ({order_type})")
+                except Exception as cancel_error:
+                    print(f"[WARNING] Failed to cancel existing orders: {cancel_error}")
+                
+                # Place new Stop-Loss order if provided
+                if stop_loss is not None and stop_loss > 0:
+                    try:
+                        sl_order = await asyncio.to_thread(
+                            exchange.create_order,
+                            symbol,
+                            'STOP_MARKET',
+                            order_side,
+                            position.size,
+                            None,  # No price for STOP_MARKET (uses stopPrice in params)
+                            {
+                                'stopPrice': float(stop_loss),
+                                'positionSide': position_side,
+                                'closePosition': True,  # Close position when triggered
+                                'workingType': 'MARK_PRICE'
+                            }
+                        )
+                        print(f"[ADJUST] New Stop-Loss order placed: {sl_order.get('id')} @ ${stop_loss:.2f}")
+                    except Exception as sl_error:
+                        print(f"[WARNING] Failed to place new Stop-Loss: {sl_error}")
+                
+                # Place new Take-Profit order if provided
+                if take_profit is not None and take_profit > 0:
+                    try:
+                        tp_order = await asyncio.to_thread(
+                            exchange.create_order,
+                            symbol,
+                            'TAKE_PROFIT_MARKET',
+                            order_side,
+                            position.size,
+                            None,  # No price for TAKE_PROFIT_MARKET (uses stopPrice in params)
+                            {
+                                'stopPrice': float(take_profit),
+                                'positionSide': position_side,
+                                'closePosition': True,  # Close position when triggered
+                                'workingType': 'MARK_PRICE'
+                            }
+                        )
+                        print(f"[ADJUST] New Take-Profit order placed: {tp_order.get('id')} @ ${take_profit:.2f}")
+                    except Exception as tp_error:
+                        print(f"[WARNING] Failed to place new Take-Profit: {tp_error}")
+                
+            except Exception as e:
+                print(f"[ERROR] Failed to adjust orders on Binance: {e}")
+                raise HTTPException(status_code=500, detail=f'Failed to adjust orders on Binance: {str(e)}')
+        
+        # Update SL/TP in local tracking
+        if stop_loss is not None:
+            position.stop_loss = float(stop_loss)
+        if take_profit is not None:
+            position.take_profit = float(take_profit)
+        
+        print(f"[ADJUST] Updated {symbol} SL/TP: SL=${position.stop_loss:.2f}, TP=${position.take_profit:.2f}")
+        
+        return {
+            'success': True,
+            'message': f'SL/TP updated {"(LIVE)" if allow_live else "(TEST)"}',
+            'position': {
+                'symbol': position.symbol,
+                'side': position.side,
+                'stop_loss': position.stop_loss,
+                'take_profit': position.take_profit
+            }
+        }
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'Failed to adjust SL/TP: {str(e)}')
+
 
 def _save_webhook_config(obj: dict):
     try:
@@ -2864,6 +4119,10 @@ BINANCE_FUTURES_24H_URL = "https://fapi.binance.com/fapi/v1/ticker/24hr"
 # Background price alerts task
 _price_alerts_task: Optional[asyncio.Task] = None
 _top_futures_task: Optional[asyncio.Task] = None
+
+# Simple price cache to avoid hammering Binance API
+_price_cache: Dict[str, tuple[float, float]] = {}  # symbol -> (price, timestamp)
+_price_cache_ttl = 2.0  # Cache for 2 seconds
 _vault_apy_monitor_task: Optional[asyncio.Task] = None
 
 # status info for top futures checker
@@ -2882,8 +4141,27 @@ def _http_get_json_sync(url: str, timeout: float = 10.0):
     try:
         req = _urllib_request.Request(url, headers={"User-Agent": "arb-check/1.0"})
         with _urllib_request.urlopen(req, timeout=timeout) as r:
-            return json.loads(r.read().decode('utf-8'))
+            response_text = r.read().decode('utf-8')
+            return json.loads(response_text)
+    except _urllib_error.HTTPError as e:
+        # HTTP error (4xx, 5xx)
+        error_body = e.read().decode('utf-8') if e.fp else 'No error body'
+        print(f"[ERROR] HTTP {e.code} for {url}: {error_body}")
+        try:
+            server_logs.append({"ts": _dt.datetime.utcnow().isoformat(), "text": f"http {e.code}: {error_body}"})
+        except Exception:
+            pass
+        return None
+    except _urllib_error.URLError as e:
+        # Network error
+        print(f"[ERROR] Network error for {url}: {str(e.reason)}")
+        try:
+            server_logs.append({"ts": _dt.datetime.utcnow().isoformat(), "text": f"network error: {str(e.reason)}"})
+        except Exception:
+            pass
+        return None
     except Exception as e:
+        print(f"[ERROR] HTTP request failed for {url}: {str(e)}")
         try:
             server_logs.append({"ts": _dt.datetime.utcnow().isoformat(), "text": f"http error: {str(e)}"})
         except Exception:
@@ -2905,15 +4183,35 @@ def _fetch_klines_sync(symbol: str, interval: str = '1m', limit: int = 100, star
 
 
 def _fetch_ticker_sync(symbol: str, market: str = 'spot') -> Optional[float]:
-    base = BINANCE_TICKER_URL if market == 'spot' else BINANCE_FUTURES_TICKER_URL
-    q = _urllib_parse.urlencode({"symbol": symbol})
-    url = f"{base}?{q}"
-    data = _http_get_json_sync(url)
-    if not isinstance(data, dict):
-        return None
+    """Fetch current ticker price from Binance with caching."""
+    global _price_cache
+    
+    # Check cache
+    cache_key = f"{symbol}_{market}"
+    now = time.time()
+    if cache_key in _price_cache:
+        cached_price, cached_time = _price_cache[cache_key]
+        if now - cached_time < _price_cache_ttl:
+            return cached_price
+    
     try:
-        return float(data.get('price'))
-    except Exception:
+        base = BINANCE_TICKER_URL if market == 'spot' else BINANCE_FUTURES_TICKER_URL
+        q = _urllib_parse.urlencode({"symbol": symbol})
+        url = f"{base}?{q}"
+        data = _http_get_json_sync(url)
+        if not isinstance(data, dict):
+            print(f"[WARNING] Invalid ticker response for {symbol} ({market}): {data}")
+            return None
+        try:
+            price = float(data.get('price'))
+            # Cache the result
+            _price_cache[cache_key] = (price, now)
+            return price
+        except Exception as e:
+            print(f"[WARNING] Could not parse price for {symbol} ({market}): {data}")
+            return None
+    except Exception as e:
+        print(f"[ERROR] Failed to fetch ticker for {symbol} ({market}): {e}")
         return None
 
 
@@ -4841,17 +6139,93 @@ async def _vol_index_startup_loop():
     except asyncio.CancelledError:
         return
 
+
+# -----------------------------------------------------------------------------
+# Position Monitor - Auto-close positions when TP/SL hit
+# -----------------------------------------------------------------------------
+async def _monitor_positions():
+    """Background task to monitor positions and auto-close on TP/SL."""
+    print("[POSITION MONITOR] Started")
+    while True:
+        try:
+            await asyncio.sleep(5)  # Check every 5 seconds
+            
+            from .live_dashboard import get_dashboard
+            dashboard = get_dashboard()
+            positions = dashboard.get_all_positions()
+            
+            if not positions:
+                continue
+            
+            for pos in positions:
+                try:
+                    # Fetch current price
+                    market = getattr(pos, 'market', None)
+                    if market is None:
+                        current_price = await asyncio.to_thread(_fetch_ticker_sync, pos.symbol, 'futures')
+                        if not current_price:
+                            current_price = await asyncio.to_thread(_fetch_ticker_sync, pos.symbol, 'spot')
+                    else:
+                        current_price = await asyncio.to_thread(_fetch_ticker_sync, pos.symbol, market)
+                    
+                    if not current_price:
+                        continue
+                    
+                    # Check TP/SL
+                    should_close = False
+                    close_reason = None
+                    
+                    if pos.side == 'long':
+                        if pos.stop_loss and current_price <= pos.stop_loss:
+                            should_close = True
+                            close_reason = 'stop_loss'
+                        elif pos.take_profit and current_price >= pos.take_profit:
+                            should_close = True
+                            close_reason = 'take_profit'
+                    else:  # short
+                        if pos.stop_loss and current_price >= pos.stop_loss:
+                            should_close = True
+                            close_reason = 'stop_loss'
+                        elif pos.take_profit and current_price <= pos.take_profit:
+                            should_close = True
+                            close_reason = 'take_profit'
+                    
+                    if should_close:
+                        print(f"[POSITION MONITOR] 🎯 Auto-closing {pos.symbol} {pos.side.upper()} position - {close_reason.upper()} hit!")
+                        print(f"[POSITION MONITOR] Entry: ${pos.entry_price:.2f}, Current: ${current_price:.2f}, SL: ${pos.stop_loss:.2f}, TP: ${pos.take_profit:.2f}")
+                        
+                        # Calculate P&L
+                        if pos.side == 'long':
+                            pnl = (current_price - pos.entry_price) * pos.size
+                        else:
+                            pnl = (pos.entry_price - current_price) * pos.size
+                        
+                        # Close position
+                        dashboard.close_position(pos.symbol, current_price, close_reason)
+                        print(f"[POSITION MONITOR] ✅ Position closed - P&L: ${pnl:.2f}")
+                        
+                except Exception as e:
+                    print(f"[POSITION MONITOR ERROR] Failed to check {pos.symbol}: {e}")
+                    
+        except Exception as e:
+            print(f"[POSITION MONITOR ERROR] Monitor loop failed: {e}")
+
+
 # -----------------------------------------------------------------------------
 # Lifecycle
 # -----------------------------------------------------------------------------
 @app.on_event("startup")
 async def _start_scanner():
-    global _scanner_task, _hotcoins_task, latest_opportunities
+    global _scanner_task, _hotcoins_task, _position_monitor_task, latest_opportunities
     if _scanner_task is not None:
         return
 
     scanner_enabled = os.environ.get('ARB_ENABLE_SCANNER', '0').strip() == '1'
     hotcoins_enabled = os.environ.get('ARB_ENABLE_HOTCOINS', '1').strip() == '1'
+    
+    # Start position monitor for automatic TP/SL closure
+    _position_monitor_task = asyncio.create_task(_monitor_positions())
+    print("[STARTUP] Position monitor task started")
 
     try:
         from datetime import datetime
@@ -4978,13 +6352,17 @@ async def _start_scanner():
 
 @app.on_event("shutdown")
 async def _stop_scanner():
-    global _scanner_task, _hotcoins_task
+    global _scanner_task, _hotcoins_task, _position_monitor_task
     if _scanner_task is not None:
         _scanner_task.cancel()
         _scanner_task = None
     if _hotcoins_task is not None:
         _hotcoins_task.cancel()
         _hotcoins_task = None
+    if _position_monitor_task is not None:
+        _position_monitor_task.cancel()
+        _position_monitor_task = None
+        print("[SHUTDOWN] Position monitor task stopped")
     # stop vol index task
     try:
         global _vol_index_task
@@ -5089,6 +6467,505 @@ async def ws_liquidations(websocket: WebSocket):
             await asyncio.sleep(60.0)
     except WebSocketDisconnect:
         liquidation_manager.disconnect(websocket)
+
+
+@app.websocket("/ws/live-dashboard")
+async def ws_live_dashboard(websocket: WebSocket):
+    """
+    WebSocket endpoint for real-time live trading dashboard updates.
+    
+    Streams:
+    - Balance updates from Binance
+    - Position updates (watch positions)
+    - Order fills and status
+    - P&L updates
+    
+    Uses ccxt.pro WebSocket API for low-latency updates.
+    """
+    await websocket.accept()
+    
+    try:
+        import ccxt.pro as ccxtpro
+        from .live_dashboard import get_dashboard
+        
+        # Get API keys
+        api_key = os.environ.get('BINANCE_API_KEY', '')
+        api_secret = os.environ.get('BINANCE_API_SECRET', '')
+        live_enabled = os.environ.get('ARB_ALLOW_LIVE_ORDERS', '0').strip() == '1'
+        
+        if not live_enabled:
+            await websocket.send_json({
+                'type': 'error',
+                'message': 'Live trading is disabled. Set ARB_ALLOW_LIVE_ORDERS=1'
+            })
+            await websocket.close()
+            return
+        
+        if not api_key or not api_secret:
+            await websocket.send_json({
+                'type': 'error',
+                'message': 'Binance API keys not configured'
+            })
+            await websocket.close()
+            return
+        
+        dashboard = get_dashboard()
+        exchange = None
+        session = None
+        connector = None
+        
+        try:
+            # Initialize WebSocket exchange
+            # Use ThreadedResolver instead of aiodns to avoid DNS timeout issues on Windows
+            import aiohttp
+            from aiohttp.resolver import ThreadedResolver
+            
+            print("[WS] Creating exchange with ThreadedResolver to avoid DNS issues...")
+            
+            # Create resolver explicitly
+            resolver = ThreadedResolver()
+            
+            # Create connector with the resolver
+            connector = aiohttp.TCPConnector(
+                resolver=resolver,
+                limit=100,
+                ttl_dns_cache=300,
+                use_dns_cache=True,
+                force_close=False,
+            )
+            
+            # Create custom aiohttp session with our connector
+            session = aiohttp.ClientSession(connector=connector)
+            
+            exchange = ccxtpro.binance({
+                'apiKey': api_key,
+                'secret': api_secret,
+                'options': {
+                    'defaultType': 'future',
+                },
+                'enableRateLimit': True,
+                'session': session,  # Use our custom session instead of connector
+            })
+            
+            # Pre-load markets to avoid delays during watch_* calls
+            print("[WS] Pre-loading market data...")
+            try:
+                await exchange.load_markets()
+                print("[WS] Markets loaded successfully")
+            except Exception as e:
+                print(f"[WS ERROR] Failed to load markets: {e}")
+                import traceback
+                traceback.print_exc()
+                await websocket.send_json({
+                    'type': 'error',
+                    'message': f'Failed to connect to Binance: {str(e)}'
+                })
+                await websocket.close()
+                return
+            
+            await websocket.send_json({
+                'type': 'connected',
+                'message': 'Connected to Binance WebSocket',
+                'timestamp': int(time.time() * 1000)
+            })
+            
+            # Helper function to safely send JSON (checks if WS is still open)
+            async def safe_send_json(data):
+                """Send JSON only if websocket is still connected"""
+                try:
+                    await websocket.send_json(data)
+                    return True
+                except RuntimeError as e:
+                    if "close message has been sent" in str(e) or "WebSocket is not connected" in str(e):
+                        print("[WS] WebSocket closed, stopping watcher")
+                        return False
+                    raise
+            
+            # Start watching balance, positions, and orders
+            async def watch_balance():
+                """Stream balance updates"""
+                while True:
+                    try:
+                        balance = await exchange.watch_balance()
+                        usdt_balance = balance.get('USDT', {})
+                        
+                        wallet_balance = usdt_balance.get('total', 0.0)
+                        net_info = dashboard.calculate_net_balance(wallet_balance, live_only=True)
+                        
+                        if not await safe_send_json({
+                            'type': 'balance',
+                            'data': {
+                                'wallet_balance': wallet_balance,
+                                'unrealized_pnl': net_info['unrealized_pnl'],
+                                'realized_pnl': net_info['realized_pnl'],
+                                'total_fees_paid': net_info['total_fees_paid'],
+                                'net_balance': net_info['net_balance']
+                            },
+                            'timestamp': int(time.time() * 1000)
+                        }):
+                            return  # WebSocket closed, exit watcher
+                    except Exception as e:
+                        print(f"[WS ERROR] Balance watch error: {e}")
+                        import traceback
+                        traceback.print_exc()
+                        await asyncio.sleep(2)  # Wait before retry
+            
+            async def watch_positions():
+                """Stream position updates with SL/TP from dashboard"""
+                # Keep track of symbols to watch prices for
+                watched_symbols = set()
+                
+                while True:
+                    try:
+                        positions = await exchange.watch_positions()
+                        print(f"[WS] Received {len(positions)} positions from Binance")
+                        
+                        # Filter active positions
+                        active_positions = [
+                            p for p in positions 
+                            if float(p.get('contracts', 0)) != 0
+                        ]
+                        
+                        print(f"[WS] Filtered to {len(active_positions)} active positions")
+                        
+                        # Merge Binance position data with dashboard SL/TP
+                        dashboard_positions = []
+                        for binance_pos in active_positions:
+                            raw_symbol = binance_pos.get('symbol')
+                            # Normalize symbol: 'AIA/USDT:USDT' -> 'AIAUSDT'
+                            symbol = raw_symbol.replace('/', '').replace(':USDT', '') if raw_symbol else ''
+                            watched_symbols.add(raw_symbol)  # Track for price updates
+                            
+                            side = 'long' if float(binance_pos.get('contracts', 0)) > 0 else 'short'
+                            size = abs(float(binance_pos.get('contracts', 0)))
+                            entry_price = float(binance_pos.get('entryPrice', 0))
+                            
+                            # Get latest mark price (this is what we need for live P&L)
+                            current_price = float(binance_pos.get('markPrice', 0))
+                            
+                            # Calculate P&L manually (like test positions)
+                            if side == 'long':
+                                unrealized_pnl = (current_price - entry_price) * size
+                            else:  # short
+                                unrealized_pnl = (entry_price - current_price) * size
+                            
+                            # Get SL/TP from dashboard tracking (using normalized symbol)
+                            # NOTE: In hedge mode, dashboard doesn't distinguish LONG vs SHORT
+                            # So we just use the symbol lookup (will match first position)
+                            dashboard_pos = dashboard.get_position(symbol)
+                            
+                            # If position doesn't exist in dashboard, create it
+                            # This ensures ticker watcher can find positions
+                            if not dashboard_pos:
+                                from arbitrage.live_dashboard import Position
+                                
+                                dashboard_pos = Position(
+                                    symbol=symbol,
+                                    side=side,
+                                    size=size,
+                                    entry_price=entry_price,
+                                    entry_time=int(time.time() * 1000),
+                                    stop_loss=None,
+                                    take_profit=None,
+                                    market='futures',
+                                    is_live=True,  # Mark as live position from exchange
+                                )
+                                # Add to dashboard (bypassing open_position to avoid fee deduction)
+                                with dashboard._lock:
+                                    dashboard._positions[symbol] = dashboard_pos
+                                
+                                # Handle leverage for logging
+                                leverage_value = binance_pos.get('leverage')
+                                if leverage_value is None:
+                                    leverage_value = 1
+                                else:
+                                    try:
+                                        leverage_value = int(float(leverage_value))
+                                    except (ValueError, TypeError):
+                                        leverage_value = 1
+                                
+                                print(f"[WS] ✅ Added live position to dashboard: {symbol} {side} (leverage: {leverage_value}x)")
+                            
+                            stop_loss = dashboard_pos.stop_loss if dashboard_pos else None
+                            take_profit = dashboard_pos.take_profit if dashboard_pos else None
+                            entry_time = dashboard_pos.entry_time if dashboard_pos else 0
+                            
+                            # Calculate P&L percentage
+                            unrealized_pnl_pct = 0.0
+                            if entry_price > 0 and size > 0:
+                                unrealized_pnl_pct = (unrealized_pnl / (entry_price * size)) * 100
+                            
+                            # Get leverage safely
+                            leverage_value = binance_pos.get('leverage', 1)
+                            if leverage_value is None:
+                                leverage_value = 1
+                            else:
+                                try:
+                                    leverage_value = int(float(leverage_value))
+                                except (ValueError, TypeError):
+                                    leverage_value = 1
+                            
+                            dashboard_positions.append({
+                                'symbol': symbol,
+                                'side': side,
+                                'entry_price': entry_price,
+                                'size': size,
+                                'unrealized_pnl': unrealized_pnl,
+                                'unrealized_pnl_pct': unrealized_pnl_pct,
+                                'leverage': leverage_value,
+                                'liquidation_price': binance_pos.get('liquidationPrice', 0),
+                                'stop_loss': stop_loss,
+                                'take_profit': take_profit,
+                                'entry_time': entry_time,
+                                'current_price': current_price,
+                                # Add unique identifier for hedge mode (symbol + side)
+                                'position_id': f"{symbol}_{side.upper()}",
+                            })
+                            
+                            # Update dashboard position with latest price
+                            if dashboard_pos and current_price > 0:
+                                dashboard_pos.update_pnl(current_price)
+                        
+                        # Create debug string for logging
+                        position_ids = [f"{p['symbol']}_{p['side'].upper()}" for p in dashboard_positions]
+                        print(f"[WS] Sending {len(dashboard_positions)} positions to frontend: {position_ids}")
+
+                        
+                        if not await safe_send_json({
+                            'type': 'positions',
+                            'data': dashboard_positions,
+                            'count': len(dashboard_positions),
+                            'timestamp': int(time.time() * 1000)
+                        }):
+                            return  # WebSocket closed, exit watcher
+                    except Exception as e:
+                        print(f"[WS ERROR] Position watch error: {e}")
+                        import traceback
+                        traceback.print_exc()
+                        # Wait before retry to avoid rapid error loops
+                        await asyncio.sleep(2)
+            
+            async def watch_orders():
+                """Stream order updates (fills, cancellations, etc.)"""
+                while True:
+                    try:
+                        orders = await exchange.watch_orders()
+                        
+                        # Send order updates
+                        order_updates = []
+                        for order in orders:
+                            order_updates.append({
+                                'id': order.get('id'),
+                                'symbol': order.get('symbol'),
+                                'type': order.get('type'),
+                                'side': order.get('side'),
+                                'status': order.get('status'),
+                                'price': order.get('price'),
+                                'amount': order.get('amount'),
+                                'filled': order.get('filled'),
+                                'remaining': order.get('remaining'),
+                                'timestamp': order.get('timestamp')
+                            })
+                        
+                        if not await safe_send_json({
+                            'type': 'orders',
+                            'data': order_updates,
+                            'timestamp': int(time.time() * 1000)
+                        }):
+                            return  # WebSocket closed, exit watcher
+                    except Exception as e:
+                        print(f"[WS ERROR] Orders watch error: {e}")
+                        import traceback
+                        traceback.print_exc()
+                        await asyncio.sleep(2)  # Wait before retry
+            
+            async def watch_tickers_for_pnl():
+                """
+                Watch ticker price updates for real-time P&L calculation.
+                Uses concurrent tasks to watch multiple symbols simultaneously.
+                """
+                print("[WS] ⚡ Starting ticker watcher for real-time P&L updates")
+                
+                active_watchers = {}  # raw_symbol -> asyncio.Task
+                
+                async def watch_single_ticker(raw_symbol: str):
+                    """Watch a single ticker continuously"""
+                    print(f"[WS] 📊 Starting continuous ticker stream for {raw_symbol}")
+                    while True:
+                        try:
+                            # Check if WebSocket is still connected before watching
+                            # This prevents blocking on watch_ticker when WS is already closed
+                            if websocket.client_state.name != 'CONNECTED':
+                                print(f"[WS] WebSocket not connected, stopping ticker watcher for {raw_symbol}")
+                                break
+                            
+                            # This blocks until next update for this symbol (streaming)
+                            ticker = await exchange.watch_ticker(raw_symbol)
+                            current_price = float(ticker.get('last', 0) or ticker.get('mark', 0))
+                            
+                            if current_price == 0:
+                                continue
+                            
+                            # Get all positions for this symbol
+                            all_positions = dashboard.get_all_positions()
+                            
+                            for pos in all_positions:
+                                if not pos.is_live:
+                                    continue
+                                
+                                symbol = pos.symbol
+                                pos_raw_symbol = f"{symbol[:-4]}/{symbol[-4:]}:{symbol[-4:]}"
+                                
+                                if pos_raw_symbol != raw_symbol:
+                                    continue
+                                
+                                # Calculate P&L for this position
+                                side = pos.side
+                                size = pos.size
+                                entry_price = pos.entry_price
+                                
+                                if side == 'long':
+                                    unrealized_pnl = (current_price - entry_price) * size
+                                else:
+                                    unrealized_pnl = (entry_price - current_price) * size
+                                
+                                unrealized_pnl_pct = 0.0
+                                if entry_price > 0 and size > 0:
+                                    unrealized_pnl_pct = (unrealized_pnl / (entry_price * size)) * 100
+                                
+                                position_id = f"{symbol}_{side.upper()}"
+                                
+                                # Send real-time P&L update
+                                if not await safe_send_json({
+                                    'type': 'pnl_update',
+                                    'data': {
+                                        'symbol': symbol,
+                                        'side': side,
+                                        'position_id': position_id,
+                                        'current_price': current_price,
+                                        'unrealized_pnl': unrealized_pnl,
+                                        'unrealized_pnl_pct': unrealized_pnl_pct,
+                                        'stop_loss': pos.stop_loss,
+                                        'take_profit': pos.take_profit,
+                                    },
+                                    'timestamp': int(time.time() * 1000)
+                                }):
+                                    print(f"[WS] WebSocket closed while sending P&L for {raw_symbol}")
+                                    return  # WebSocket closed
+                                
+                        except Exception as e:
+                            if "close message" not in str(e).lower():
+                                print(f"[WS] Ticker watch error for {raw_symbol}: {e}")
+                            break  # Exit this watcher task
+                
+                # Main management loop
+                while True:
+                    try:
+                        # Get current positions
+                        all_positions = dashboard.get_all_positions()
+                        
+                        print(f"[WS] 🔍 Checking positions... Found {len(all_positions)} total")
+                        
+                        # Find symbols we need to watch
+                        needed_symbols = set()
+                        for pos in all_positions:
+                            if pos.is_live:
+                                symbol = pos.symbol
+                                raw_symbol = f"{symbol[:-4]}/{symbol[-4:]}:{symbol[-4:]}"
+                                needed_symbols.add(raw_symbol)
+                                print(f"[WS] 📍 Found live position: {symbol} ({pos.side}) - will watch {raw_symbol}")
+                        
+                        print(f"[WS] 📡 Need to watch {len(needed_symbols)} symbols: {needed_symbols}")
+                        
+                        # Start watchers for new symbols
+                        for raw_symbol in needed_symbols:
+                            # Check if watcher exists and is still running
+                            if raw_symbol in active_watchers:
+                                task = active_watchers[raw_symbol]
+                                if task.done():
+                                    # Task completed/crashed, restart it
+                                    print(f"[WS] ⚠️ Ticker watcher for {raw_symbol} stopped, restarting...")
+                                    try:
+                                        # Get exception if task failed
+                                        exc = task.exception()
+                                        if exc:
+                                            print(f"[WS] Task exception: {exc}")
+                                    except:
+                                        pass
+                                    del active_watchers[raw_symbol]
+                            
+                            if raw_symbol not in active_watchers:
+                                print(f"[WS] ✅ Starting ticker watcher for {raw_symbol}")
+                                task = asyncio.create_task(watch_single_ticker(raw_symbol))
+                                active_watchers[raw_symbol] = task
+                        
+                        # Stop watchers for symbols no longer needed
+                        for raw_symbol in list(active_watchers.keys()):
+                            if raw_symbol not in needed_symbols:
+                                print(f"[WS] Stopping ticker watcher for {raw_symbol}")
+                                active_watchers[raw_symbol].cancel()
+                                del active_watchers[raw_symbol]
+                        
+                        # Check every 5 seconds for position changes
+                        await asyncio.sleep(5)
+                        
+                    except Exception as e:
+                        if "close message" not in str(e).lower():
+                            print(f"[WS ERROR] Ticker watcher main loop error: {e}")
+                        await asyncio.sleep(2)
+            
+            # Run all watchers concurrently (including ticker watcher for real-time P&L)
+            await asyncio.gather(
+                watch_balance(),
+                watch_positions(),
+                watch_orders(),
+                watch_tickers_for_pnl(),
+                return_exceptions=True
+            )
+            
+        finally:
+            # Proper cleanup: close in reverse order of creation
+            print("[WS] Cleaning up WebSocket resources...")
+            if exchange:
+                try:
+                    await exchange.close()
+                    print("[WS] Exchange closed")
+                except Exception as e:
+                    print(f"[WS] Error closing exchange: {e}")
+            
+            if session:
+                try:
+                    await session.close()
+                    print("[WS] Session closed")
+                except Exception as e:
+                    print(f"[WS] Error closing session: {e}")
+            
+            if connector:
+                try:
+                    await connector.close()
+                    print("[WS] Connector closed")
+                except Exception as e:
+                    print(f"[WS] Error closing connector: {e}")
+                
+    except WebSocketDisconnect:
+        print("[WS] Live dashboard client disconnected")
+    except Exception as e:
+        print(f"[WS ERROR] Live dashboard error: {e}")
+        import traceback
+        traceback.print_exc()
+        try:
+            await websocket.send_json({
+                'type': 'error',
+                'message': str(e)
+            })
+        except:
+            pass
+    finally:
+        try:
+            await websocket.close()
+            print("[WS] WebSocket closed")
+        except:
+            pass
 
 
 # -----------------------------------------------------------------------------

@@ -19,6 +19,8 @@ class Position:
     take_profit: Optional[float] = None
     unrealized_pnl: float = 0.0
     unrealized_pnl_pct: float = 0.0
+    market: str = 'spot'  # 'spot' or 'futures'
+    is_live: bool = False  # True for live positions, False for test positions
     
     def update_pnl(self, current_price: float):
         """Update unrealized P&L based on current price."""
@@ -86,6 +88,15 @@ class LiveDashboard:
         self._strategy_symbol = None
         self._strategy_type = None  # 'bear' or 'bull'
         
+        # Paper trading balance and fees
+        self._test_balance: float = 500.0  # Starting test balance
+        self._initial_balance: float = 500.0
+        self._taker_fee_rate: float = 0.0005  # 0.05% (Binance Futures taker fee)
+        self._maker_fee_rate: float = 0.0002  # 0.02% (Binance Futures maker fee)
+        
+        # Live trading fee tracking
+        self._total_fees_paid: float = 0.0  # Track all fees paid on live trades
+        
         # Statistics
         self._total_trades = 0
         self._winning_trades = 0
@@ -127,24 +138,51 @@ class LiveDashboard:
                     break
     
     def open_position(self, position: Position):
-        """Open a new position."""
+        """Open a new position and deduct entry fee from test balance."""
         with self._lock:
+            # Calculate entry fee (using taker fee for market orders)
+            position_value = position.entry_price * position.size
+            entry_fee = position_value * self._taker_fee_rate
+            
+            # Deduct fee from test balance
+            self._test_balance -= entry_fee
+            
+            # Store position
             self._positions[position.symbol] = position
+            
+            print(f"[BALANCE] Position opened: {position.symbol} {position.side.upper()}")
+            print(f"[BALANCE] Position value: ${position_value:.2f}, Entry fee: ${entry_fee:.2f}")
+            print(f"[BALANCE] Test balance: ${self._test_balance:.2f}")
     
     def close_position(self, symbol: str, exit_price: float, reason: str = 'manual') -> Optional[Trade]:
-        """Close a position and record the trade."""
+        """Close a position, settle P&L, and deduct exit fee from test balance."""
         with self._lock:
             pos = self._positions.pop(symbol, None)
             if pos is None:
                 return None
             
-            # Calculate final P&L
+            # Calculate gross P&L
             if pos.side == 'long':
-                pnl = (exit_price - pos.entry_price) * pos.size
+                gross_pnl = (exit_price - pos.entry_price) * pos.size
                 pnl_pct = ((exit_price - pos.entry_price) / pos.entry_price) * 100
             else:
-                pnl = (pos.entry_price - exit_price) * pos.size
+                gross_pnl = (pos.entry_price - exit_price) * pos.size
                 pnl_pct = ((pos.entry_price - exit_price) / pos.entry_price) * 100
+            
+            # Calculate exit fee
+            exit_value = exit_price * pos.size
+            exit_fee = exit_value * self._taker_fee_rate
+            
+            # Net P&L after fees (entry fee was already deducted)
+            net_pnl = gross_pnl - exit_fee
+            
+            # Settle P&L to test balance
+            self._test_balance += gross_pnl  # Add gross P&L
+            self._test_balance -= exit_fee    # Deduct exit fee
+            
+            print(f"[BALANCE] Position closed: {symbol} {pos.side.upper()}")
+            print(f"[BALANCE] Gross P&L: ${gross_pnl:.2f}, Exit fee: ${exit_fee:.2f}, Net P&L: ${net_pnl:.2f}")
+            print(f"[BALANCE] Test balance: ${self._test_balance:.2f}")
             
             # Create trade record
             trade = Trade(
@@ -155,23 +193,23 @@ class LiveDashboard:
                 size=pos.size,
                 entry_time=pos.entry_time,
                 exit_time=int(time.time() * 1000),
-                pnl=pnl,
+                pnl=net_pnl,  # Store net P&L after fees
                 pnl_pct=pnl_pct,
                 reason=reason
             )
             
             # Update statistics
             self._total_trades += 1
-            if pnl > 0:
+            if net_pnl > 0:
                 self._winning_trades += 1
-            self._total_pnl += pnl
+            self._total_pnl += net_pnl
             
             # Store trade
             self._trades.insert(0, trade)
             if len(self._trades) > self._max_trades:
                 self._trades = self._trades[:self._max_trades]
             
-            print(f"[LiveDashboard] Trade recorded: {symbol} {pos.side} entry=${pos.entry_price:.2f} exit=${exit_price:.2f} P&L=${pnl:.2f} ({pnl_pct:.2f}%) reason={reason}")
+            print(f"[LiveDashboard] Trade recorded: {symbol} {pos.side} entry=${pos.entry_price:.2f} exit=${exit_price:.2f} P&L=${net_pnl:.2f} ({pnl_pct:.2f}%) reason={reason}")
             print(f"[LiveDashboard] Total trades: {self._total_trades}, Stored trades: {len(self._trades)}")
             
             return trade
@@ -223,6 +261,60 @@ class LiveDashboard:
                 'uptime_ms': int(time.time() * 1000) - self._start_time if self._start_time else 0
             }
     
+    def add_fee_paid(self, fee_amount: float):
+        """Track fees paid on live trades."""
+        with self._lock:
+            self._total_fees_paid += fee_amount
+            print(f"[FEES] Fee tracked: ${fee_amount:.2f}, Total fees: ${self._total_fees_paid:.2f}")
+    
+    def get_total_fees_paid(self) -> float:
+        """Get total fees paid on live trades."""
+        with self._lock:
+            return self._total_fees_paid
+    
+    def get_total_unrealized_pnl(self, live_only: bool = False) -> float:
+        """Get total unrealized PNL from open positions.
+        
+        Args:
+            live_only: If True, only include live positions. If False, only test positions.
+        """
+        with self._lock:
+            if live_only:
+                return sum(pos.unrealized_pnl for pos in self._positions.values() if getattr(pos, 'is_live', False))
+            else:
+                return sum(pos.unrealized_pnl for pos in self._positions.values() if not getattr(pos, 'is_live', False))
+    
+    def calculate_net_balance(self, wallet_balance: float, live_only: bool = True) -> Dict:
+        """
+        Calculate comprehensive balance including fees and PNL.
+        
+        Args:
+            wallet_balance: Current Binance wallet balance
+            live_only: If True, only include live positions. If False, only test positions.
+            
+        Returns:
+            Dict with wallet, unrealized PNL, fees, and net balance
+        """
+        with self._lock:
+            unrealized_pnl = sum(
+                pos.unrealized_pnl 
+                for pos in self._positions.values() 
+                if getattr(pos, 'is_live', False) == live_only
+            )
+            total_fees = self._total_fees_paid
+            
+            # Net balance = wallet + unrealized PNL - fees paid
+            # (Realized PNL is already in wallet, fees already deducted from wallet)
+            net_balance = wallet_balance + unrealized_pnl
+            
+            return {
+                'wallet_balance': wallet_balance,
+                'unrealized_pnl': unrealized_pnl,
+                'total_fees_paid': total_fees,
+                'net_balance': net_balance,
+                'realized_pnl': self._total_pnl
+            }
+    
     def get_full_state(self) -> Dict:
         """Get complete dashboard state."""
         with self._lock:
@@ -237,8 +329,26 @@ class LiveDashboard:
                 'signals': [asdict(s) for s in self._signals[:20]],
                 'trades': [asdict(t) for t in self._trades[:20]],
                 'statistics': self.get_statistics(),
+                'balance': {
+                    'current': self._test_balance,
+                    'initial': self._initial_balance,
+                    'pnl': self._test_balance - self._initial_balance,
+                    'pnl_pct': ((self._test_balance - self._initial_balance) / self._initial_balance * 100) if self._initial_balance > 0 else 0.0
+                },
                 'timestamp': int(time.time() * 1000)
             }
+    
+    def get_balance(self) -> float:
+        """Get current test balance."""
+        with self._lock:
+            return self._test_balance
+    
+    def reset_balance(self, amount: float = 500.0):
+        """Reset test balance to specified amount."""
+        with self._lock:
+            self._test_balance = amount
+            self._initial_balance = amount
+            print(f"[BALANCE] Test balance reset to ${amount:.2f}")
     
     def reset(self):
         """Reset all dashboard data (useful for testing)."""
@@ -251,6 +361,8 @@ class LiveDashboard:
             self._total_pnl = 0.0
             self._start_time = None
             self._strategy_running = False
+            self._test_balance = self._initial_balance  # Reset to initial balance
+            print(f"[BALANCE] Dashboard reset, balance: ${self._test_balance:.2f}")
 
 
 # Global singleton instance
