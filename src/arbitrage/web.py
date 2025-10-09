@@ -7360,6 +7360,92 @@ async def debug_hotcoins_agg():
 async def health():
     return {"status": "ok"}
 
+@app.get("/api/debug/ip")
+async def debug_ip(request: Request):
+    """Get Railway's public IP address"""
+    try:
+        # Try to get IP from various sources
+        import requests
+        
+        # Get IP from external service
+        response = requests.get('https://api.ipify.org?format=json', timeout=5)
+        external_ip = response.json().get('ip', 'Unknown')
+        
+        # Get more info about the IP
+        try:
+            info_response = requests.get(f'https://ipapi.co/{external_ip}/json/', timeout=5)
+            ip_info = info_response.json()
+        except:
+            ip_info = {}
+        
+        return {
+            'ip': external_ip,
+            'country': ip_info.get('country_name', 'Unknown'),
+            'city': ip_info.get('city', 'Unknown'),
+            'org': ip_info.get('org', 'Unknown'),
+            'timezone': ip_info.get('timezone', 'Unknown')
+        }
+    except Exception as e:
+        return {'error': str(e), 'ip': 'Unknown'}
+
+@app.get("/api/debug/config")
+async def debug_config():
+    """Check if API keys are configured (without exposing full keys)"""
+    api_key = os.environ.get('BINANCE_API_KEY', '')
+    api_secret = os.environ.get('BINANCE_API_SECRET', '')
+    live_orders = os.environ.get('ARB_ALLOW_LIVE_ORDERS', '0')
+    
+    return {
+        'has_api_key': bool(api_key and len(api_key) > 10),
+        'has_api_secret': bool(api_secret and len(api_secret) > 10),
+        'api_key_preview': api_key[:10] + '...' if len(api_key) > 10 else 'Not Set',
+        'api_secret_preview': api_secret[:10] + '...' if len(api_secret) > 10 else 'Not Set',
+        'live_orders_enabled': live_orders == '1',
+        'live_orders_flag': live_orders
+    }
+
+@app.get("/api/debug/test-binance")
+async def debug_test_binance():
+    """Test Binance API connection"""
+    try:
+        import ccxt
+        
+        api_key = os.environ.get('BINANCE_API_KEY', '')
+        api_secret = os.environ.get('BINANCE_API_SECRET', '')
+        
+        if not api_key or not api_secret:
+            return {
+                'success': False,
+                'error': 'API credentials not configured'
+            }
+        
+        # Try to connect to Binance
+        exchange = ccxt.binance({
+            'apiKey': api_key,
+            'secret': api_secret,
+            'enableRateLimit': True,
+        })
+        
+        # Test connection
+        balance = exchange.fetch_balance()
+        
+        # Get non-zero balances
+        non_zero = {k: v for k, v in balance['total'].items() if v > 0}
+        
+        return {
+            'success': True,
+            'can_trade': True,
+            'futures_enabled': True,
+            'balances': list(non_zero.keys())[:10]
+        }
+        
+    except Exception as e:
+        return {
+            'success': False,
+            'error': str(e),
+            'error_type': type(e).__name__
+        }
+
 @app.get("/logs/raw")
 async def get_logs_raw():
     return server_logs[-200:]
