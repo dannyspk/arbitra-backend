@@ -4,7 +4,7 @@ Social sentiment endpoint using LunarCrush API
 import os
 import logging
 from typing import Optional, Dict, Any
-import requests
+import httpx
 from fastapi import APIRouter, HTTPException
 
 logger = logging.getLogger(__name__)
@@ -23,9 +23,9 @@ def get_lunarcrush_symbol(symbol: str) -> str:
     return base_symbol.upper()
 
 
-def fetch_lunarcrush_data(symbol: str) -> Optional[Dict[str, Any]]:
+async def fetch_lunarcrush_data(symbol: str) -> Optional[Dict[str, Any]]:
     """
-    Fetch social sentiment data from LunarCrush API
+    Fetch social sentiment data from LunarCrush API (async)
     Uses both /coins and /topic endpoints for comprehensive data
     """
     if not LUNARCRUSH_API_KEY:
@@ -38,33 +38,43 @@ def fetch_lunarcrush_data(symbol: str) -> Optional[Dict[str, Any]]:
             "Content-Type": "application/json"
         }
         
-        # Get basic coin data (galaxy score, alt rank)
-        coin_url = f"https://lunarcrush.com/api4/public/coins/{symbol}/v1"
-        coin_response = requests.get(coin_url, headers=headers, timeout=10)
-        
-        # Get social/topic data (tweets, sentiment, interactions)
-        topic_url = f"https://lunarcrush.com/api4/public/topic/{symbol}/v1"
-        topic_response = requests.get(topic_url, headers=headers, timeout=10)
-        
-        result = {}
-        
-        # Process coin data
-        if coin_response.status_code == 200:
-            coin_data = coin_response.json()
-            if 'data' in coin_data:
-                result['coin'] = coin_data['data']
-        
-        # Process topic data
-        if topic_response.status_code == 200:
-            topic_data = topic_response.json()
-            if 'data' in topic_data:
-                result['topic'] = topic_data['data']
-        
-        if not result:
-            logger.warning(f"No data found for symbol {symbol}")
-            return None
-        
-        return result
+        async with httpx.AsyncClient(timeout=5.0) as client:
+            # Get basic coin data (galaxy score, alt rank)
+            coin_url = f"https://lunarcrush.com/api4/public/coins/{symbol}/v1"
+            
+            # Get social/topic data (tweets, sentiment, interactions)
+            topic_url = f"https://lunarcrush.com/api4/public/topic/{symbol}/v1"
+            
+            # Make both requests concurrently
+            try:
+                coin_response = await client.get(coin_url, headers=headers)
+                topic_response = await client.get(topic_url, headers=headers)
+            except httpx.TimeoutException:
+                logger.warning(f"LunarCrush API timeout for {symbol}")
+                return None
+            except Exception as e:
+                logger.error(f"LunarCrush API error: {e}")
+                return None
+            
+            result = {}
+            
+            # Process coin data
+            if coin_response.status_code == 200:
+                coin_data = coin_response.json()
+                if 'data' in coin_data:
+                    result['coin'] = coin_data['data']
+            
+            # Process topic data
+            if topic_response.status_code == 200:
+                topic_data = topic_response.json()
+                if 'data' in topic_data:
+                    result['topic'] = topic_data['data']
+            
+            if not result:
+                logger.warning(f"No data found for symbol {symbol}")
+                return None
+            
+            return result
         
     except Exception as e:
         logger.error(f"Error fetching LunarCrush data: {e}")
@@ -159,8 +169,8 @@ async def get_social_sentiment(symbol: str):
         base_symbol = get_lunarcrush_symbol(symbol)
         logger.info(f"Fetching social sentiment for {symbol} (LunarCrush: {base_symbol})")
         
-        # Fetch data from LunarCrush
-        data = fetch_lunarcrush_data(base_symbol)
+        # Fetch data from LunarCrush (await the async function)
+        data = await fetch_lunarcrush_data(base_symbol)
         
         if not data:
             raise HTTPException(status_code=404, detail="Social data not available for this symbol")

@@ -216,24 +216,31 @@ def get_hotcoins_combined_analysis():
 
 
 @app.get('/api/ai-analysis/{symbol}')
-def get_ai_analysis(symbol: str):
+async def get_ai_analysis(symbol: str):
     """
     Compute real-time AI analysis for a specific symbol.
     Fetches 1h and 4h klines from Binance and computes technical indicators + trend prediction.
     """
     import statistics
-    from urllib import request as _req, parse as _parse
+    import httpx
     
     symbol_upper = symbol.upper()
     
-    def fetch_klines(sym: str, interval: str = '1m', limit: int = 60):
-        """Fetch klines from Binance Futures API"""
+    async def fetch_klines(sym: str, interval: str = '1m', limit: int = 60):
+        """Fetch klines from Binance Futures API (async)"""
         try:
-            q = _parse.urlencode({'symbol': sym, 'interval': interval, 'limit': str(limit)})
             # Use Binance Futures API for USDT perpetual contracts
-            url = f"https://fapi.binance.com/fapi/v1/klines?{q}"
-            with _req.urlopen(url, timeout=10) as r:
-                return json.load(r)
+            url = f"https://fapi.binance.com/fapi/v1/klines"
+            params = {'symbol': sym, 'interval': interval, 'limit': str(limit)}
+            
+            async with httpx.AsyncClient(timeout=5.0) as client:
+                response = await client.get(url, params=params)
+                if response.status_code == 200:
+                    return response.json()
+                return None
+        except httpx.TimeoutException:
+            print(f"Timeout fetching klines for {sym}")
+            return None
         except Exception as e:
             print(f"Error fetching klines for {sym}: {e}")
             return None
@@ -380,13 +387,13 @@ def get_ai_analysis(symbol: str):
         return trend, confidence_pct
     
     try:
-        # Fetch 1h data (60 x 1m candles)
-        klines_1h = fetch_klines(symbol_upper, '1m', 60)
+        # Fetch 1h data (60 x 1m candles) - await the async function
+        klines_1h = await fetch_klines(symbol_upper, '1m', 60)
         analysis_1h = analyze_klines(klines_1h) if klines_1h else None
         trend_1h, conf_1h = classify_trend(analysis_1h, min_quote_vol=1000.0) if analysis_1h else ('Unknown', 0)
         
-        # Fetch 4h data (240 x 1m candles)
-        klines_4h = fetch_klines(symbol_upper, '1m', 240)
+        # Fetch 4h data (240 x 1m candles) - await the async function
+        klines_4h = await fetch_klines(symbol_upper, '1m', 240)
         analysis_4h = analyze_klines(klines_4h) if klines_4h else None
         trend_4h, conf_4h = classify_trend(analysis_4h, min_quote_vol=4000.0) if analysis_4h else ('Unknown', 0)
         
@@ -7408,6 +7415,23 @@ async def debug_config():
 async def debug_test_binance():
     """Test Binance API connection"""
     try:
+
+@app.get("/debug/routes")
+async def list_routes():
+    """List all registered API routes"""
+    routes = []
+    for route in app.routes:
+        if hasattr(route, 'path') and hasattr(route, 'methods'):
+            routes.append({
+                'path': route.path,
+                'methods': list(route.methods),
+                'name': route.name if hasattr(route, 'name') else None
+            })
+    return {
+        'total_routes': len(routes),
+        'routes': sorted(routes, key=lambda x: x['path']),
+        'social_sentiment_available': SOCIAL_SENTIMENT_AVAILABLE
+    }
         import ccxt
         
         api_key = os.environ.get('BINANCE_API_KEY', '')
