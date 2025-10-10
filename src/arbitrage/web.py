@@ -7411,11 +7411,6 @@ async def debug_config():
         'live_orders_flag': live_orders
     }
 
-@app.get("/api/debug/test-binance")
-async def debug_test_binance():
-    """Test Binance API connection"""
-    try:
-
 @app.get("/debug/routes")
 async def list_routes():
     """List all registered API routes"""
@@ -7432,43 +7427,6 @@ async def list_routes():
         'routes': sorted(routes, key=lambda x: x['path']),
         'social_sentiment_available': SOCIAL_SENTIMENT_AVAILABLE
     }
-        import ccxt
-        
-        api_key = os.environ.get('BINANCE_API_KEY', '')
-        api_secret = os.environ.get('BINANCE_API_SECRET', '')
-        
-        if not api_key or not api_secret:
-            return {
-                'success': False,
-                'error': 'API credentials not configured'
-            }
-        
-        # Try to connect to Binance
-        exchange = ccxt.binance({
-            'apiKey': api_key,
-            'secret': api_secret,
-            'enableRateLimit': True,
-        })
-        
-        # Test connection
-        balance = exchange.fetch_balance()
-        
-        # Get non-zero balances
-        non_zero = {k: v for k, v in balance['total'].items() if v > 0}
-        
-        return {
-            'success': True,
-            'can_trade': True,
-            'futures_enabled': True,
-            'balances': list(non_zero.keys())[:10]
-        }
-        
-    except Exception as e:
-        return {
-            'success': False,
-            'error': str(e),
-            'error_type': type(e).__name__
-        }
 
 @app.get("/logs/raw")
 async def get_logs_raw():
