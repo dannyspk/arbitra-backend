@@ -241,6 +241,18 @@ class LiveDashboard:
         with self._lock:
             return self._trades[:limit]
     
+    def clear_all_data(self):
+        """Clear all dashboard data (signals, trades, positions, statistics)."""
+        with self._lock:
+            self._signals = []
+            self._trades = []
+            self._positions = {}
+            self._total_trades = 0
+            self._winning_trades = 0
+            self._realized_pnl = 0.0
+            self._total_fees_paid = 0.0
+            print("[LiveDashboard] All data cleared")
+    
     def get_statistics(self) -> Dict:
         """Get trading statistics."""
         with self._lock:
