@@ -204,10 +204,32 @@ class LiveDashboard:
                 self._winning_trades += 1
             self._total_pnl += net_pnl
             
-            # Store trade
+            # Store trade in memory
             self._trades.insert(0, trade)
             if len(self._trades) > self._max_trades:
                 self._trades = self._trades[:self._max_trades]
+            
+            # Save trade to database for persistence
+            try:
+                from .strategy_persistence import save_trade
+                save_trade(
+                    symbol=symbol,
+                    strategy_type=self._strategy_mode or 'unknown',
+                    exchange='binance_futures',
+                    side=pos.side,
+                    order_type='market',
+                    quantity=pos.size,
+                    price=pos.entry_price,        # Entry price
+                    exit_price=exit_price,         # Exit price
+                    order_id=f'paper_{symbol}_{int(time.time())}',
+                    status='filled',
+                    fee=exit_fee,
+                    fee_currency='USDT',
+                    pnl=net_pnl
+                )
+                print(f"[TRADE SAVED] {symbol} {pos.side} | Entry: ${pos.entry_price:.2f} → Exit: ${exit_price:.2f} | P&L: ${net_pnl:+.2f} ({pnl_pct:+.2f}%)")
+            except Exception as e:
+                print(f"[TRADE SAVE ERROR] Failed to save trade to database: {e}")
             
             print(f"[LiveDashboard] Trade recorded: {symbol} {pos.side} entry=${pos.entry_price:.2f} exit=${exit_price:.2f} P&L=${net_pnl:.2f} ({pnl_pct:.2f}%) reason={reason}")
             print(f"[LiveDashboard] Total trades: {self._total_trades}, Stored trades: {len(self._trades)}")

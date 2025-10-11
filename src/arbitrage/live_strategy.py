@@ -54,29 +54,29 @@ class LiveStrategy:
             self.tp_pct = 0.02
             self.risk_pct = 0.1  # 10% position sizing for bull
         elif self.mode == 'scalp':
-            # Scalp mode: Quick entries/exits based on QuickScalpStrategy
+            # Scalp mode: SUPER AGGRESSIVE FOR TESTING - Triggers signals quickly
             # Use 1m interval for scalping, fetch more bars for indicators
             self.interval = '1m'
             # Import and initialize QuickScalpStrategy
             from .strategy import QuickScalpStrategy
             self.scalp_strategy = QuickScalpStrategy(
-                notional_per_trade=200.0,    # Larger base size for better absolute profits
-                sma_window=6,
-                vol_window=6,
-                entry_threshold=0.012,       # 1.2% deviation (more selective entries)
-                exit_target=0.025,           # 2.5% profit target (net ~2.1% after fees)
-                partial_target=0.015,        # 1.5% partial (net ~1.2% after fees)
-                stop_loss=0.015,             # 1.5% stop loss (wider breathing room)
-                max_holding_bars=120,        # 120 minutes (2 hours max hold)
-                trend_filter=True,           # Enable trend filtering
-                sr_threshold_pct=0.008,      # 0.8% near SR levels (slightly relaxed)
-                momentum_threshold=0.01,     # Momentum filter
-                min_notional=20.0,           # Min $20 position
-                max_notional=2000.0,         # Max $2000 position (increased)
+                notional_per_trade=200.0,
+                sma_window=3,                # REDUCED: Faster SMA response
+                vol_window=3,                # REDUCED: Faster volatility calc
+                entry_threshold=0.002,       # REDUCED: 0.2% deviation (VERY aggressive entries)
+                exit_target=0.005,           # REDUCED: 0.5% profit target (quick exits)
+                partial_target=0.003,        # REDUCED: 0.3% partial (very quick)
+                stop_loss=0.004,             # REDUCED: 0.4% stop loss (tight stop)
+                max_holding_bars=10,         # REDUCED: 10 minutes max hold (quick flip)
+                trend_filter=False,          # DISABLED: No trend filter (trade any move)
+                sr_threshold_pct=0.001,      # REDUCED: 0.1% SR threshold (ignore SR)
+                momentum_threshold=0.001,    # REDUCED: Minimal momentum filter
+                min_notional=20.0,
+                max_notional=2000.0,
             )
-            self.sl_pct = 0.015
-            self.tp_pct = 0.025
-            self.risk_pct = 0.08  # 8% position sizing for scalping (increased)
+            self.sl_pct = 0.004   # 0.4% stop loss
+            self.tp_pct = 0.005   # 0.5% take profit
+            self.risk_pct = 0.15  # 15% position sizing (very aggressive)
         
         elif self.mode == 'range':
             # Range/Grid mode: Trade sideways markets with defined support/resistance
@@ -353,90 +353,152 @@ class LiveStrategy:
                     # Scalp mode: Use QuickScalpStrategy for decisions
                     # Need at least 30+ bars for strategy indicators
                     print(f"[Scalp] Checking decision... bars={len(closes)}, need 40+")
-                    if len(closes) >= 40:
-                        # Check current position from dashboard
-                        current_pos = self.dashboard.get_position(self.symbol) if hasattr(self.dashboard, 'get_position') else self._current_position
+                    
+                    # Check current position from dashboard (do this ALWAYS, not just when enough bars)
+                    current_pos = self.dashboard.get_position(self.symbol) if hasattr(self.dashboard, 'get_position') else self._current_position
+                    
+                    # 🔧 FIX: Check TP/SL FIRST - ALWAYS run this check regardless of bar count!
+                    tp_sl_triggered = False
+                    if current_pos is not None:
+                        should_close = False
+                        close_reason = ''
                         
-                        # Get funding rate (optional, can be None)
-                        funding_rate = None
-                        try:
-                            # Attempt to fetch current funding rate from Binance
-                            from urllib import request as _req, parse as _p
-                            url = f"https://fapi.binance.com/fapi/v1/premiumIndex?symbol={self.symbol}"
-                            with _req.urlopen(url, timeout=5) as r:
-                                data = json.load(r)
-                                funding_rate = float(data.get('lastFundingRate', 0))
-                        except Exception:
-                            pass
+                        if current_pos.side == 'long':
+                            if price <= current_pos.stop_loss:
+                                should_close = True
+                                close_reason = 'stop_loss'
+                                print(f"[Scalp TP/SL] LONG Stop Loss triggered: price={price:.4f} <= SL={current_pos.stop_loss:.4f}")
+                            elif price >= current_pos.take_profit:
+                                should_close = True
+                                close_reason = 'take_profit'
+                                print(f"[Scalp TP/SL] LONG Take Profit triggered: price={price:.4f} >= TP={current_pos.take_profit:.4f}")
+                        else:  # short
+                            if price >= current_pos.stop_loss:
+                                should_close = True
+                                close_reason = 'stop_loss'
+                                print(f"[Scalp TP/SL] SHORT Stop Loss triggered: price={price:.4f} >= SL={current_pos.stop_loss:.4f}")
+                            elif price <= current_pos.take_profit:
+                                should_close = True
+                                close_reason = 'take_profit'
+                                print(f"[Scalp TP/SL] SHORT Take Profit triggered: price={price:.4f} <= TP={current_pos.take_profit:.4f}")
                         
-                        # Calculate bars held if in position
-                        bars_held = 0
-                        if current_pos is not None:
-                            entry_time = getattr(current_pos, 'entry_time', None)
-                            if entry_time:
-                                bars_held = int((time.time() * 1000 - entry_time) / 60000)  # Minutes
-                        
-                        # Get strategy decision
-                        decision = self.scalp_strategy.decide(
-                            price=price,
-                            recent_closes=closes,
-                            funding_rate=funding_rate,
-                            position=current_pos,
-                            bars_held=bars_held
-                        )
-                        
-                        # Execute based on decision
-                        if decision.action == 'enter':
-                            action_type = 'open_long' if decision.direction == 'long' else 'open_short'
-                            act = self._make_action(action_type, price, decision.size, decision.reason)
-                            await self._emit_action(act)
-                        
-                        elif decision.action == 'exit' and current_pos is not None:
+                        if should_close:
                             action_type = 'close_long' if current_pos.side == 'long' else 'close_short'
-                            act = self._make_action(action_type, price, None, decision.reason)
+                            act = self._make_action(action_type, price, None, close_reason)
                             await self._emit_action(act)
-                        
-                        elif decision.action == 'reduce' and current_pos is not None and decision.fraction:
-                            # Partial exit - close fraction of position
-                            action_type = 'close_long' if current_pos.side == 'long' else 'close_short'
-                            # Calculate size to close
-                            close_size = getattr(current_pos, 'size', 0) * decision.fraction if hasattr(current_pos, 'size') else None
-                            act = self._make_action(action_type, price, close_size, f"partial_exit({decision.fraction:.0%}): {decision.reason}")
-                            await self._emit_action(act)
+                            tp_sl_triggered = True
+                    
+                    # Only run strategy decision if we have enough bars AND TP/SL didn't trigger
+                    if len(closes) >= 40 and not tp_sl_triggered:
+                            # Get funding rate (optional, can be None)
+                            funding_rate = None
+                            try:
+                                # Attempt to fetch current funding rate from Binance
+                                from urllib import request as _req, parse as _p
+                                url = f"https://fapi.binance.com/fapi/v1/premiumIndex?symbol={self.symbol}"
+                                with _req.urlopen(url, timeout=5) as r:
+                                    data = json.load(r)
+                                    funding_rate = float(data.get('lastFundingRate', 0))
+                            except Exception:
+                                pass
+                            
+                            # Calculate bars held if in position
+                            bars_held = 0
+                            if current_pos is not None:
+                                entry_time = getattr(current_pos, 'entry_time', None)
+                                if entry_time:
+                                    bars_held = int((time.time() * 1000 - entry_time) / 60000)  # Minutes
+                            
+                            # Get strategy decision
+                            decision = self.scalp_strategy.decide(
+                                price=price,
+                                recent_closes=closes,
+                                funding_rate=funding_rate,
+                                position=current_pos,
+                                bars_held=bars_held
+                            )
+                            
+                            # Execute based on decision
+                            if decision.action == 'enter' and current_pos is None:
+                                action_type = 'open_long' if decision.direction == 'long' else 'open_short'
+                                act = self._make_action(action_type, price, decision.size, decision.reason)
+                                await self._emit_action(act)
+                            
+                            elif decision.action == 'exit' and current_pos is not None:
+                                action_type = 'close_long' if current_pos.side == 'long' else 'close_short'
+                                act = self._make_action(action_type, price, None, decision.reason)
+                                await self._emit_action(act)
+                            
+                            elif decision.action == 'reduce' and current_pos is not None and decision.fraction:
+                                # Partial exit - close fraction of position
+                                action_type = 'close_long' if current_pos.side == 'long' else 'close_short'
+                                # Calculate size to close
+                                close_size = getattr(current_pos, 'size', 0) * decision.fraction if hasattr(current_pos, 'size') else None
+                                act = self._make_action(action_type, price, close_size, f"partial_exit({decision.fraction:.0%}): {decision.reason}")
+                                await self._emit_action(act)
 
                 elif self.mode == 'range':
                     # Range/Grid mode: Use RangeGridStrategy for decisions
                     # Need at least 50+ bars for range detection
-                    if len(closes) >= 60:
-                        # Check current position from dashboard
-                        current_pos = self.dashboard.get_position(self.symbol) if hasattr(self.dashboard, 'get_position') else self._current_position
+                    
+                    # Check current position from dashboard (do this ALWAYS)
+                    current_pos = self.dashboard.get_position(self.symbol) if hasattr(self.dashboard, 'get_position') else self._current_position
+                    
+                    # 🔧 FIX: Check TP/SL FIRST - ALWAYS run this check regardless of bar count!
+                    tp_sl_triggered = False
+                    if current_pos is not None:
+                        should_close = False
+                        close_reason = ''
                         
-                        # Calculate bars held if in position
-                        bars_held = 0
-                        if current_pos is not None:
-                            entry_time = getattr(current_pos, 'entry_time', None)
-                            if entry_time:
-                                bars_held = int((time.time() * 1000 - entry_time) / 60000)  # Minutes
+                        if current_pos.side == 'long':
+                            if price <= current_pos.stop_loss:
+                                should_close = True
+                                close_reason = 'stop_loss'
+                            elif price >= current_pos.take_profit:
+                                should_close = True
+                                close_reason = 'take_profit'
+                        else:  # short
+                            if price >= current_pos.stop_loss:
+                                should_close = True
+                                close_reason = 'stop_loss'
+                            elif price <= current_pos.take_profit:
+                                should_close = True
+                                close_reason = 'take_profit'
                         
-                        # Get strategy decision
-                        decision = self.range_strategy.decide(
-                            price=price,
-                            recent_closes=closes,
-                            funding_rate=None,
-                            position=current_pos,
-                            bars_held=bars_held
-                        )
-                        
-                        # Execute based on decision
-                        if decision.action == 'enter':
-                            action_type = 'open_long' if decision.direction == 'long' else 'open_short'
-                            act = self._make_action(action_type, price, decision.size, decision.reason)
-                            await self._emit_action(act)
-                        
-                        elif decision.action == 'exit' and current_pos is not None:
+                        if should_close:
                             action_type = 'close_long' if current_pos.side == 'long' else 'close_short'
-                            act = self._make_action(action_type, price, None, decision.reason)
+                            act = self._make_action(action_type, price, None, close_reason)
                             await self._emit_action(act)
+                            tp_sl_triggered = True
+                    
+                    # Only run strategy decision if we have enough bars AND TP/SL didn't trigger
+                    if len(closes) >= 60 and not tp_sl_triggered:
+                            # Calculate bars held if in position
+                            bars_held = 0
+                            if current_pos is not None:
+                                entry_time = getattr(current_pos, 'entry_time', None)
+                                if entry_time:
+                                    bars_held = int((time.time() * 1000 - entry_time) / 60000)  # Minutes
+                            
+                            # Get strategy decision
+                            decision = self.range_strategy.decide(
+                                price=price,
+                                recent_closes=closes,
+                                funding_rate=None,
+                                position=current_pos,
+                                bars_held=bars_held
+                            )
+                            
+                            # Execute based on decision
+                            if decision.action == 'enter' and current_pos is None:
+                                action_type = 'open_long' if decision.direction == 'long' else 'open_short'
+                                act = self._make_action(action_type, price, decision.size, decision.reason)
+                                await self._emit_action(act)
+                            
+                            elif decision.action == 'exit' and current_pos is not None:
+                                action_type = 'close_long' if current_pos.side == 'long' else 'close_short'
+                                act = self._make_action(action_type, price, None, decision.reason)
+                                await self._emit_action(act)
 
             await asyncio.sleep(poll_s)
 
@@ -460,12 +522,50 @@ class LiveStrategy:
         )
         self.dashboard.add_signal(signal)
         
+        # 🆕 Save signal to database for persistence
+        try:
+            from .strategy_persistence import save_signal
+            
+            # Determine signal type from action
+            action_type = action.get('action', 'unknown')
+            if 'long' in action_type or 'buy' in action_type:
+                signal_type = 'BUY'
+            elif 'short' in action_type or 'sell' in action_type:
+                signal_type = 'SELL'
+            elif 'close' in action_type:
+                signal_type = 'CLOSE'
+            else:
+                signal_type = action_type.upper()
+            
+            save_signal(
+                symbol=self.symbol,
+                strategy_type=self.mode,
+                signal_type=signal_type,
+                price=action.get('price_hint', 0.0),
+                reason=action.get('reason', ''),
+                indicators=None  # TODO: Add indicator values if available
+            )
+            print(f"[SIGNAL SAVED] {self.symbol} {signal_type} @ ${action.get('price_hint', 0.0)}")
+        except Exception as e:
+            print(f"[SIGNAL SAVE ERROR] {e}")
+        
         # compute pos_size using live account equity if possible
         try:
             pos_size = await self._compute_pos_size(action.get('price_hint'))
+            
+            # If pos_size is None (e.g., API fetch failed) and we're in paper/dry mode,
+            # use a default size for testing
+            if pos_size is None and self.exec_mode in ['paper', 'dry']:
+                # Use a default $100 USDT position size for paper trading
+                price = action.get('price_hint', 1.0)
+                if price > 0:
+                    pos_size = 100.0 / price  # $100 worth of the asset
+                    print(f"[PAPER TRADING] Using default $100 position size: {pos_size:.4f} {self.symbol}")
+            
             action['pos_size'] = pos_size
             signal.size = pos_size
-        except Exception:
+        except Exception as e:
+            print(f"[POS_SIZE ERROR] {e}")
             # leave pos_size as-is (None) if computation fails
             pass
 
@@ -518,6 +618,24 @@ class LiveStrategy:
                         self._current_position = None
                         if trade:
                             print(f"[LiveStrategy] Trade completed: {trade.symbol} {trade.side} P&L=${trade.pnl:.2f} ({trade.pnl_pct:.2f}%)")
+                            
+                            # Save trade to database
+                            from .strategy_persistence import save_trade
+                            save_trade(
+                                symbol=trade.symbol,
+                                strategy_type=self.mode,
+                                exchange='binance_futures',
+                                side=trade.side,
+                                order_type='market',
+                                quantity=trade.size,
+                                price=trade.exit_price,
+                                order_id=res.get('order_id', 'mock_order'),
+                                status='filled',
+                                fee=0.0007 * trade.size * trade.exit_price,  # Estimated fee
+                                fee_currency='USDT',
+                                pnl=trade.pnl
+                            )
+                            print(f"[TRADE SAVED] {trade.symbol} {trade.side} PnL=${trade.pnl:.2f}")
                         else:
                             print(f"[LiveStrategy] WARNING: close_position returned None for {self.symbol}")
             else:

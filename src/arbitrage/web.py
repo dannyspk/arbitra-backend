@@ -10,7 +10,12 @@ import time
 # Load environment variables from .env file
 try:
     from dotenv import load_dotenv
-    load_dotenv()
+    import os
+    # Load from the project root
+    dotenv_path = os.path.join(os.path.dirname(__file__), '..', '..', '.env')
+    load_dotenv(dotenv_path)
+    print(f"[STARTUP] Loaded .env from: {dotenv_path}")
+    print(f"[STARTUP] LUNARCRUSH_API_KEY loaded: {len(os.getenv('LUNARCRUSH_API_KEY', '')) > 0}")
 except ImportError:
     pass
 
@@ -1560,7 +1565,7 @@ def get_defi_vaults():
                 'apy_pct_7d': round(apy_pct_7d, 2) if apy_pct_7d is not None else None,
                 'apy_pct_30d': round(apy_pct_30d, 2) if apy_pct_30d is not None else None,
                 'apy_prediction': pred_direction if pred_direction else None,
-                'apy_prediction_confidence': pred_probability if pred_probability > 0 else None,
+                'apy_prediction_confidence': pred_probability if pred_probability is not None and pred_probability > 0 else None,
                 'pool_meta': pool_meta,
                 'is_leveraged': is_leveraged,
                 'leverage_ratio': leverage_ratio,
@@ -2268,6 +2273,9 @@ async def api_live_strategy_start(req: Request):
     
     global _live_strategy_instances
     
+    # Import persistence layer
+    from .strategy_persistence import save_strategy
+    
     # Check if strategy already running for this symbol
     if symbol in _live_strategy_instances and _live_strategy_instances[symbol].running():
         return {'started': False, 'reason': f'strategy already running for {symbol}', 'symbol': symbol}
@@ -2280,6 +2288,14 @@ async def api_live_strategy_start(req: Request):
         raise HTTPException(status_code=500, detail='failed-to-start')
     
     _live_strategy_instances[symbol] = inst
+    
+    # Persist strategy to database
+    save_strategy(
+        symbol=symbol,
+        strategy_type=mode,
+        exchange='binance',  # Default exchange
+        config={'mode': mode, 'interval': interval}
+    )
     
     return {
         'started': True, 
@@ -2299,6 +2315,9 @@ async def api_live_strategy_stop(req: Request = None):
     If no symbol provided, stops all strategies.
     """
     global _live_strategy_instances
+    
+    # Import persistence layer
+    from .strategy_persistence import remove_strategy
     
     symbol = None
     if req:
@@ -2320,6 +2339,9 @@ async def api_live_strategy_stop(req: Request = None):
         except Exception as e:
             print(f"Error stopping strategy for {symbol}: {e}")
         
+        # Remove from persistence
+        remove_strategy(symbol, reason="user_stopped")
+        
         del _live_strategy_instances[symbol]
         stopped_strategies.append(symbol)
         
@@ -2338,6 +2360,8 @@ async def api_live_strategy_stop(req: Request = None):
             try:
                 await inst.stop()
                 stopped_strategies.append(sym)
+                # Remove from persistence
+                remove_strategy(sym, reason="user_stopped_all")
             except Exception as e:
                 print(f"Error stopping strategy for {sym}: {e}")
         
@@ -2866,6 +2890,38 @@ async def api_dashboard(mode: str = 'test'):
             for p in positions
         ]
         
+        # Override signals with database signals instead of in-memory ones
+        from .strategy_persistence import get_recent_signals_from_db
+        from .signal_formatter import format_signal_reason
+        from datetime import datetime
+        
+        db_signals = get_recent_signals_from_db(20)
+        signals = []
+        for sig in db_signals:
+            # Parse ISO timestamp to milliseconds
+            try:
+                ts_str = sig[6] if len(sig) > 6 else datetime.utcnow().isoformat()
+                dt = datetime.fromisoformat(ts_str.replace('Z', '+00:00'))
+                timestamp_ms = int(dt.timestamp() * 1000)
+            except:
+                timestamp_ms = int(datetime.utcnow().timestamp() * 1000)
+            
+            # Format reason to be human-readable
+            raw_reason = sig[5] or ''
+            formatted_reason = format_signal_reason(raw_reason)
+            
+            signals.append({
+                'id': str(sig[0]),  # id
+                'timestamp': timestamp_ms,  # timestamp in ms
+                'symbol': sig[1],  # symbol
+                'action': sig[3].lower(),  # signal_type (BUY/SELL/CLOSE)
+                'price': float(sig[4]),  # price
+                'reason': formatted_reason,  # formatted reason
+                'status': 'executed',  # default status
+            })
+        
+        state['signals'] = signals
+        
         # Recalculate statistics based on filtered positions
         state['statistics']['active_positions'] = len(positions)
         state['statistics']['unrealized_pnl'] = sum(p.unrealized_pnl for p in positions)
@@ -2977,12 +3033,42 @@ async def api_dashboard_positions():
 
 @app.get('/api/dashboard/signals')
 async def api_dashboard_signals(limit: int = 20):
-    """Get recent trading signals."""
+    """Get recent trading signals from database."""
     try:
-        from .live_dashboard import get_dashboard
-        dashboard = get_dashboard()
-        signals = dashboard.get_recent_signals(limit)
-        return {'signals': [vars(s) for s in signals]}
+        from .strategy_persistence import get_recent_signals_from_db
+        from .signal_formatter import format_signal_reason
+        from datetime import datetime
+        
+        # Get signals from database
+        db_signals = get_recent_signals_from_db(limit)
+        
+        # Format for frontend (convert to Signal-like objects)
+        signals = []
+        for sig in db_signals:
+            # Parse ISO timestamp to milliseconds
+            try:
+                ts_str = sig[6] if len(sig) > 6 else datetime.utcnow().isoformat()
+                dt = datetime.fromisoformat(ts_str.replace('Z', '+00:00'))
+                timestamp_ms = int(dt.timestamp() * 1000)
+            except:
+                timestamp_ms = int(datetime.utcnow().timestamp() * 1000)
+            
+            # Format reason to be human-readable
+            raw_reason = sig[5] or ''
+            formatted_reason = format_signal_reason(raw_reason)
+            
+            signal_obj = {
+                'id': str(sig[0]),  # id
+                'timestamp': timestamp_ms,  # timestamp in ms
+                'symbol': sig[1],  # symbol
+                'action': sig[3].lower(),  # signal_type (BUY/SELL/CLOSE)
+                'price': float(sig[4]),  # price
+                'reason': formatted_reason,  # formatted reason
+                'status': 'executed',  # default status
+            }
+            signals.append(signal_obj)
+        
+        return {'signals': signals}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'Failed to get signals: {str(e)}')
 
@@ -3017,6 +3103,66 @@ async def api_dashboard_reset():
         return {'success': True, 'message': 'Dashboard reset successfully'}
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'Failed to reset dashboard: {str(e)}')
+
+@app.get('/api/strategy/trade-history')
+async def api_strategy_trade_history(symbol: str = None, limit: int = 100):
+    """Get persisted trade history from database.
+    
+    Args:
+        symbol: Filter by symbol (optional)
+        limit: Maximum number of trades to return (default 100)
+    
+    Returns:
+        List of trade records with full details including P&L
+    """
+    try:
+        from .strategy_persistence import get_strategy_trades
+        
+        trades = get_strategy_trades(symbol=symbol, limit=limit)
+        
+        # Calculate aggregated statistics
+        total_trades = len(trades)
+        total_pnl = sum(t.get('pnl', 0) or 0 for t in trades)
+        total_fees = sum(t.get('fee', 0) or 0 for t in trades)
+        winning_trades = sum(1 for t in trades if (t.get('pnl') or 0) > 0)
+        losing_trades = sum(1 for t in trades if (t.get('pnl') or 0) < 0)
+        win_rate = (winning_trades / total_trades * 100) if total_trades > 0 else 0
+        
+        # Get unique symbols traded
+        symbols_traded = list(set(t['symbol'] for t in trades))
+        
+        return {
+            'trades': trades,
+            'statistics': {
+                'total_trades': total_trades,
+                'total_pnl': total_pnl,
+                'total_fees': total_fees,
+                'winning_trades': winning_trades,
+                'losing_trades': losing_trades,
+                'win_rate': win_rate,
+                'symbols_traded': symbols_traded,
+                'net_pnl': total_pnl - total_fees
+            }
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'Failed to get trade history: {str(e)}')
+
+@app.get('/api/strategy/performance/{symbol}')
+async def api_strategy_performance(symbol: str):
+    """Get comprehensive performance statistics for a specific symbol."""
+    try:
+        from .strategy_persistence import get_strategy_performance
+        
+        performance = get_strategy_performance(symbol)
+        
+        if not performance:
+            raise HTTPException(status_code=404, detail=f'No performance data found for {symbol}')
+        
+        return performance
+    except HTTPException:
+        raise
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'Failed to get performance: {str(e)}')
 
 @app.get('/api/binance/balance')
 async def api_binance_balance():
@@ -3932,6 +4078,29 @@ async def api_manual_trade_ws(request: dict):
         import traceback
         traceback.print_exc()
         raise HTTPException(status_code=500, detail=f'Failed to place manual trade via WebSocket: {str(e)}')
+
+@app.get('/api/price/{symbol}')
+async def get_current_price(symbol: str):
+    """Get current market price for a symbol"""
+    try:
+        import ccxt
+        
+        exchange = ccxt.binance({
+            'options': {
+                'defaultType': 'future',
+            }
+        })
+        
+        ticker = await asyncio.to_thread(exchange.fetch_ticker, symbol)
+        return {
+            'symbol': symbol,
+            'price': ticker['last'],
+            'bid': ticker['bid'],
+            'ask': ticker['ask'],
+            'timestamp': ticker['timestamp']
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f'Failed to fetch price for {symbol}: {str(e)}')
 
 @app.post('/api/manual-trade/close')
 async def api_manual_trade_close(request: dict):
@@ -5519,9 +5688,74 @@ app.add_middleware(
 )
 
 
+async def _restore_strategies():
+    """Restore persisted strategies on startup (after Railway restart)"""
+    global _live_strategy_instances
+    
+    try:
+        from .strategy_persistence import get_active_strategies
+        from .live_strategy import LiveStrategy
+        
+        persisted = get_active_strategies()
+        
+        if not persisted:
+            print("[STARTUP] No persisted strategies to restore")
+            return
+        
+        print(f"[STARTUP] Restoring {len(persisted)} strategies from database...")
+        
+        restored_count = 0
+        failed_count = 0
+        
+        for strategy_data in persisted:
+            symbol = strategy_data['symbol']
+            strategy_type = strategy_data['strategy_type']
+            config = strategy_data['config']
+            
+            try:
+                # Skip if already running
+                if symbol in _live_strategy_instances and _live_strategy_instances[symbol].running():
+                    print(f"[STARTUP] Strategy {symbol} already running, skipping restore")
+                    continue
+                
+                # Create and start strategy
+                inst = LiveStrategy(
+                    symbol=symbol,
+                    mode=config.get('mode', strategy_type),
+                    interval=config.get('interval', '15m')
+                )
+                
+                started = inst.start()
+                
+                if started:
+                    _live_strategy_instances[symbol] = inst
+                    restored_count += 1
+                    print(f"[STARTUP] ✓ Restored strategy: {symbol} ({strategy_type})")
+                else:
+                    failed_count += 1
+                    print(f"[STARTUP] ✗ Failed to start restored strategy: {symbol}")
+                    
+            except Exception as e:
+                failed_count += 1
+                print(f"[STARTUP] ✗ Error restoring strategy {symbol}: {e}")
+                import traceback
+                traceback.print_exc()
+        
+        print(f"[STARTUP] Strategy restoration complete: {restored_count} restored, {failed_count} failed")
+        
+    except Exception as e:
+        print(f"[STARTUP] Error in strategy restoration: {e}")
+        import traceback
+        traceback.print_exc()
+
+
 @app.on_event('startup')
 async def _on_startup():
     global _price_alerts_task, _notifier_task, _vault_apy_monitor_task
+    
+    # Restore persisted strategies
+    await _restore_strategies()
+    
     # start notifier if not running
     if _notifier_task is None:
         _notifier_task = asyncio.create_task(_notifier_loop())
