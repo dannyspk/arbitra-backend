@@ -10,3 +10,8 @@ healthcheckPath = "/health"
 healthcheckTimeout = 300
 restartPolicyType = "ON_FAILURE"
 restartPolicyMaxRetries = 10
+
+# Persist strategy database across restarts
+[[deploy.volumes]]
+mountPath = "/app/data"
+name = "strategy_data"

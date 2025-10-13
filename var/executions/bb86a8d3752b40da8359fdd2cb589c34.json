@@ -1,0 +1,19 @@
+{
+  "run_id": "bb86a8d3752b40da8359fdd2cb589c34",
+  "mode": "paper",
+  "start_time": 1760331186.8353896,
+  "events": [
+    {
+      "type": "place_close",
+      "oid": "mock-518",
+      "price": 10.927,
+      "size": 9.151642719868217
+    },
+    {
+      "type": "partial_unfilled",
+      "oid": "mock-518",
+      "remaining_qty": 9.151642719868217
+    }
+  ],
+  "end_time": 1760331186.8353896
+}
