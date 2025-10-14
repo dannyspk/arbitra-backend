@@ -19,5 +19,15 @@ dist/
 .env
 .env.local
 .env.production
+.env.backup.*
+
+# Security databases (contain user data)
+data/prod/
+data/staging/
+*.db
+
+# Keep dev/test databases in repo for reference (empty)
+!data/dev/.gitkeep
+!data/test/.gitkeep
 
 .vercel

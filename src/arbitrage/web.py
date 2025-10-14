@@ -231,6 +231,16 @@ if SECURITY_AVAILABLE:
     app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
     print("[STARTUP] Rate limiting enabled")
 
+# Conditional rate limiting decorator
+def conditional_limiter(rate_limit_type: str):
+    """Apply rate limiting only if enabled in security config."""
+    def decorator(func):
+        security_config = get_security_config()
+        if security_config.get('enable_rate_limiting', False):
+            return limiter.limit(get_rate_limit(rate_limit_type))(func)
+        return func
+    return decorator
+
 # Include social sentiment router if available
 if SOCIAL_SENTIMENT_AVAILABLE:
     app.include_router(social_sentiment_router)
@@ -263,8 +273,7 @@ class UserAPIKeyRequest(BaseModel):
 # Authentication Endpoints
 # -----------------------------------------------------------------------------
 @app.post('/api/auth/register', response_model=TokenResponse, tags=["Authentication"])
-@limiter.limit(get_rate_limit('auth'))
-async def register(request: Request, data: RegisterRequest):
+async def register(data: RegisterRequest):
     """Register a new user account"""
     if not SECURITY_AVAILABLE:
         raise HTTPException(
@@ -274,16 +283,16 @@ async def register(request: Request, data: RegisterRequest):
     
     try:
         # Create user
-        user_id = create_user(data.username, data.email, data.password)
+        user = create_user(data.username, data.email, data.password)
         
         # Generate access token
-        token_data = {"sub": data.username, "user_id": user_id}
+        token_data = {"sub": data.username, "user_id": user["id"]}
         access_token = create_access_token(token_data)
         
         return TokenResponse(
             access_token=access_token,
-            user_id=user_id,
-            username=data.username
+            user_id=user["id"],
+            username=user["username"]
         )
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -292,8 +301,7 @@ async def register(request: Request, data: RegisterRequest):
         raise HTTPException(status_code=500, detail="Registration failed")
 
 @app.post('/api/auth/login', response_model=TokenResponse, tags=["Authentication"])
-@limiter.limit(get_rate_limit('auth'))
-async def login(request: Request, data: LoginRequest):
+async def login(data: LoginRequest):
     """Login with username and password"""
     if not SECURITY_AVAILABLE:
         raise HTTPException(
@@ -327,8 +335,7 @@ async def login(request: Request, data: LoginRequest):
         raise HTTPException(status_code=500, detail="Login failed")
 
 @app.get('/api/auth/me', tags=["Authentication"])
-@limiter.limit(get_rate_limit('data'))
-async def get_current_user_info(request: Request, current_user: dict = Depends(get_current_user)):
+async def get_current_user_info(current_user: dict = Depends(get_current_user)):
     """Get current authenticated user information"""
     if not current_user:
         raise HTTPException(status_code=401, detail="Not authenticated")
@@ -344,9 +351,7 @@ async def get_current_user_info(request: Request, current_user: dict = Depends(g
 # API Key Management Endpoints
 # -----------------------------------------------------------------------------
 @app.post('/api/user/api-keys', tags=["API Keys"])
-@limiter.limit(get_rate_limit('trading'))
 async def add_api_key(
-    request: Request,
     data: UserAPIKeyRequest,
     current_user: dict = Depends(get_current_user)
 ):
@@ -380,9 +385,7 @@ async def add_api_key(
         raise HTTPException(status_code=500, detail="Failed to store API keys")
 
 @app.get('/api/user/api-keys', tags=["API Keys"])
-@limiter.limit(get_rate_limit('data'))
 async def get_api_keys(
-    request: Request,
     exchange: str = None,
     current_user: dict = Depends(get_current_user)
 ):
@@ -2022,7 +2025,7 @@ def get_vault_apy_history(pool_id: str, hours: int = 24):
 @app.post('/api/defi-vaults/alerts', tags=["DeFi"])
 @limiter.limit(get_rate_limit('trading'))
 async def create_vault_alert(
-    req: Request,
+    request: Request,
     current_user: dict = Depends(get_current_user_optional)
 ):
     """Create an alert for APY changes on a specific vault.
@@ -2052,7 +2055,7 @@ async def create_vault_alert(
             status_code=401,
             detail="Authentication required for alert management"
         )
-    body = await req.json()
+    body = await request.json()
     
     pool_id = body.get('pool_id', '').strip()
     alert_type = body.get('alert_type', '').strip()
@@ -2124,7 +2127,7 @@ def delete_vault_alert(alert_id: str):
 @app.post('/api/defi-vaults/positions', tags=["DeFi"])
 @limiter.limit(get_rate_limit('trading'))
 async def track_user_position(
-    req: Request,
+    request: Request,
     current_user: dict = Depends(get_current_user_optional)
 ):
     """Track a user's position in a DeFi vault for monitoring.
@@ -2148,7 +2151,7 @@ async def track_user_position(
             detail="Authentication required for position tracking"
         )
     
-    body = await req.json()
+    body = await request.json()
     
     user_id = body.get('user_id', '').strip()
     pool_id = body.get('pool_id', '').strip()
@@ -2499,7 +2502,7 @@ async def _trigger_alert(alert: dict, vault: dict, message: str):
 @app.post('/api/live-strategy/start', tags=["Strategy"])
 @limiter.limit(get_rate_limit('trading'))
 async def api_live_strategy_start(
-    req: Request,
+    request: Request,
     current_user: dict = Depends(get_current_user_optional)
 ):
     """Start the live strategy for a given symbol.
@@ -2519,7 +2522,7 @@ async def api_live_strategy_start(
             detail="Authentication required for strategy operations"
         )
     
-    body = await req.json()
+    body = await request.json()
     symbol = (body.get('symbol') or '').strip()
     mode = (body.get('mode') or 'bear').strip()
     interval = (body.get('interval') or '1m').strip()
@@ -2571,7 +2574,7 @@ async def api_live_strategy_start(
 @app.post('/api/live-strategy/stop', tags=["Strategy"])
 @limiter.limit(get_rate_limit('trading'))
 async def api_live_strategy_stop(
-    req: Request = None,
+    request: Request,
     current_user: dict = Depends(get_current_user_optional)
 ):
     """Stop strategy for a specific symbol or all strategies if no symbol provided.
@@ -2594,12 +2597,11 @@ async def api_live_strategy_stop(
     from .strategy_persistence import remove_strategy
     
     symbol = None
-    if req:
-        try:
-            body = await req.json()
-            symbol = (body.get('symbol') or '').strip() if body else None
-        except Exception:
-            pass
+    try:
+        body = await request.json()
+        symbol = (body.get('symbol') or '').strip() if body else None
+    except Exception:
+        pass
     
     stopped_strategies = []
     
@@ -2950,7 +2952,7 @@ async def api_account_info():
 @app.post('/api/test-order', tags=["Trading"])
 @limiter.limit(get_rate_limit('trading'))
 async def api_test_order(
-    req: Request,
+    request: Request,
     current_user: dict = Depends(get_current_user_optional)
 ):
     """Test placing an order on Binance Futures (uses testnet if available, otherwise paper trade).
@@ -2974,7 +2976,7 @@ async def api_test_order(
             detail="Authentication required for trading operations"
         )
     
-    body = await req.json()
+    body = await request.json()
     symbol = (body.get('symbol') or '').strip()
     side = (body.get('side') or '').strip().lower()
     amount = body.get('amount')
