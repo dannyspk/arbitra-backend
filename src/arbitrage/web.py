@@ -19,11 +19,13 @@ try:
 except ImportError:
     pass
 
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, HTTPException
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, HTTPException, Depends
 from fastapi.responses import JSONResponse
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from urllib import request as _urllib_request, parse as _urllib_parse, error as _urllib_error
 import datetime as _dt
 from fastapi.middleware.cors import CORSMiddleware
+from pydantic import BaseModel
 
 # Project root (two levels up from this module when running from source),
 # fallback to cwd.
@@ -37,6 +39,49 @@ from .exchanges.mock_exchange import MockExchange
 from .opportunities import compute_dryrun_opportunities
 from .hotcoins import find_hot_coins
 from .feeder_utils import start_all as feeders_start_all, stop_all as feeders_stop_all
+
+# Security imports
+try:
+    from .security.auth import create_user, authenticate_user, create_access_token, verify_token, get_user_by_id
+    from .security.middleware import get_current_user, get_current_user_optional, verify_websocket_token
+    from .security.rate_limit import limiter, get_rate_limit
+    from .security.encryption import store_user_api_keys, get_user_api_keys, list_user_exchanges
+    from .config import is_production, is_development, get_security_config, get_cors_origins
+    SECURITY_AVAILABLE = True
+    print("[STARTUP] Security modules loaded successfully")
+except ImportError as e:
+    SECURITY_AVAILABLE = False
+    print(f"[STARTUP] Security modules not available: {e}")
+    print("[STARTUP] Running WITHOUT security features (development mode only!)")
+    
+    # Fallback for development without security
+    def get_current_user_optional(*args, **kwargs):
+        return None
+    
+    def get_cors_origins():
+        return ["*"]
+    
+    def is_production():
+        return False
+    
+    def is_development():
+        return True
+    
+    def get_security_config():
+        return {
+            'require_auth': False,
+            'require_https': False,
+            'enable_rate_limiting': False,
+            'enable_websocket_auth': False
+        }
+    
+    class _DummyLimiter:
+        def limit(self, *args, **kwargs):
+            def decorator(func):
+                return func
+            return decorator
+    
+    limiter = _DummyLimiter()
 
 # Import social sentiment router
 try:
@@ -176,11 +221,184 @@ class ConnectionManager:
             self.disconnect(ws)
 
 
-app = FastAPI()
+app = FastAPI(title="Arbitra API", version="1.0.0")
+
+# Add rate limiter to app state if security is available
+if SECURITY_AVAILABLE:
+    app.state.limiter = limiter
+    from slowapi import _rate_limit_exceeded_handler
+    from slowapi.errors import RateLimitExceeded
+    app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
+    print("[STARTUP] Rate limiting enabled")
 
 # Include social sentiment router if available
 if SOCIAL_SENTIMENT_AVAILABLE:
     app.include_router(social_sentiment_router)
+
+# -----------------------------------------------------------------------------
+# Pydantic Models for Request/Response
+# -----------------------------------------------------------------------------
+class RegisterRequest(BaseModel):
+    username: str
+    email: str
+    password: str
+
+class LoginRequest(BaseModel):
+    username: str
+    password: str
+
+class TokenResponse(BaseModel):
+    access_token: str
+    token_type: str = "bearer"
+    user_id: int
+    username: str
+
+class UserAPIKeyRequest(BaseModel):
+    exchange: str
+    api_key: str
+    api_secret: str
+    label: str = ""
+
+# -----------------------------------------------------------------------------
+# Authentication Endpoints
+# -----------------------------------------------------------------------------
+@app.post('/api/auth/register', response_model=TokenResponse, tags=["Authentication"])
+@limiter.limit(get_rate_limit('auth'))
+async def register(request: Request, data: RegisterRequest):
+    """Register a new user account"""
+    if not SECURITY_AVAILABLE:
+        raise HTTPException(
+            status_code=501,
+            detail="Authentication not available in this environment"
+        )
+    
+    try:
+        # Create user
+        user_id = create_user(data.username, data.email, data.password)
+        
+        # Generate access token
+        token_data = {"sub": data.username, "user_id": user_id}
+        access_token = create_access_token(token_data)
+        
+        return TokenResponse(
+            access_token=access_token,
+            user_id=user_id,
+            username=data.username
+        )
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        print(f"[ERROR] Registration failed: {e}")
+        raise HTTPException(status_code=500, detail="Registration failed")
+
+@app.post('/api/auth/login', response_model=TokenResponse, tags=["Authentication"])
+@limiter.limit(get_rate_limit('auth'))
+async def login(request: Request, data: LoginRequest):
+    """Login with username and password"""
+    if not SECURITY_AVAILABLE:
+        raise HTTPException(
+            status_code=501,
+            detail="Authentication not available in this environment"
+        )
+    
+    try:
+        # Authenticate user
+        user = authenticate_user(data.username, data.password)
+        
+        if not user:
+            raise HTTPException(
+                status_code=401,
+                detail="Invalid username or password"
+            )
+        
+        # Generate access token
+        token_data = {"sub": user["username"], "user_id": user["id"]}
+        access_token = create_access_token(token_data)
+        
+        return TokenResponse(
+            access_token=access_token,
+            user_id=user["id"],
+            username=user["username"]
+        )
+    except HTTPException:
+        raise
+    except Exception as e:
+        print(f"[ERROR] Login failed: {e}")
+        raise HTTPException(status_code=500, detail="Login failed")
+
+@app.get('/api/auth/me', tags=["Authentication"])
+@limiter.limit(get_rate_limit('data'))
+async def get_current_user_info(request: Request, current_user: dict = Depends(get_current_user)):
+    """Get current authenticated user information"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Not authenticated")
+    
+    return {
+        "id": current_user["id"],
+        "username": current_user["username"],
+        "email": current_user.get("email"),
+        "created_at": current_user.get("created_at")
+    }
+
+# -----------------------------------------------------------------------------
+# API Key Management Endpoints
+# -----------------------------------------------------------------------------
+@app.post('/api/user/api-keys', tags=["API Keys"])
+@limiter.limit(get_rate_limit('trading'))
+async def add_api_key(
+    request: Request,
+    data: UserAPIKeyRequest,
+    current_user: dict = Depends(get_current_user)
+):
+    """Add encrypted API keys for an exchange"""
+    if not SECURITY_AVAILABLE:
+        raise HTTPException(
+            status_code=501,
+            detail="API key encryption not available in this environment"
+        )
+    
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    try:
+        key_id = store_user_api_keys(
+            current_user["id"],
+            data.exchange,
+            data.api_key,
+            data.api_secret,
+            data.label or f"{data.exchange}_key"
+        )
+        
+        return {
+            "status": "success",
+            "key_id": key_id,
+            "exchange": data.exchange,
+            "message": "API keys encrypted and stored successfully"
+        }
+    except Exception as e:
+        print(f"[ERROR] Failed to store API keys: {e}")
+        raise HTTPException(status_code=500, detail="Failed to store API keys")
+
+@app.get('/api/user/api-keys', tags=["API Keys"])
+@limiter.limit(get_rate_limit('data'))
+async def get_api_keys(
+    request: Request,
+    exchange: str = None,
+    current_user: dict = Depends(get_current_user)
+):
+    """Get list of configured exchanges (keys are NOT returned for security)"""
+    if not current_user:
+        raise HTTPException(status_code=401, detail="Authentication required")
+    
+    if not SECURITY_AVAILABLE:
+        return {"exchanges": []}
+    
+    try:
+        exchanges = list_user_exchanges(current_user["id"])
+        return {"exchanges": exchanges}
+    except Exception as e:
+        print(f"[ERROR] Failed to list exchanges: {e}")
+        raise HTTPException(status_code=500, detail="Failed to list exchanges")
 
 # Endpoint: serve the latest hotcoins 1h analysis JSON if present
 @app.get('/api/hotcoins/1h-analysis')
@@ -1801,9 +2019,15 @@ def get_vault_apy_history(pool_id: str, hours: int = 24):
     }
 
 
-@app.post('/api/defi-vaults/alerts')
-async def create_vault_alert(req: Request):
+@app.post('/api/defi-vaults/alerts', tags=["DeFi"])
+@limiter.limit(get_rate_limit('trading'))
+async def create_vault_alert(
+    req: Request,
+    current_user: dict = Depends(get_current_user_optional)
+):
     """Create an alert for APY changes on a specific vault.
+    
+    Requires authentication in production.
     
     Body:
         {
@@ -1821,6 +2045,13 @@ async def create_vault_alert(req: Request):
         - apy_below: Alert when APY falls below threshold value
         - apy_above: Alert when APY rises above threshold value
     """
+    # Check authentication in production
+    security_config = get_security_config()
+    if security_config['require_auth'] and not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required for alert management"
+        )
     body = await req.json()
     
     pool_id = body.get('pool_id', '').strip()
@@ -1890,9 +2121,15 @@ def delete_vault_alert(alert_id: str):
     }
 
 
-@app.post('/api/defi-vaults/positions')
-async def track_user_position(req: Request):
+@app.post('/api/defi-vaults/positions', tags=["DeFi"])
+@limiter.limit(get_rate_limit('trading'))
+async def track_user_position(
+    req: Request,
+    current_user: dict = Depends(get_current_user_optional)
+):
     """Track a user's position in a DeFi vault for monitoring.
+    
+    Requires authentication in production.
     
     Body:
         {
@@ -1903,6 +2140,14 @@ async def track_user_position(req: Request):
             "tx_hash": "0x...",  # Optional: transaction hash for verification
         }
     """
+    # Check authentication in production
+    security_config = get_security_config()
+    if security_config['require_auth'] and not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required for position tracking"
+        )
+    
     body = await req.json()
     
     user_id = body.get('user_id', '').strip()
@@ -2251,13 +2496,29 @@ async def _trigger_alert(alert: dict, vault: dict, message: str):
     # TODO: Broadcast to WebSocket clients monitoring this vault
 
 
-@app.post('/api/live-strategy/start')
-async def api_live_strategy_start(req: Request):
-    """Start the live strategy for a given symbol. Body: { symbol: 'ALPINEUSDT', mode: 'bear' }
+@app.post('/api/live-strategy/start', tags=["Strategy"])
+@limiter.limit(get_rate_limit('trading'))
+async def api_live_strategy_start(
+    req: Request,
+    current_user: dict = Depends(get_current_user_optional)
+):
+    """Start the live strategy for a given symbol.
+    
+    Requires authentication in production.
+    
+    Body: { symbol: 'ALPINEUSDT', mode: 'bear' }
 
     Returns the start status. Execution defaults to paper unless ARB_ALLOW_LIVE_EXECUTION=1 and proper auth is provided.
     Supports multiple concurrent strategies on different symbols.
     """
+    # Check authentication in production
+    security_config = get_security_config()
+    if security_config['require_auth'] and not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required for strategy operations"
+        )
+    
     body = await req.json()
     symbol = (body.get('symbol') or '').strip()
     mode = (body.get('mode') or 'bear').strip()
@@ -2307,13 +2568,26 @@ async def api_live_strategy_start(req: Request):
     }
 
 
-@app.post('/api/live-strategy/stop')
-async def api_live_strategy_stop(req: Request = None):
+@app.post('/api/live-strategy/stop', tags=["Strategy"])
+@limiter.limit(get_rate_limit('trading'))
+async def api_live_strategy_stop(
+    req: Request = None,
+    current_user: dict = Depends(get_current_user_optional)
+):
     """Stop strategy for a specific symbol or all strategies if no symbol provided.
+    
+    Requires authentication in production.
     
     Body (optional): { symbol: 'BTCUSDT' }
     If no symbol provided, stops all strategies.
     """
+    # Check authentication in production
+    security_config = get_security_config()
+    if security_config['require_auth'] and not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required for strategy operations"
+        )
     global _live_strategy_instances
     
     # Import persistence layer
@@ -2673,9 +2947,15 @@ async def api_account_info():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'Failed to fetch account info: {str(e)}')
 
-@app.post('/api/test-order')
-async def api_test_order(req: Request):
+@app.post('/api/test-order', tags=["Trading"])
+@limiter.limit(get_rate_limit('trading'))
+async def api_test_order(
+    req: Request,
+    current_user: dict = Depends(get_current_user_optional)
+):
     """Test placing an order on Binance Futures (uses testnet if available, otherwise paper trade).
+    
+    Requires authentication in production.
     
     Request body: {
         "symbol": "BTCUSDT",
@@ -2686,6 +2966,14 @@ async def api_test_order(req: Request):
     
     Returns order details or error.
     """
+    # Check authentication in production
+    security_config = get_security_config()
+    if security_config['require_auth'] and not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required for trading operations"
+        )
+    
     body = await req.json()
     symbol = (body.get('symbol') or '').strip()
     side = (body.get('side') or '').strip().lower()
@@ -2989,9 +3277,24 @@ async def api_dashboard(mode: str = 'test'):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'Failed to get dashboard: {str(e)}')
 
-@app.post('/api/dashboard/clear')
-async def api_dashboard_clear():
-    """Clear all dashboard data (test mode only - for resetting test trades/positions)."""
+@app.post('/api/dashboard/clear', tags=["Dashboard"])
+@limiter.limit(get_rate_limit('trading'))
+async def api_dashboard_clear(
+    request: Request,
+    current_user: dict = Depends(get_current_user_optional)
+):
+    """Clear all dashboard data (test mode only - for resetting test trades/positions).
+    
+    Requires authentication in production.
+    """
+    # Check authentication in production
+    security_config = get_security_config()
+    if security_config['require_auth'] and not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required for dashboard operations"
+        )
+    
     try:
         from .live_dashboard import get_dashboard
         dashboard = get_dashboard()
@@ -3093,9 +3396,24 @@ async def api_dashboard_statistics():
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'Failed to get statistics: {str(e)}')
 
-@app.post('/api/dashboard/reset')
-async def api_dashboard_reset():
-    """Reset dashboard data (for testing)."""
+@app.post('/api/dashboard/reset', tags=["Dashboard"])
+@limiter.limit(get_rate_limit('trading'))
+async def api_dashboard_reset(
+    request: Request,
+    current_user: dict = Depends(get_current_user_optional)
+):
+    """Reset dashboard data (for testing).
+    
+    Requires authentication in production.
+    """
+    # Check authentication in production
+    security_config = get_security_config()
+    if security_config['require_auth'] and not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required for dashboard operations"
+        )
+    
     try:
         from .live_dashboard import get_dashboard
         dashboard = get_dashboard()
@@ -3575,9 +3893,16 @@ def _get_binance_positions_sync():
         traceback.print_exc()
         return []
 
-@app.post('/api/manual-trade')
-async def api_manual_trade(request: dict):
+@app.post('/api/manual-trade', tags=["Trading"])
+@limiter.limit(get_rate_limit('trading'))
+async def api_manual_trade(
+    http_request: Request,
+    request: dict,
+    current_user: dict = Depends(get_current_user_optional)
+):
     """Place a manual test trade (paper trading).
+    
+    Requires authentication in production.
     
     Body:
     {
@@ -3590,6 +3915,13 @@ async def api_manual_trade(request: dict):
         "entry_price": 97000.50
     }
     """
+    # Check authentication in production
+    security_config = get_security_config()
+    if security_config['require_auth'] and not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required for trading operations"
+        )
     try:
         from .live_dashboard import get_dashboard, Position
         import time
@@ -4102,9 +4434,16 @@ async def get_current_price(symbol: str):
     except Exception as e:
         raise HTTPException(status_code=500, detail=f'Failed to fetch price for {symbol}: {str(e)}')
 
-@app.post('/api/manual-trade/close')
-async def api_manual_trade_close(request: dict):
+@app.post('/api/manual-trade/close', tags=["Trading"])
+@limiter.limit(get_rate_limit('trading'))
+async def api_manual_trade_close(
+    http_request: Request,
+    request: dict,
+    current_user: dict = Depends(get_current_user_optional)
+):
     """Close a manual test position.
+    
+    Requires authentication in production.
     
     Body:
     {
@@ -4113,6 +4452,14 @@ async def api_manual_trade_close(request: dict):
         "allow_live": false
     }
     """
+    # Check authentication in production
+    security_config = get_security_config()
+    if security_config['require_auth'] and not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required for trading operations"
+        )
+    
     try:
         from .live_dashboard import get_dashboard
         
@@ -4225,9 +4572,16 @@ async def api_manual_trade_close(request: dict):
         raise HTTPException(status_code=500, detail=f'Failed to close manual trade: {str(e)}')
 
 
-@app.post('/api/manual-trade/adjust')
-async def api_manual_trade_adjust(request: dict):
+@app.post('/api/manual-trade/adjust', tags=["Trading"])
+@limiter.limit(get_rate_limit('trading'))
+async def api_manual_trade_adjust(
+    http_request: Request,
+    request: dict,
+    current_user: dict = Depends(get_current_user_optional)
+):
     """Adjust stop-loss and take-profit for an open position.
+    
+    Requires authentication in production.
     
     Body:
     {
@@ -4237,6 +4591,14 @@ async def api_manual_trade_adjust(request: dict):
         "allow_live": false
     }
     """
+    # Check authentication in production
+    security_config = get_security_config()
+    if security_config['require_auth'] and not current_user:
+        raise HTTPException(
+            status_code=401,
+            detail="Authentication required for trading operations"
+        )
+    
     try:
         from .live_dashboard import get_dashboard
         
@@ -5666,18 +6028,28 @@ async def api_preview_top(limit: int = 20, notional: float | None = None, symbol
         raise HTTPException(status_code=500, detail=str(e))
 
 # -----------------------------------------------------------------------------
-# CORS
+# CORS - Environment-based configuration
 # -----------------------------------------------------------------------------
-raw_allow = os.environ.get('ARB_ALLOW_ORIGINS', '').strip()
-if raw_allow == '*' or raw_allow.upper() == 'ALL':
-    allow_origins = ['*']
-    allow_credentials = False
-elif raw_allow:
-    allow_origins = [o.strip() for o in raw_allow.split(',') if o.strip()]
-    allow_credentials = True
+if SECURITY_AVAILABLE:
+    # Use environment-based CORS configuration
+    cors_origins = get_cors_origins()
+    allow_origins = cors_origins if isinstance(cors_origins, list) else [cors_origins]
+    allow_credentials = '*' not in allow_origins
+    print(f"[STARTUP] CORS origins: {allow_origins}")
+    print(f"[STARTUP] CORS credentials: {allow_credentials}")
 else:
-    allow_origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
-    allow_credentials = True
+    # Fallback for development without security
+    raw_allow = os.environ.get('ARB_ALLOW_ORIGINS', '').strip()
+    if raw_allow == '*' or raw_allow.upper() == 'ALL':
+        allow_origins = ['*']
+        allow_credentials = False
+    elif raw_allow:
+        allow_origins = [o.strip() for o in raw_allow.split(',') if o.strip()]
+        allow_credentials = True
+    else:
+        allow_origins = ['http://localhost:3000', 'http://127.0.0.1:3000']
+        allow_credentials = True
+    print(f"[STARTUP] CORS origins (legacy): {allow_origins}")
 
 app.add_middleware(
     CORSMiddleware,
