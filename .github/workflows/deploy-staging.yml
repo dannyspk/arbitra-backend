@@ -1,0 +1,52 @@
+name: Deploy to Railway Staging
+
+on:
+  push:
+    branches:
+      - development
+    paths-ignore:
+      - '**.md'
+      - 'docs/**'
+      - '.gitignore'
+      - 'LICENSE'
+  workflow_dispatch:  # Allow manual triggers
+
+jobs:
+  deploy:
+    name: Deploy to Railway Staging
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v4
+        
+      - name: 🚀 Deploy to Railway
+        uses: bervProject/railway-deploy@main
+        with:
+          railway_token: ${{ secrets.RAILWAY_TOKEN }}
+          service: arbitra-api-staging
+          
+      - name: ⏳ Wait for deployment
+        run: sleep 30
+        
+      - name: 🧪 Run health check
+        run: |
+          response=$(curl -s -o /dev/null -w "%{http_code}" https://arbitra-api-staging.up.railway.app/health)
+          if [ $response -eq 200 ]; then
+            echo "✅ Health check passed (Status: $response)"
+          else
+            echo "❌ Health check failed (Status: $response)"
+            exit 1
+          fi
+          
+      - name: 📊 Deployment summary
+        run: |
+          echo "### 🚀 Deployment Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "- **Environment**: Staging" >> $GITHUB_STEP_SUMMARY
+          echo "- **Branch**: development" >> $GITHUB_STEP_SUMMARY
+          echo "- **Service**: arbitra-api-staging" >> $GITHUB_STEP_SUMMARY
+          echo "- **Health Check**: ✅ Passed" >> $GITHUB_STEP_SUMMARY
+          echo "- **URL**: https://arbitra-api-staging.up.railway.app" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "🎉 Staging deployment successful!" >> $GITHUB_STEP_SUMMARY
