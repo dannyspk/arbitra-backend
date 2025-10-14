@@ -1,0 +1,55 @@
+# Railway Environment Variables - Copy and Paste
+
+## REQUIRED (Add these first):
+
+Variable Name: ENCRYPTION_KEY
+Value: b6q3t8Y11VkPm38OQA-CRDgpsqt7aIrA8MyyT6j9BK4=
+
+Variable Name: JWT_SECRET_KEY
+Value: HJPspaGUl3ScsVpHCg7Sl64cfRDWImPdGYeRrBdBKY8
+
+Variable Name: ENVIRONMENT
+Value: staging
+
+## Optional (For full security features):
+
+Variable Name: REQUIRE_AUTH
+Value: true
+
+Variable Name: REQUIRE_HTTPS
+Value: true
+
+Variable Name: ENABLE_RATE_LIMITING
+Value: true
+
+Variable Name: ENABLE_WEBSOCKET_AUTH
+Value: true
+
+Variable Name: JWT_ALGORITHM
+Value: HS256
+
+Variable Name: ACCESS_TOKEN_EXPIRE_MINUTES
+Value: 60
+
+Variable Name: DATABASE_PATH
+Value: data/staging/security.db
+
+Variable Name: LOG_LEVEL
+Value: INFO
+
+---
+
+## How to Add in Railway:
+
+1. Open: https://railway.com/project/09bc8d71-6ef3-4dea-b211-3e72ce75b8e8
+2. Click on your service (arbitra-backend)
+3. Go to "Variables" tab
+4. Click "New Variable"
+5. Copy variable name and value from above
+6. Click "Add"
+7. Repeat for each variable
+8. Railway will automatically redeploy after you add variables
+
+---
+
+After adding all variables, Railway will redeploy and the health check should PASS!
