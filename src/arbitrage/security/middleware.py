@@ -28,7 +28,7 @@ async def get_current_user(
             headers={"WWW-Authenticate": "Bearer"},
         )
     
-    user_id = payload.get("sub")
+    user_id = payload.get("user_id")
     if not user_id:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
@@ -75,7 +75,7 @@ async def get_current_user_optional(
     if not payload:
         return None
     
-    user_id = payload.get("sub")
+    user_id = payload.get("user_id")
     if not user_id:
         return None
     
@@ -101,7 +101,7 @@ async def verify_websocket_token(token: str) -> dict:
             detail="Invalid or expired WebSocket token"
         )
     
-    user_id = payload.get("sub")
+    user_id = payload.get("user_id")
     if not user_id:
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,

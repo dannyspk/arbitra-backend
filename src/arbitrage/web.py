@@ -3896,9 +3896,7 @@ def _get_binance_positions_sync():
         return []
 
 @app.post('/api/manual-trade', tags=["Trading"])
-@limiter.limit(get_rate_limit('trading'))
 async def api_manual_trade(
-    http_request: Request,
     request: dict,
     current_user: dict = Depends(get_current_user_optional)
 ):
